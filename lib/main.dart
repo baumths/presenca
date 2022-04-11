@@ -1,3 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-void main() => runApp(const MaterialApp());
+import 'src/bootstrap.dart';
+
+Future<void> main() async {
+  final Widget app = await createAndInitializeApp();
+  runApp(app);
+}
