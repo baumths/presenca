@@ -88,8 +88,7 @@ class DisciplineFormBloc
 
     Either<DisciplineFailure, Unit>? failureOrSuccess;
 
-    // Update the creation time to the time of the submission
-    final discipline = state.discipline.copyWith(createdAt: DateTime.now());
+    final discipline = state.discipline;
 
     if (discipline.validate()) {
       failureOrSuccess = await _disciplinesRepository.save(discipline);

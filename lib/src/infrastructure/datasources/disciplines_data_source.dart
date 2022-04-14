@@ -46,8 +46,8 @@ class HiveDisciplinesDataSource implements DisciplinesDataSource {
   Future<List<DisciplineDto>> readAll() async {
     final List<DisciplineDto> disciplines = [];
 
-    for (final key in box.keys) {
-      final DisciplineDto? discipline = await read(key);
+    for (final dynamic key in box.keys) {
+      final DisciplineDto? discipline = await read(key as String);
 
       if (discipline == null) {
         continue;

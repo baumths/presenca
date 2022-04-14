@@ -1,64 +1,39 @@
-import 'dart:convert' show json;
+import 'dart:convert' show jsonDecode, jsonEncode;
 
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
 import '../../domain/entities/discipline.dart';
 
-class DisciplineDto {
-  const DisciplineDto({
-    required this.id,
-    required this.name,
-    required this.createdAt,
-  });
+part 'discipline_dto.freezed.dart';
+part 'discipline_dto.g.dart';
 
-  final String id;
-  final String name;
-  final DateTime createdAt;
+typedef Json = Map<String, dynamic>;
+
+@freezed
+class DisciplineDto with _$DisciplineDto {
+  const DisciplineDto._();
+
+  const factory DisciplineDto({
+    required String id,
+    required String name,
+  }) = _DisciplineDto;
+
+  factory DisciplineDto.fromJson(Json json) => _$DisciplineDtoFromJson(json);
 
   factory DisciplineDto.fromDomain(Discipline discipline) {
     return DisciplineDto(
       id: discipline.id,
       name: discipline.name,
-      createdAt: discipline.createdAt,
     );
-  }
-
-  factory DisciplineDto.fromMap(Map<String, dynamic> map) {
-    return DisciplineDto(
-      id: map['id'] ?? '',
-      name: map['name'] ?? '',
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
-    );
-  }
-
-  factory DisciplineDto.fromJson(String source) {
-    return DisciplineDto.fromMap(json.decode(source));
   }
 
   Discipline toDomain() {
     return Discipline(
       id: id,
       name: name,
-      createdAt: createdAt,
     );
   }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'createdAt': createdAt.millisecondsSinceEpoch,
-    };
-  }
-
-  String toJson() => json.encode(toMap());
-
-  @override
-  String toString() => 'DisciplineDto('
-      'id: $id, '
-      'name: $name, '
-      'createdAt: ${createdAt.toIso8601String()}'
-      ')';
 }
 
 class DisciplineDtoAdapter extends TypeAdapter<DisciplineDto> {
@@ -67,11 +42,13 @@ class DisciplineDtoAdapter extends TypeAdapter<DisciplineDto> {
 
   @override
   DisciplineDto read(BinaryReader reader) {
-    return DisciplineDto.fromJson(reader.readString());
+    final decoded = jsonDecode(reader.readString()) as Map;
+    final map = Map<String, dynamic>.from(decoded);
+    return DisciplineDto.fromJson(map);
   }
 
   @override
   void write(BinaryWriter writer, DisciplineDto obj) {
-    writer.writeString(obj.toJson());
+    writer.writeString(jsonEncode(obj.toJson()));
   }
 }
