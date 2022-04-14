@@ -1,6 +1,7 @@
 /android/
 /linux/
 **/*.lock
+**/*.g.dart
 **/*.freezed.dart
 
 # Miscellaneous
