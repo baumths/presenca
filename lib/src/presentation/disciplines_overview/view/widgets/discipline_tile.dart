@@ -20,7 +20,7 @@ class DisciplineTile extends StatelessWidget {
       trailing: const Icon(Icons.arrow_forward_rounded),
       tileColor: tileColor,
       onLongPress: () => AppRouter.showDisciplineForm(context, discipline),
-      onTap: () {},
+      onTap: () => AppRouter.showDisciplineDetails(context, discipline),
     );
   }
 }

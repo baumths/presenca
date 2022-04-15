@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/discipline.dart';
+import '../discipline_details/discipline_details.dart';
 import '../pages.dart';
 
 abstract class AppRouter {
@@ -19,6 +20,15 @@ abstract class AppRouter {
   ) {
     Navigator.of(context).push(
       DisciplineFormPage.route(editingDiscipline),
+    );
+  }
+
+  static void showDisciplineDetails(
+    BuildContext context,
+    Discipline discipline,
+  ) {
+    Navigator.of(context).push(
+      DisciplineDetailsPage.route(discipline),
     );
   }
 
