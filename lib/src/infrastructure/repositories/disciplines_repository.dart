@@ -6,7 +6,7 @@ import '../dtos/discipline_dto.dart';
 
 class DisciplinesRepositoryImpl implements DisciplinesRepository {
   const DisciplinesRepositoryImpl(
-    DisciplinesDataSource dataSource,
+    DataSource<DisciplineDto> dataSource,
   ) : _dataSource = dataSource;
 
   final DataSource<DisciplineDto> _dataSource;

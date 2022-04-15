@@ -1,4 +1,4 @@
-export 'datasources/disciplines_data_source.dart';
+export 'data_sources/disciplines_data_source.dart';
 
 abstract class DataSource<T> {
   Future<T?> read(String id);
