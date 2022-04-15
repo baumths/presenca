@@ -6,9 +6,8 @@ final ThemeData theme = ThemeData(
   colorScheme: colorScheme,
   visualDensity: VisualDensity.comfortable,
   inputDecorationTheme: const InputDecorationTheme(
-    border: OutlineInputBorder(
-      borderRadius: kDefaultBorderRadius,
-    ),
+    contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+    border: OutlineInputBorder(borderRadius: kDefaultBorderRadius),
   ),
 );
 

@@ -38,8 +38,6 @@ class _NameFormFieldState extends State<_NameFormField> {
         _textController.selection = TextSelection.collapsed(
           offset: text.length,
         );
-
-        //_focusNode?.requestFocus();
       },
       child: BlocConsumer<DisciplineFormBloc, DisciplineFormState>(
         listenWhen: (p, c) => p.isSaving != c.isSaving,
@@ -54,10 +52,6 @@ class _NameFormFieldState extends State<_NameFormField> {
             focusNode: _focusNode,
             decoration: InputDecoration(
               label: const Text('Nome'),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-              border: const OutlineInputBorder(
-                borderRadius: kDefaultBorderRadius,
-              ),
               errorText: state.errorMessage,
               helperText:
                   state.isEditing ? null : 'Dê um nome à sua disciplina.',
