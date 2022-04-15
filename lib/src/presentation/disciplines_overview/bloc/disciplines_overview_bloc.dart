@@ -27,17 +27,17 @@ class DisciplineOverviewBloc
     Emitter<DisciplinesOverviewState> emit,
   ) async {
     await event.map(
-      refresh: (event) => _onRefreshed(event, emit),
       initialized: _onInitialize,
+      refreshed: (event) => _onRefreshed(event, emit),
     );
   }
 
   Future<void> _onInitialize(DisciplinesOverviewInitialized event) async {
-    add(const DisciplinesOverviewEvent.refresh());
+    add(const DisciplinesOverviewEvent.refreshed());
 
     await _streamSubscription?.cancel();
     _streamSubscription = _disciplinesRepository.watch().listen((_) {
-      add(const DisciplinesOverviewEvent.refresh());
+      add(const DisciplinesOverviewEvent.refreshed());
     });
   }
 
@@ -45,7 +45,7 @@ class DisciplineOverviewBloc
     DisciplinesOverviewRefreshed event,
     Emitter<DisciplinesOverviewState> emit,
   ) async {
-    emit(const DisciplinesOverviewState.loading());
+    emit(const DisciplinesOverviewState.loadInProgress());
 
     final disciplines = await _disciplinesRepository.findAll();
 
@@ -55,7 +55,7 @@ class DisciplineOverviewBloc
     if (disciplines.isEmpty) {
       emit(const DisciplinesOverviewState.initial());
     } else {
-      emit(DisciplinesOverviewState.success(disciplines: disciplines));
+      emit(DisciplinesOverviewState.loadSuccess(disciplines: disciplines));
     }
   }
 

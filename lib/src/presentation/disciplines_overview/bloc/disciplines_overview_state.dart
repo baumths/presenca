@@ -4,9 +4,10 @@ part of 'disciplines_overview_bloc.dart';
 class DisciplinesOverviewState with _$DisciplinesOverviewState {
   const factory DisciplinesOverviewState.initial() = DisciplinesOverviewInitial;
 
-  const factory DisciplinesOverviewState.loading() = DisciplinesOverviewLoading;
+  const factory DisciplinesOverviewState.loadInProgress() =
+      DisciplinesOverviewLoadInProgress;
 
-  const factory DisciplinesOverviewState.success({
+  const factory DisciplinesOverviewState.loadSuccess({
     required List<Discipline> disciplines,
-  }) = DisciplinesOverviewSuccess;
+  }) = DisciplinesOverviewLoadSuccess;
 }

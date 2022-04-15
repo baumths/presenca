@@ -22,7 +22,7 @@ class DisciplineOverviewView extends StatelessWidget {
               FloatingActionButtonLocation.miniCenterFloat,
           floatingActionButton: state.maybeWhen(
             orElse: () => null,
-            success: (_) => FloatingActionButton.extended(
+            loadSuccess: (_) => FloatingActionButton.extended(
               label: const Text('CRIAR DISCIPLINA'),
               icon: const Icon(Icons.add),
               shape: const RoundedRectangleBorder(

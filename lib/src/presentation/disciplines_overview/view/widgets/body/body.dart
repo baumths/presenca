@@ -23,10 +23,12 @@ class DisciplinesOverviewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return state.map(
       initial: (_) => const _EmptyDisciplines(),
-      loading: (_) => const _LoadingDisciplines(),
-      success: (DisciplinesOverviewSuccess state) => DisciplinesOverview(
-        disciplines: state.disciplines,
-      ),
+      loadInProgress: (_) => const _LoadingDisciplines(),
+      loadSuccess: (DisciplinesOverviewLoadSuccess state) {
+        return DisciplinesOverview(
+          disciplines: state.disciplines,
+        );
+      },
     );
   }
 }

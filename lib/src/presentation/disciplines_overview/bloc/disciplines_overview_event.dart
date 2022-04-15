@@ -5,6 +5,6 @@ class DisciplinesOverviewEvent with _$DisciplinesOverviewEvent {
   const factory DisciplinesOverviewEvent.initialized() =
       DisciplinesOverviewInitialized;
 
-  const factory DisciplinesOverviewEvent.refresh() =
+  const factory DisciplinesOverviewEvent.refreshed() =
       DisciplinesOverviewRefreshed;
 }
