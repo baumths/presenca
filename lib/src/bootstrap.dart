@@ -19,8 +19,14 @@ Future<Widget> createAndInitializeApp() async {
     disciplinesDataSource,
   );
 
+  final studentsDataSource = await StudentsDataSource.create();
+  final studentsRepository = StudentsRepositoryImpl(
+    studentsDataSource,
+  );
+
   return PresencaApp(
     disciplinesRepository: disciplinesRepository,
+    studentsRepository: studentsRepository,
   );
 }
 
@@ -29,4 +35,5 @@ Future<void> _initHive() async {
   Hive.init(supportDir.path);
 
   Hive.registerAdapter<DisciplineDto>(DisciplineDtoAdapter());
+  Hive.registerAdapter<StudentDto>(StudentDtoAdapter());
 }
