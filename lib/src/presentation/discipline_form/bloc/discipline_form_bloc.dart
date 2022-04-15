@@ -2,9 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../domain/entities/discipline.dart';
-import '../../../domain/failures/disciplines/discipline_failure.dart';
-import '../../../domain/repositories/disciplines_repository.dart';
+import '../../../domain/discipline.dart';
 
 part 'discipline_form_bloc.freezed.dart';
 part 'discipline_form_event.dart';

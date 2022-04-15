@@ -4,9 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'infrastructure/datasources/disciplines_data_source.dart';
-import 'infrastructure/dto/discipline_dto.dart';
-import 'infrastructure/repositories/disciplines_repository.dart';
+import 'infrastructure/data_sources.dart';
+import 'infrastructure/dtos.dart';
+import 'infrastructure/repositories.dart';
 import 'presentation/app/app.dart';
 
 Future<Widget> createAndInitializeApp() async {
@@ -14,7 +14,7 @@ Future<Widget> createAndInitializeApp() async {
 
   await _initHive();
 
-  final disciplinesDataSource = await HiveDisciplinesDataSource.create();
+  final disciplinesDataSource = await DisciplinesDataSource.create();
   final disciplinesRepository = DisciplinesRepositoryImpl(
     disciplinesDataSource,
   );

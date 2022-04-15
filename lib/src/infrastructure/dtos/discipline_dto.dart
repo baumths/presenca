@@ -3,12 +3,12 @@ import 'dart:convert' show jsonDecode, jsonEncode;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
-import '../../domain/entities/discipline.dart';
+import '../../domain/discipline.dart';
 
 part 'discipline_dto.freezed.dart';
 part 'discipline_dto.g.dart';
 
-typedef Json = Map<String, dynamic>;
+typedef _Json = Map<String, dynamic>;
 
 @freezed
 class DisciplineDto with _$DisciplineDto {
@@ -19,7 +19,7 @@ class DisciplineDto with _$DisciplineDto {
     required String name,
   }) = _DisciplineDto;
 
-  factory DisciplineDto.fromJson(Json json) => _$DisciplineDtoFromJson(json);
+  factory DisciplineDto.fromJson(_Json json) => _$DisciplineDtoFromJson(json);
 
   factory DisciplineDto.fromDomain(Discipline discipline) {
     return DisciplineDto(

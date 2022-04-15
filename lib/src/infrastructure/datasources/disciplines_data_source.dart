@@ -1,82 +1,17 @@
 import 'package:hive/hive.dart';
+import 'package:meta/meta.dart';
 
-import '../dto/discipline_dto.dart';
+import '../adapters/hive_adapter.dart';
+import '../dtos/discipline_dto.dart';
 
-class DisciplineException implements Exception {
-  const DisciplineException();
-}
-
-abstract class DisciplinesDataSource {
-  Future<DisciplineDto?> read(String id);
-
-  Future<List<DisciplineDto>> readAll();
-
-  Future<void> write(DisciplineDto discipline);
-
-  Future<void> delete(String id);
-
-  /// Stream of discipline keys coming from database.
-  Stream<String> watch();
-}
-
-class HiveDisciplinesDataSource implements DisciplinesDataSource {
+class DisciplinesDataSource extends HiveDataSourceAdapter<DisciplineDto> {
   static const String kDisciplinesBoxName = 'disciplines';
 
-  HiveDisciplinesDataSource(this.box);
+  @visibleForTesting
+  const DisciplinesDataSource(LazyBox<DisciplineDto> box) : super(box);
 
-  static Future<DisciplinesDataSource> create([
-    String boxName = kDisciplinesBoxName,
-  ]) async {
-    final box = await Hive.openLazyBox<DisciplineDto>(boxName);
-    return HiveDisciplinesDataSource(box);
+  static Future<DisciplinesDataSource> create() async {
+    final box = await Hive.openLazyBox<DisciplineDto>(kDisciplinesBoxName);
+    return DisciplinesDataSource(box);
   }
-
-  final LazyBox<DisciplineDto> box;
-
-  @override
-  Future<DisciplineDto?> read(String id) async {
-    try {
-      return await box.get(id);
-    } on HiveError {
-      throw const DisciplineException();
-    }
-  }
-
-  @override
-  Future<List<DisciplineDto>> readAll() async {
-    final List<DisciplineDto> disciplines = [];
-
-    for (final dynamic key in box.keys) {
-      final DisciplineDto? discipline = await read(key as String);
-
-      if (discipline == null) {
-        continue;
-      }
-
-      disciplines.add(discipline);
-    }
-
-    return disciplines;
-  }
-
-  @override
-  Future<void> write(DisciplineDto discipline) async {
-    try {
-      await box.put(discipline.id, discipline);
-    } on HiveError {
-      throw const DisciplineException();
-    }
-  }
-
-  @override
-  Future<void> delete(String id) async {
-    try {
-      await box.delete(id);
-    } on HiveError {
-      throw const DisciplineException();
-    }
-  }
-
-  @override
-  Stream<String> watch() => box.watch().map((event) => event.key as String);
 }

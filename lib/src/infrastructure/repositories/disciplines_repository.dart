@@ -1,17 +1,15 @@
 import 'package:dartz/dartz.dart';
 
-import '../../domain/entities/discipline.dart';
-import '../../domain/failures/disciplines/discipline_failure.dart';
-import '../../domain/repositories/disciplines_repository.dart';
-import '../datasources/disciplines_data_source.dart';
-import '../dto/discipline_dto.dart';
+import '../../domain/discipline.dart';
+import '../data_sources.dart';
+import '../dtos/discipline_dto.dart';
 
 class DisciplinesRepositoryImpl implements DisciplinesRepository {
   const DisciplinesRepositoryImpl(
     DisciplinesDataSource dataSource,
   ) : _dataSource = dataSource;
 
-  final DisciplinesDataSource _dataSource;
+  final DataSource<DisciplineDto> _dataSource;
 
   @override
   Future<Option<Discipline>> find(String id) async {
@@ -29,19 +27,22 @@ class DisciplinesRepositoryImpl implements DisciplinesRepository {
   @override
   Future<Either<DisciplineFailure, Unit>> save(Discipline discipline) async {
     try {
-      await _dataSource.write(DisciplineDto.fromDomain(discipline));
+      await _dataSource.write(
+        discipline.id,
+        DisciplineDto.fromDomain(discipline),
+      );
       return const Right(unit);
-    } on DisciplineException {
+    } on DataSourceException {
       return const Left(DisciplineFailure.unableToUpdate());
     }
   }
 
   @override
-  Future<Either<DisciplineFailure, Unit>> delete(Discipline discipline) async {
+  Future<Either<DisciplineFailure, Unit>> delete(String id) async {
     try {
-      await _dataSource.delete(discipline.id);
+      await _dataSource.delete(id);
       return const Right(unit);
-    } on DisciplineException {
+    } on DataSourceException {
       return const Left(DisciplineFailure.unableToUpdate());
     }
   }
