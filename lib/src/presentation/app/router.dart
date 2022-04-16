@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/discipline.dart';
-import '../discipline_details/discipline_details.dart';
 import '../pages.dart';
 
 abstract class AppRouter {
