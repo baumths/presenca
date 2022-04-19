@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../domain/discipline.dart';
 import '../../../../students/students.dart';
 
 class DisciplineDetailsBody extends StatelessWidget {
   const DisciplineDetailsBody({
     Key? key,
-    required this.disciplineId,
+    required this.discipline,
   }) : super(key: key);
 
-  final String disciplineId;
+  final Discipline discipline;
 
   @override
   Widget build(BuildContext context) {
-    return StudentsOverviewPage(disciplineId: disciplineId);
+    return StudentsOverviewPage(discipline: discipline);
   }
 }

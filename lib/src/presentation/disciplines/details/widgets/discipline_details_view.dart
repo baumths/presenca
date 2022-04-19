@@ -17,7 +17,11 @@ class DisciplineDetailsView extends StatelessWidget {
       appBar: AppBar(
         title: Text(discipline.name),
       ),
-      body: DisciplineDetailsBody(disciplineId: discipline.id),
+      body: DisciplineDetailsBody(discipline: discipline),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   label: const Text('EDITAR ALUNOS'),
+      //   onPressed: () => AppRouter.showStudentsForm(context, discipline),
+      // ),
     );
   }
 }

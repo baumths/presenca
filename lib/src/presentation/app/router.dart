@@ -36,4 +36,13 @@ abstract class AppRouter {
       (route) => route.settings.name == kDisciplinesOverviewRouteName,
     );
   }
+
+  static void showStudentsForm(
+    BuildContext context,
+    Discipline discipline,
+  ) {
+    Navigator.of(context).push(
+      StudentsFormPage.route(discipline),
+    );
+  }
 }

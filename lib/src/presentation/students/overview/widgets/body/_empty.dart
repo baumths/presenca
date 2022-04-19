@@ -20,9 +20,10 @@ class _EmptyStudents extends StatelessWidget {
           // TODO(future): import from google sheets
           // TODO: import students from csv
           PrimaryButton.wide(
-            label: 'CADASTRAR ALUNO',
+            label: 'CADASTRAR ALUNOS',
             onPressed: () {
-              // TODO: show StudentForm page
+              final bloc = context.read<StudentsOverviewBloc>();
+              AppRouter.showStudentsForm(context, bloc.discipline);
             },
           ),
           const Spacer(flex: 1),
