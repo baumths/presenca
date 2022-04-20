@@ -12,15 +12,29 @@ class DiscardDialog extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return AlertDialog(
-      titlePadding: const EdgeInsets.all(16),
-      contentPadding: EdgeInsets.zero,
+      shape: const RoundedRectangleBorder(borderRadius: kDefaultBorderRadius),
+      titlePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       title: const Text('Deseja salvar as alterações?'),
+      contentPadding: EdgeInsets.zero,
+      contentTextStyle: textTheme.bodySmall?.copyWith(fontSize: 14),
       titleTextStyle: textTheme.titleMedium?.copyWith(
         fontWeight: FontWeight.w600,
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: const [
+          Divider(height: 0),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Text('Esta operação não pode ser desfeita.'),
+          ),
+          Divider(height: 0),
+        ],
       ),
       actionsOverflowButtonSpacing: 8,
       actions: [
         TextButton(
+          onPressed: () => Navigator.pop(context, false),
           child: Text(
             'DESCARTAR',
             style: textTheme.caption?.copyWith(
@@ -28,18 +42,11 @@ class DiscardDialog extends StatelessWidget {
               color: colorScheme.error,
             ),
           ),
-          onPressed: () {
-            Navigator.pop(context, false);
-            // TODO: trash changes
-          },
         ),
         PrimaryButton(
-          label: 'SALVAR',
           height: 32,
-          onPressed: () {
-            Navigator.pop(context, true);
-            // TODO: save students
-          },
+          label: 'SALVAR',
+          onPressed: () => Navigator.pop(context, true),
         ),
       ],
     );

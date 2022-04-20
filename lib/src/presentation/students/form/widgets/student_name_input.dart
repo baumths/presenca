@@ -14,10 +14,12 @@ class StudentNameInput extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 8),
         child: TextField(
+          style: const TextStyle(fontSize: 14),
           decoration: InputDecoration(
             labelText: 'Adicionar aluno(a)',
+            labelStyle: const TextStyle(fontSize: 16),
             border: const UnderlineInputBorder(),
-            contentPadding: const EdgeInsets.fromLTRB(16, 4, 4, 0),
+            contentPadding: const EdgeInsets.fromLTRB(16, 4, 0, 4),
             suffixIconConstraints: const BoxConstraints(minWidth: 56),
             suffixIcon: IconButton(
               padding: EdgeInsets.zero,

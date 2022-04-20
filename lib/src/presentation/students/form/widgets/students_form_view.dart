@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../shared/shared.dart';
-import 'csv_import_dialog.dart';
+import 'import_dialog.dart';
 import 'discard_dialog.dart';
 import 'students_form_body.dart';
 
@@ -22,25 +22,30 @@ class StudentsFormView extends StatelessWidget {
           builder: (_) => const DiscardDialog(),
         );
 
+        if (shouldSave == null) {
+          return false;
+        }
+
         // TODO: dispatch to bloc
-        shouldSave ?? false
+        // TODO: show loading overlay
+        shouldSave
             ? SnackBarHelper.showSuccess(context, 'Saved')
             : SnackBarHelper.showError(context, 'Trashed');
 
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(title)),
+        appBar: AppBar(title: Text(title), titleSpacing: 0),
         body: const StudentsFormBody(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: const _CsvImportFab(),
+        floatingActionButton: const _ImportFab(),
       ),
     );
   }
 }
 
-class _CsvImportFab extends StatelessWidget {
-  const _CsvImportFab({Key? key}) : super(key: key);
+class _ImportFab extends StatelessWidget {
+  const _ImportFab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +58,12 @@ class _CsvImportFab extends StatelessWidget {
           quarterTurns: 1,
           child: Icon(Icons.poll_outlined),
         ),
-        label: const Text('IMPORTAR CSV'),
-        onPressed: () {
-          showDialog<void>(
+        label: const Text('IMPORTAR'),
+        onPressed: () async {
+          await showDialog<void>(
             context: context,
-            builder: (_) => const CsvImportDialog(),
+            barrierDismissible: false,
+            builder: (_) => const ImportDialog(),
           );
         },
       ),
