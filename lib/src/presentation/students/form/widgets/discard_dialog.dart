@@ -26,7 +26,7 @@ class DiscardDialog extends StatelessWidget {
           Divider(height: 0),
           Padding(
             padding: EdgeInsets.all(16),
-            child: Text('Esta operação não pode ser desfeita.'),
+            child: Text('Essa operação não pode ser desfeita.'),
           ),
           Divider(height: 0),
         ],

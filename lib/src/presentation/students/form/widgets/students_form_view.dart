@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../application/students/form/bloc.dart';
 import '../../../../shared/shared.dart';
 import 'import_dialog.dart';
 import 'discard_dialog.dart';
 import 'students_form_body.dart';
 
 class StudentsFormView extends StatelessWidget {
+  static const _kFabLocation = FloatingActionButtonLocation.centerFloat;
+
   const StudentsFormView({
     Key? key,
     required this.title,
@@ -37,7 +41,7 @@ class StudentsFormView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(title: Text(title), titleSpacing: 0),
         body: const StudentsFormBody(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButtonLocation: _kFabLocation,
         floatingActionButton: const _ImportFab(),
       ),
     );

@@ -3,6 +3,7 @@ import 'dart:async' show StreamSubscription;
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../domain/discipline.dart';
 import '../../../domain/student.dart';
 
 part 'bloc.freezed.dart';
@@ -13,13 +14,13 @@ class StudentsOverviewBloc
     extends Bloc<StudentsOverviewEvent, StudentsOverviewState> {
   StudentsOverviewBloc({
     required StudentsRepository studentsRepository,
-    required this.disciplineId,
+    required this.discipline,
   })  : _studentsRepository = studentsRepository,
         super(const StudentsOverviewState.initial()) {
     on<StudentsOverviewEvent>(_onEvent);
   }
 
-  final String disciplineId;
+  final Discipline discipline;
   final StudentsRepository _studentsRepository;
 
   StreamSubscription<String>? _streamSubscription;
@@ -49,8 +50,9 @@ class StudentsOverviewBloc
   ) async {
     emit(const StudentsOverviewState.loadInProgress());
 
-    final students =
-        await _studentsRepository.findAllByDisciplineId(disciplineId);
+    final students = await _studentsRepository.findAllByDisciplineId(
+      discipline.id,
+    );
 
     students.sort((a, b) => a.name.compareTo(b.name));
 

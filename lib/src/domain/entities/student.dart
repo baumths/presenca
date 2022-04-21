@@ -2,6 +2,8 @@ import 'package:uuid/uuid.dart';
 
 const Uuid _uuid = Uuid();
 
+// TODO: Add [bool active] property
+
 class Student {
   const Student({
     required this.id,
