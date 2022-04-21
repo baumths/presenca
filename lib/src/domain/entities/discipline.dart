@@ -8,10 +8,10 @@ class Discipline {
     required this.name,
   });
 
-  factory Discipline.empty({String name = ''}) {
+  factory Discipline.empty() {
     return Discipline(
       id: _uuid.v1(),
-      name: name,
+      name: '',
     );
   }
 
