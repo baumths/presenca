@@ -40,17 +40,7 @@ class StudentsRepositoryImpl implements StudentsRepository {
       );
       return const Right(unit);
     } on DataSourceException {
-      return const Left(StudentFailure.unableToUpdate());
-    }
-  }
-
-  @override
-  Future<Either<StudentFailure, Unit>> delete(String id) async {
-    try {
-      await _dataSource.delete(id);
-      return const Right(unit);
-    } on DataSourceException {
-      return const Left(StudentFailure.unableToUpdate());
+      return Left(StudentFailure.unableToUpdate(student: student));
     }
   }
 

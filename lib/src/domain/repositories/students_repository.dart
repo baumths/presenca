@@ -9,8 +9,6 @@ abstract class StudentsRepository {
 
   Future<Either<StudentFailure, Unit>> save(Student student);
 
-  Future<Either<StudentFailure, Unit>> delete(String id);
-
   /// Stream of student ids coming from the database.
   Stream<String> watch();
 }
