@@ -54,12 +54,17 @@ class StudentsOverviewBloc
       discipline.id,
     );
 
-    students.sort((a, b) => a.name.compareTo(b.name));
+    final activeStudents = <Student>[
+      for (final Student student in students)
+        if (student.active) student,
+    ];
+
+    activeStudents.sort((a, b) => a.name.compareTo(b.name));
 
     if (students.isEmpty) {
       emit(const StudentsOverviewState.initial());
     } else {
-      emit(StudentsOverviewState.loadSuccess(students: students));
+      emit(StudentsOverviewState.loadSuccess(students: activeStudents));
     }
   }
 

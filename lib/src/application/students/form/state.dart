@@ -8,7 +8,6 @@ class StudentsFormState with _$StudentsFormState {
     required Option<Discipline> discipline,
     required Option<Student> selectedStudent,
     required List<Student> students,
-    required List<String> deletedStudentIds,
     required Option<Either<StudentFailure, Unit>> failureOrSuccessOption,
   }) = _StudentsFormState;
 
@@ -17,7 +16,6 @@ class StudentsFormState with _$StudentsFormState {
       discipline: None(),
       selectedStudent: None(),
       students: <Student>[],
-      deletedStudentIds: <String>[],
       failureOrSuccessOption: None(),
     );
   }

@@ -18,6 +18,7 @@ class StudentDto with _$StudentDto {
     required String id,
     required String disciplineId,
     required String name,
+    required bool active,
   }) = _StudentDto;
 
   factory StudentDto.fromJson(_Json json) => _$StudentDtoFromJson(json);
@@ -27,6 +28,7 @@ class StudentDto with _$StudentDto {
       id: student.id,
       disciplineId: student.disciplineId,
       name: student.name,
+      active: student.active,
     );
   }
 
@@ -35,6 +37,7 @@ class StudentDto with _$StudentDto {
       id: id,
       disciplineId: disciplineId,
       name: name,
+      active: active,
     );
   }
 }

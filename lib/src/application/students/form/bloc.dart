@@ -27,8 +27,7 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
       started: (event) => _onStarted(event, emit),
       selected: (event) => _onSelected(event, emit),
       editingComplete: (event) => _onEditingComplete(event, emit),
-      deleted: (event) => _onDeleted(event, emit),
-      restored: (event) => _onRestored(event, emit),
+      activeToggled: (event) => _onActiveToggled(event, emit),
       submitted: (event) {},
     );
   }
@@ -56,19 +55,11 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
     _Selected event,
     Emitter<StudentsFormState> emit,
   ) async {
-    state.discipline.fold(
-      () {
-        // TODO: maybe show 'Something went wrong, please try again.'
-      },
-      (discipline) {
-        // TODO(future): fold [state.selectedStudent] and show popup to discard changes
-        emit(
-          state.copyWith(
-            selectedStudent: Some(event.student),
-            failureOrSuccessOption: const None(),
-          ),
-        );
-      },
+    emit(
+      state.copyWith(
+        selectedStudent: Some(event.student),
+        failureOrSuccessOption: const None(),
+      ),
     );
   }
 
@@ -140,31 +131,21 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
     );
   }
 
-  // TODO: update deleted/restore to [active] flag of [Student] entity
-
-  Future<void> _onDeleted(
-    _Deleted event,
+  Future<void> _onActiveToggled(
+    _ActiveToggled event,
     Emitter<StudentsFormState> emit,
   ) async {
-    emit(
-      state.copyWith(
-        failureOrSuccessOption: const None(),
-        deletedStudentIds: [...state.deletedStudentIds, event.student.id],
-      ),
-    );
-  }
+    final newStudents = [
+      for (final Student student in state.students)
+        if (student.id == event.student.id)
+          student.copyWith(
+            active: !student.active,
+          )
+        else
+          student
+    ];
 
-  Future<void> _onRestored(
-    _Restored event,
-    Emitter<StudentsFormState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        deletedStudentIds: state.deletedStudentIds
-            .where((id) => id != event.student.id)
-            .toList(),
-      ),
-    );
+    emit(state.copyWith(students: newStudents));
   }
 }
 

@@ -14,13 +14,9 @@ class StudentsFormEvent with _$StudentsFormEvent {
     required String name,
   }) = _EditingComplete;
 
-  const factory StudentsFormEvent.deleted({
+  const factory StudentsFormEvent.activeToggled({
     required Student student,
-  }) = _Deleted;
-
-  const factory StudentsFormEvent.restored({
-    required Student student,
-  }) = _Restored;
+  }) = _ActiveToggled;
 
   const factory StudentsFormEvent.submitted() = _Submitted;
 }

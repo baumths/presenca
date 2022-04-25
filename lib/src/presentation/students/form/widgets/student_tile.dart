@@ -15,42 +15,26 @@ class StudentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void dispatch(StudentsFormEvent event) {
-      context.read<StudentsFormBloc>().add(event);
-    }
-
     return BlocBuilder<StudentsFormBloc, StudentsFormState>(
-      buildWhen: (p, c) {
-        return p.selectedStudent != c.selectedStudent ||
-            p.deletedStudentIds != c.deletedStudentIds;
-      },
       builder: (BuildContext context, StudentsFormState state) {
-        if (state.deletedStudentIds.contains(student.id)) {
-          return _DeletedTile(
-            title: student.name,
-            onTap: () => dispatch(StudentsFormEvent.restored(student: student)),
+        if (student.active) {
+          late Widget tile = _NormalTile(student: student);
+
+          state.selectedStudent.fold(
+            () {},
+            (editingStudent) {
+              if (student.id == editingStudent.id) {
+                tile = _EditingTile(
+                  title: student.name,
+                );
+              }
+            },
           );
+
+          return tile;
         }
 
-        late Widget tile = _NormalTile(
-            title: student.name,
-            onTap: () => dispatch(StudentsFormEvent.selected(student: student)),
-            onTrailingPressed: () {
-              dispatch(StudentsFormEvent.deleted(student: student));
-            });
-
-        state.selectedStudent.fold(
-          () {},
-          (editingStudent) {
-            if (student.id == editingStudent.id) {
-              tile = _EditingTile(
-                title: student.name,
-              );
-            }
-          },
-        );
-
-        return tile;
+        return _InactiveTile(student: student);
       },
     );
   }
@@ -59,14 +43,10 @@ class StudentTile extends StatelessWidget {
 class _NormalTile extends StatelessWidget {
   const _NormalTile({
     Key? key,
-    required this.title,
-    this.onTap,
-    this.onTrailingPressed,
+    required this.student,
   }) : super(key: key);
 
-  final String title;
-  final VoidCallback? onTap;
-  final VoidCallback? onTrailingPressed;
+  final Student student;
 
   @override
   Widget build(BuildContext context) {
@@ -74,18 +54,25 @@ class _NormalTile extends StatelessWidget {
       dense: true,
       horizontalTitleGap: 0,
       contentPadding: const EdgeInsets.only(left: 16, right: 8),
-      title: Text(
-        title,
-        overflow: TextOverflow.ellipsis,
-      ),
+      title: Text(student.name),
       trailing: IconButton(
         iconSize: 20,
         splashRadius: 20,
         visualDensity: kVisualDensity,
-        icon: const Icon(Icons.delete_rounded),
-        onPressed: onTrailingPressed,
+        tooltip: 'Marcar como Inativo',
+        color: Colors.green,
+        icon: const Icon(Icons.toggle_on),
+        onPressed: () {
+          context
+              .read<StudentsFormBloc>()
+              .add(StudentsFormEvent.activeToggled(student: student));
+        },
       ),
-      onTap: onTap,
+      onTap: () {
+        context
+            .read<StudentsFormBloc>()
+            .add(StudentsFormEvent.selected(student: student));
+      },
     );
   }
 }
@@ -111,7 +98,6 @@ class _EditingTile extends StatelessWidget {
       selectedTileColor: theme.colorScheme.primary.withOpacity(.1),
       title: Text(
         title,
-        overflow: TextOverflow.ellipsis,
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       subtitle: const Text('Editando'),
@@ -123,40 +109,40 @@ class _EditingTile extends StatelessWidget {
   }
 }
 
-class _DeletedTile extends StatelessWidget {
-  const _DeletedTile({
+class _InactiveTile extends StatelessWidget {
+  const _InactiveTile({
     Key? key,
-    required this.title,
-    this.onTap,
+    required this.student,
   }) : super(key: key);
 
-  final String title;
-  final VoidCallback? onTap;
+  final Student student;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return ListTile(
       dense: true,
       horizontalTitleGap: 0,
       contentPadding: const EdgeInsets.only(left: 16, right: 8),
       title: Text(
-        title,
-        overflow: TextOverflow.ellipsis,
+        student.name,
         style: const TextStyle(
           fontStyle: FontStyle.italic,
           decoration: TextDecoration.lineThrough,
         ),
       ),
-      selected: true,
-      selectedColor: theme.colorScheme.error,
-      subtitle: const Text('Mantenha pressionado para restaurar.'),
-      trailing: const Padding(
-        padding: EdgeInsets.only(right: 8),
-        child: Icon(Icons.restore_from_trash_rounded, size: 20),
+      subtitle: const Text('Inativo'),
+      trailing: IconButton(
+        iconSize: 20,
+        splashRadius: 20,
+        visualDensity: kVisualDensity,
+        tooltip: 'Marcar como Ativo',
+        icon: const Icon(Icons.toggle_off),
+        onPressed: () {
+          context
+              .read<StudentsFormBloc>()
+              .add(StudentsFormEvent.activeToggled(student: student));
+        },
       ),
-      onLongPress: onTap,
     );
   }
 }
