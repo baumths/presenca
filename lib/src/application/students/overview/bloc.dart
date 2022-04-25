@@ -23,7 +23,7 @@ class StudentsOverviewBloc
   final Discipline discipline;
   final StudentsRepository _studentsRepository;
 
-  StreamSubscription<String>? _streamSubscription;
+  StreamSubscription<List<Student>>? _streamSubscription;
 
   Future<void> _onEvent(
     StudentsOverviewEvent event,
@@ -36,11 +36,12 @@ class StudentsOverviewBloc
   }
 
   Future<void> _onStarted(_Started event) async {
-    add(const StudentsOverviewEvent.refreshed());
-
     await _streamSubscription?.cancel();
-    _streamSubscription = _studentsRepository.watch().listen((_) {
-      add(const StudentsOverviewEvent.refreshed());
+
+    final stream = _studentsRepository.watch(discipline.id);
+
+    _streamSubscription = stream.listen((List<Student> students) {
+      add(StudentsOverviewEvent.refreshed(students: students));
     });
   }
 
@@ -48,24 +49,22 @@ class StudentsOverviewBloc
     _Refreshed event,
     Emitter<StudentsOverviewState> emit,
   ) async {
-    emit(const StudentsOverviewState.loadInProgress());
-
-    final students = await _studentsRepository.findAllByDisciplineId(
-      discipline.id,
-    );
-
     final activeStudents = <Student>[
-      for (final Student student in students)
+      for (final Student student in event.students)
         if (student.active) student,
     ];
 
     activeStudents.sort((a, b) => a.name.compareTo(b.name));
 
-    if (students.isEmpty) {
-      emit(const StudentsOverviewState.initial());
+    late final StudentsOverviewState state;
+
+    if (activeStudents.isEmpty) {
+      state = const StudentsOverviewState.initial();
     } else {
-      emit(StudentsOverviewState.loadSuccess(students: activeStudents));
+      state = StudentsOverviewState.loadSuccess(students: activeStudents);
     }
+
+    emit(state);
   }
 
   @override

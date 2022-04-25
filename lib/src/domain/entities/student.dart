@@ -1,8 +1,15 @@
+import 'dart:convert' show jsonDecode, jsonEncode;
+
 import 'package:uuid/uuid.dart';
 
 const Uuid _uuid = Uuid();
 
 class Student {
+  final String id;
+  final String disciplineId;
+  final String name;
+  final bool active;
+
   const Student({
     required this.id,
     required this.disciplineId,
@@ -19,10 +26,29 @@ class Student {
     );
   }
 
-  final String id;
-  final String disciplineId;
-  final String name;
-  final bool active;
+  Student.fromMap(Map<String, Object?> map)
+      : this(
+          id: map['id'] as String,
+          disciplineId: map['disciplineId'] as String,
+          name: map['name'] as String,
+          active: map['active'] as bool,
+        );
+
+  Student.fromJson(String json)
+      : this.fromMap(
+          Map<String, Object?>.from(jsonDecode(json) as Map),
+        );
+
+  Map<String, Object?> toMap() {
+    return {
+      'id': id,
+      'disciplineId': disciplineId,
+      'name': name,
+      'active': active,
+    };
+  }
+
+  String toJson() => jsonEncode(toMap());
 
   Student copyWith({
     String? disciplineId,
@@ -36,14 +62,6 @@ class Student {
       active: active ?? this.active,
     );
   }
-
-  @override
-  String toString() => 'Student('
-      'id: $id, '
-      'disciplineId: $disciplineId, '
-      'name: $name'
-      'active: $active'
-      ')';
 
   @override
   bool operator ==(Object other) {
@@ -63,4 +81,12 @@ class Student {
         name,
         active,
       ]);
+
+  @override
+  String toString() => 'Student('
+      'id: $id, '
+      'disciplineId: $disciplineId, '
+      'name: $name'
+      'active: $active'
+      ')';
 }

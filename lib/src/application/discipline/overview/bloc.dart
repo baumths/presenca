@@ -20,7 +20,7 @@ class DisciplineOverviewBloc
 
   final DisciplinesRepository _disciplinesRepository;
 
-  StreamSubscription<String>? _streamSubscription;
+  StreamSubscription<List<Discipline>>? _streamSubscription;
 
   Future<void> _onEvent(
     DisciplinesOverviewEvent event,
@@ -33,11 +33,12 @@ class DisciplineOverviewBloc
   }
 
   Future<void> _onStarted(_Started event) async {
-    add(const DisciplinesOverviewEvent.refreshed());
-
     await _streamSubscription?.cancel();
-    _streamSubscription = _disciplinesRepository.watch().listen((_) {
-      add(const DisciplinesOverviewEvent.refreshed());
+
+    final stream = _disciplinesRepository.watch();
+
+    _streamSubscription = stream.listen((List<Discipline> disciplines) {
+      add(DisciplinesOverviewEvent.refreshed(disciplines: disciplines));
     });
   }
 
@@ -45,16 +46,17 @@ class DisciplineOverviewBloc
     _Refreshed event,
     Emitter<DisciplinesOverviewState> emit,
   ) async {
-    emit(const DisciplinesOverviewState.loadInProgress());
+    late final DisciplinesOverviewState state;
 
-    final disciplines = await _disciplinesRepository.findAll();
-    disciplines.sort((a, b) => a.name.compareTo(b.name));
-
-    if (disciplines.isEmpty) {
-      emit(const DisciplinesOverviewState.initial());
+    if (event.disciplines.isEmpty) {
+      state = const DisciplinesOverviewState.initial();
     } else {
-      emit(DisciplinesOverviewState.loadSuccess(disciplines: disciplines));
+      state = DisciplinesOverviewState.loadSuccess(
+        disciplines: event.disciplines,
+      );
     }
+
+    emit(state);
   }
 
   @override

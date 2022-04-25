@@ -1,52 +1,54 @@
 import 'package:dartz/dartz.dart';
+import 'package:hive/hive.dart';
 
 import '../../domain/discipline.dart';
-import '../data_sources.dart';
-import '../dtos/discipline_dto.dart';
 
 class DisciplinesRepositoryImpl implements DisciplinesRepository {
+  static const String kDisciplinesBoxName = 'disciplines';
+
   const DisciplinesRepositoryImpl(
-    DataSource<DisciplineDto> dataSource,
-  ) : _dataSource = dataSource;
+    LazyBox<String> storage,
+  ) : _storage = storage;
 
-  final DataSource<DisciplineDto> _dataSource;
-
-  @override
-  Future<Option<Discipline>> find(String id) async {
-    final dto = await _dataSource.read(id);
-    return optionOf(dto?.toDomain());
+  static Future<DisciplinesRepository> create() async {
+    final box = await Hive.openLazyBox<String>(kDisciplinesBoxName);
+    return DisciplinesRepositoryImpl(box);
   }
 
-  @override
-  Future<List<Discipline>> findAll() async {
-    final dtos = await _dataSource.readAll();
-    final disciplines = dtos.map((dto) => dto.toDomain()).toList();
-    return disciplines;
-  }
+  final LazyBox<String> _storage;
 
   @override
   Future<Either<DisciplineFailure, Unit>> save(Discipline discipline) async {
     try {
-      await _dataSource.write(
-        discipline.id,
-        DisciplineDto.fromDomain(discipline),
-      );
+      await _storage.put(discipline.id, discipline.toJson());
       return const Right(unit);
-    } on DataSourceException {
+    } on HiveError {
       return const Left(DisciplineFailure.unableToUpdate());
     }
   }
 
   @override
-  Future<Either<DisciplineFailure, Unit>> delete(String id) async {
-    try {
-      await _dataSource.delete(id);
-      return const Right(unit);
-    } on DataSourceException {
-      return const Left(DisciplineFailure.unableToUpdate());
+  Stream<List<Discipline>> watch() async* {
+    yield await findDisciplines();
+
+    await for (final BoxEvent _ in _storage.watch()) {
+      yield await findDisciplines();
     }
   }
 
-  @override
-  Stream<String> watch() => _dataSource.watch();
+  Future<List<Discipline>> findDisciplines() async {
+    final disciplines = <Discipline>[];
+
+    for (final dynamic key in _storage.keys) {
+      final String? json = await _storage.get(key);
+
+      if (json == null) {
+        continue;
+      }
+
+      disciplines.add(Discipline.fromJson(json));
+    }
+
+    return disciplines;
+  }
 }

@@ -88,7 +88,7 @@ class DisciplineFormBloc
 
     final discipline = state.discipline;
 
-    if (discipline.validate()) {
+    if (discipline.name.isNotEmpty) {
       failureOrSuccess = await _disciplinesRepository.save(discipline);
     }
 
@@ -101,7 +101,4 @@ class DisciplineFormBloc
       ),
     );
   }
-
-  // TODO(future): check if discipline name already exists
-  bool _validateName(String name) => name.isNotEmpty;
 }

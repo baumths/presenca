@@ -15,6 +15,7 @@ class StudentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      dense: true,
       title: Text(student.name),
       tileColor: tileColor,
     );

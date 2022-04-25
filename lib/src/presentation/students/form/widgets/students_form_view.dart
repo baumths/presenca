@@ -26,15 +26,17 @@ class StudentsFormView extends StatelessWidget {
           builder: (_) => const DiscardDialog(),
         );
 
+        // TODO: show loading overlay
         if (shouldSave == null) {
           return false;
+        } else if (shouldSave) {
+          context
+              .read<StudentsFormBloc>()
+              .add(const StudentsFormEvent.submitted());
+          SnackBarHelper.showSuccess(context, 'Saved');
+        } else {
+          SnackBarHelper.showError(context, 'Trashed');
         }
-
-        // TODO: dispatch to bloc
-        // TODO: show loading overlay
-        shouldSave
-            ? SnackBarHelper.showSuccess(context, 'Saved')
-            : SnackBarHelper.showError(context, 'Trashed');
 
         return true;
       },

@@ -28,7 +28,7 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
       selected: (event) => _onSelected(event, emit),
       editingComplete: (event) => _onEditingComplete(event, emit),
       activeToggled: (event) => _onActiveToggled(event, emit),
-      submitted: (event) {},
+      submitted: (event) => _onSubmitted(event, emit),
     );
   }
 
@@ -37,9 +37,7 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
     Emitter<StudentsFormState> emit,
   ) async {
     final discipline = event.discipline;
-    final students = await _studentsRepository.findAllByDisciplineId(
-      discipline.id,
-    );
+    final students = await _studentsRepository.find(discipline.id);
 
     emit(
       state.copyWith(
@@ -71,7 +69,7 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
 
     state.discipline.fold(
       () {
-        // TODO: maybe show 'Something went wrong, please try again.'
+        // maybe show 'Something went wrong, please try again.'
       },
       (discipline) {
         state.selectedStudent.fold(
@@ -146,6 +144,30 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
     ];
 
     emit(state.copyWith(students: newStudents));
+  }
+
+  Future<void> _onSubmitted(
+    _Submitted event,
+    Emitter<StudentsFormState> emit,
+  ) async {
+    await state.discipline.fold(
+      () {
+        // maybe show 'Something went wrong, please try again.'
+        return Future<void>.value();
+      },
+      (discipline) async {
+        final failureOrSuccess = await _studentsRepository.save(
+          discipline.id,
+          state.students,
+        );
+
+        emit(
+          state.copyWith(
+            failureOrSuccessOption: Some(failureOrSuccess),
+          ),
+        );
+      },
+    );
   }
 }
 

@@ -25,6 +25,6 @@ class DisciplineFormState with _$DisciplineFormState {
   bool get canSubmit {
     return errorMessage == null &&
         saveFailureOrSuccessOption.isNone() &&
-        discipline.validate();
+        discipline.name.isNotEmpty;
   }
 }
