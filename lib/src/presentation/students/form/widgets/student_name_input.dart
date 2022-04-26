@@ -87,23 +87,15 @@ class _StudentNameInputState extends State<StudentNameInput> {
           state.failureOrSuccessOption.fold(
             () {},
             (either) => either.fold(
-              (failure) {
-                failure.whenOrNull(
-                  emptyName: () {
-                    final String? studentName = state.selectedStudent.fold(
-                      () => null,
-                      (student) => student.name,
-                    );
-                    if (studentName == null) {
-                      errorMessage = 'Por favor, informe um nome.';
-                    } else {
-                      errorMessage =
-                          'Por favor, informe um nome novo nome para '
-                          '$studentName.';
-                    }
+              (failure) => failure.whenOrNull(
+                emptyName: () => state.selectedStudent.fold(
+                  () {},
+                  (student) {
+                    final String name = student.name;
+                    errorMessage = 'Por favor, informe um novo nome para $name';
                   },
-                );
-              },
+                ),
+              ),
               (_) {},
             ),
           );
