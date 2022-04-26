@@ -17,14 +17,32 @@ class StudentsFormView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 0,
-        title: Text(title),
-        leading: const _CloseButton(),
+    return WillPopScope(
+      onWillPop: () async {
+        final bool? discardPressed = await showDialog<bool>(
+          context: context,
+          builder: (_) => const DiscardDialog(),
+        );
+
+        if (discardPressed ?? false) {
+          SnackBarHelper.showWarning(
+            context,
+            'As alterações foram descartadas.',
+          );
+
+          return true;
+        }
+
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          titleSpacing: 0,
+          title: Text(title),
+        ),
+        body: const StudentsFormBody(),
+        bottomNavigationBar: const _ButtonBar(),
       ),
-      body: const StudentsFormBody(),
-      bottomNavigationBar: const _ButtonBar(),
     );
   }
 }
@@ -35,12 +53,12 @@ class _ButtonBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        boxShadow: const [
           BoxShadow(
             offset: Offset(0, 10),
-            blurRadius: 20,
+            blurRadius: 10,
           ),
         ],
       ),
@@ -74,30 +92,6 @@ class _ButtonBar extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _CloseButton extends StatelessWidget {
-  const _CloseButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return CloseButton(
-      onPressed: () async {
-        final bool? discardPressed = await showDialog<bool>(
-          context: context,
-          builder: (_) => const DiscardDialog(),
-        );
-
-        if (discardPressed ?? false) {
-          SnackBarHelper.showWarning(
-            context,
-            'As alterações foram descartadas.',
-          );
-          Navigator.pop(context); // Return to discipline details
-        }
-      },
     );
   }
 }
