@@ -8,8 +8,6 @@ import 'discard_dialog.dart';
 import 'students_form_body.dart';
 
 class StudentsFormView extends StatelessWidget {
-  static const _kFabLocation = FloatingActionButtonLocation.centerFloat;
-
   const StudentsFormView({
     Key? key,
     required this.title,
@@ -19,60 +17,87 @@ class StudentsFormView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        final bool? shouldSave = await showDialog<bool>(
-          context: context,
-          builder: (_) => const DiscardDialog(),
-        );
+    return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 0,
+        title: Text(title),
+        leading: const _CloseButton(),
+      ),
+      body: const StudentsFormBody(),
+      bottomNavigationBar: const _ButtonBar(),
+    );
+  }
+}
 
-        // TODO: show loading overlay
-        if (shouldSave == null) {
-          return false;
-        } else if (shouldSave) {
-          context
-              .read<StudentsFormBloc>()
-              .add(const StudentsFormEvent.submitted());
-          SnackBarHelper.showSuccess(context, 'Saved');
-        } else {
-          SnackBarHelper.showError(context, 'Trashed');
-        }
+class _ButtonBar extends StatelessWidget {
+  const _ButtonBar({Key? key}) : super(key: key);
 
-        return true;
-      },
-      child: Scaffold(
-        appBar: AppBar(title: Text(title), titleSpacing: 0),
-        body: const StudentsFormBody(),
-        floatingActionButtonLocation: _kFabLocation,
-        floatingActionButton: const _ImportFab(),
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0, 10),
+            blurRadius: 20,
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          children: [
+            Expanded(
+              child: SecondaryButton(
+                height: 40,
+                label: 'IMPORTAR',
+                onPressed: () async {
+                  await showDialog<void>(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) => const ImportDialog(),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: PrimaryButton(
+                height: 40,
+                label: 'SALVAR',
+                onPressed: () => context
+                    .read<StudentsFormBloc>()
+                    .add(const StudentsFormEvent.submitted()),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _ImportFab extends StatelessWidget {
-  const _ImportFab({Key? key}) : super(key: key);
+class _CloseButton extends StatelessWidget {
+  const _CloseButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: .8,
-      child: FloatingActionButton.extended(
-        // TODO(future): update on scrollable scrolled
-        isExtended: true,
-        icon: const RotatedBox(
-          quarterTurns: 1,
-          child: Icon(Icons.poll_outlined),
-        ),
-        label: const Text('IMPORTAR'),
-        onPressed: () async {
-          await showDialog<void>(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => const ImportDialog(),
+    return CloseButton(
+      onPressed: () async {
+        final bool? discardPressed = await showDialog<bool>(
+          context: context,
+          builder: (_) => const DiscardDialog(),
+        );
+
+        if (discardPressed ?? false) {
+          SnackBarHelper.showWarning(
+            context,
+            'As alterações foram descartadas.',
           );
-        },
-      ),
+          Navigator.pop(context); // Return to discipline details
+        }
+      },
     );
   }
 }

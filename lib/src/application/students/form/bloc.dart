@@ -143,13 +143,24 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
           student
     ];
 
-    emit(state.copyWith(students: newStudents));
+    emit(
+      state.copyWith(
+        students: newStudents,
+      ),
+    );
   }
 
   Future<void> _onSubmitted(
     _Submitted event,
     Emitter<StudentsFormState> emit,
   ) async {
+    emit(
+      state.copyWith(
+        failureOrSuccessOption: const None(),
+        isSaving: true,
+      ),
+    );
+
     await state.discipline.fold(
       () {
         // maybe show 'Something went wrong, please try again.'
@@ -164,6 +175,7 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
         emit(
           state.copyWith(
             failureOrSuccessOption: Some(failureOrSuccess),
+            isSaving: false,
           ),
         );
       },

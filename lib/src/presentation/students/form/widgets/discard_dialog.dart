@@ -14,7 +14,7 @@ class DiscardDialog extends StatelessWidget {
     return AlertDialog(
       shape: const RoundedRectangleBorder(borderRadius: kDefaultBorderRadius),
       titlePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      title: const Text('Deseja salvar as alterações?'),
+      title: const Text('Deseja descartar as alterações?'),
       contentPadding: EdgeInsets.zero,
       contentTextStyle: textTheme.bodySmall?.copyWith(fontSize: 14),
       titleTextStyle: textTheme.titleMedium?.copyWith(
@@ -33,20 +33,22 @@ class DiscardDialog extends StatelessWidget {
       ),
       actionsOverflowButtonSpacing: 8,
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context, false),
-          child: Text(
-            'DESCARTAR',
-            style: textTheme.caption?.copyWith(
-              fontWeight: FontWeight.w500,
-              color: colorScheme.error,
+        SizedBox(
+          height: 40,
+          child: TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(
+              'DESCARTAR',
+              style: textTheme.caption?.copyWith(
+                fontWeight: FontWeight.w500,
+                color: colorScheme.error,
+              ),
             ),
           ),
         ),
-        PrimaryButton(
-          height: 32,
-          label: 'SALVAR',
-          onPressed: () => Navigator.pop(context, true),
+        ElevatedButton(
+          child: const Text('Cancelar'),
+          onPressed: () => Navigator.pop(context, false),
         ),
       ],
     );

@@ -8,6 +8,7 @@ class StudentsFormState with _$StudentsFormState {
     required Option<Discipline> discipline,
     required Option<Student> selectedStudent,
     required List<Student> students,
+    required bool isSaving,
     required Option<Either<StudentFailure, Unit>> failureOrSuccessOption,
   }) = _StudentsFormState;
 
@@ -16,6 +17,7 @@ class StudentsFormState with _$StudentsFormState {
       discipline: None(),
       selectedStudent: None(),
       students: <Student>[],
+      isSaving: false,
       failureOrSuccessOption: None(),
     );
   }
