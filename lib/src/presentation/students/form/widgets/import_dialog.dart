@@ -21,78 +21,117 @@ class ImportDialog extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-            child: SizedBox(
-              height: 28,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Importar Alunos',
-                    style: textTheme.titleLarge?.copyWith(
-                      color: colorScheme.primary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  if (!isLoading)
-                    IconButton(
-                      splashRadius: 20,
-                      iconSize: 20,
-                      icon: const Icon(Icons.close),
-                      padding: EdgeInsets.zero,
-                      visualDensity: kVisualDensity,
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                ],
-              ),
-            ),
-          ),
-          const Divider(height: 0),
-          isLoading
-              ? const LinearProgressIndicator()
-              : const SizedBox(height: 4),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-            child: RichText(
-              text: TextSpan(
-                style: textTheme.bodySmall,
-                children: [
-                  const TextSpan(
-                    text: 'A importação possui somente suporte para ',
-                  ),
-                  TextSpan(
-                    text: 'arquivos CSV',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.primary,
-                    ),
-                  ),
-                  const TextSpan(text: ' no momento.'),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              'Ao importar uma planilha, apenas a primeira coluna será '
-              'utilizada, o resto será ignorado.'
-              '\n\n'
-              'Você pode omitir a primeira linha desmarcando a caixinha abaixo '
-              'caso haja um cabeçalho.',
-              style: textTheme.bodySmall,
-            ),
-          ),
-          const _ChooseFileButton(
+        children: const [
+          _Header(showCloseButton: !isLoading),
+          Divider(height: 0),
+          isLoading ? LinearProgressIndicator() : SizedBox(height: 4),
+          _CsvOnlyHelperMessage(),
+          _HelperMessage(),
+          _ChooseFileButton(
             isLoading: isLoading,
           ),
-          const Divider(height: 0),
-          const _IncludeFirstLineTile(
+          Divider(height: 0),
+          _IncludeFirstLineTile(
             value: includeFirstLine,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _HelperMessage extends StatelessWidget {
+  const _HelperMessage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Text(
+        'Ao importar uma planilha, apenas a primeira coluna será '
+        'utilizada, as outras serão ignoradas.'
+        '\n\n'
+        'Você pode omitir a primeira linha desmarcando a caixinha abaixo '
+        'caso haja um cabeçalho.'
+        '\n\n'
+        'Ao realizar a importação, a lista de alunos dessa disciplina '
+        'será sobrescrita.',
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    );
+  }
+}
+
+class _CsvOnlyHelperMessage extends StatelessWidget {
+  const _CsvOnlyHelperMessage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+      child: RichText(
+        text: TextSpan(
+          style: textTheme.bodySmall,
+          children: [
+            const TextSpan(text: 'A importação possui somente suporte para '),
+            TextSpan(
+              text: 'arquivos CSV',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: colorScheme.primary,
+              ),
+            ),
+            const TextSpan(text: ' no momento.'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header({
+    Key? key,
+    required this.showCloseButton,
+  }) : super(key: key);
+
+  final bool showCloseButton;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+      child: SizedBox(
+        height: 28,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Importar Alunos',
+              style: textTheme.titleLarge?.copyWith(
+                color: colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            if (showCloseButton)
+              IconButton(
+                splashRadius: 20,
+                iconSize: 20,
+                icon: const Icon(Icons.close),
+                padding: EdgeInsets.zero,
+                visualDensity: kVisualDensity,
+                onPressed: () => Navigator.pop(context),
+              ),
+          ],
+        ),
       ),
     );
   }
