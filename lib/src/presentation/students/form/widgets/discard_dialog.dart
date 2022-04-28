@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../shared/shared.dart';
 
 class DiscardDialog extends StatelessWidget {
-  const DiscardDialog({Key? key}) : super(key: key);
+  const DiscardDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +33,13 @@ class DiscardDialog extends StatelessWidget {
       ),
       actionsOverflowButtonSpacing: 8,
       actions: [
-        SizedBox(
-          height: 40,
-          child: TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(
-              'DESCARTAR',
-              style: textTheme.caption?.copyWith(
-                fontWeight: FontWeight.w500,
-                color: colorScheme.error,
-              ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: Text(
+            'DESCARTAR',
+            style: textTheme.caption?.copyWith(
+              fontWeight: FontWeight.w500,
+              color: colorScheme.error,
             ),
           ),
         ),

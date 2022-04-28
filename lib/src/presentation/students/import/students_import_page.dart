@@ -8,9 +8,9 @@ import 'widgets/students_import_view.dart';
 
 class StudentsImportPage extends StatelessWidget {
   const StudentsImportPage({
-    Key? key,
+    super.key,
     required this.discipline,
-  }) : super(key: key);
+  });
 
   final Discipline discipline;
 

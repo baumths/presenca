@@ -6,7 +6,7 @@ import '../../../../shared/shared.dart';
 import '../../../app/router.dart';
 
 class StudentsImportBody extends StatelessWidget {
-  const StudentsImportBody({Key? key}) : super(key: key);
+  const StudentsImportBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +34,17 @@ class StudentsImportBody extends StatelessWidget {
 }
 
 class PickFileView extends StatelessWidget {
-  const PickFileView({Key? key}) : super(key: key);
+  const PickFileView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
           _BorderedColumn(
-            color: Colors.deepOrange,
             children: [
               _Header(),
               SizedBox(height: 16),
@@ -60,7 +60,7 @@ class PickFileView extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({Key? key}) : super(key: key);
+  const _Header({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,13 +68,10 @@ class _Header extends StatelessWidget {
     final textTheme = theme.textTheme;
     final colorScheme = theme.colorScheme;
 
-    return SizedBox(
-      width: double.infinity,
-      child: Text(
-        'Importar Alunos',
-        style: textTheme.titleLarge?.copyWith(
-          color: colorScheme.secondary,
-        ),
+    return Text(
+      'Importar Alunos',
+      style: textTheme.titleLarge?.copyWith(
+        color: colorScheme.secondary,
       ),
     );
   }
@@ -82,25 +79,27 @@ class _Header extends StatelessWidget {
 
 class _BorderedColumn extends StatelessWidget {
   const _BorderedColumn({
-    Key? key,
-    this.color = Colors.black12,
+    super.key,
     this.children = const <Widget>[],
-  }) : super(key: key);
+  });
 
-  final Color color;
   final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: color, width: 2),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.secondary,
+          width: 2,
+        ),
         borderRadius: kDefaultBorderRadius,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: children,
         ),
       ),
@@ -109,7 +108,7 @@ class _BorderedColumn extends StatelessWidget {
 }
 
 class _HelperMessage extends StatelessWidget {
-  const _HelperMessage({Key? key}) : super(key: key);
+  const _HelperMessage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +147,7 @@ class _HelperMessage extends StatelessWidget {
 }
 
 class _PickFileButton extends StatelessWidget {
-  const _PickFileButton({Key? key}) : super(key: key);
+  const _PickFileButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -160,20 +159,11 @@ class _PickFileButton extends StatelessWidget {
             return const _LoadingIndicator();
           }
 
-          return SizedBox(
-            height: kDefaultButtonHeight,
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: kDefaultBorderRadius,
-                ),
-              ),
-              child: const Text('Selecionar Arquivo'),
-              onPressed: () => context
-                  .read<StudentsImportBloc>()
-                  .add(const StudentsImportEvent.pickFilePressed()),
-            ),
+          return PrimaryButton.wide(
+            label: 'Selecionar Arquivo',
+            onPressed: () => context
+                .read<StudentsImportBloc>()
+                .add(const StudentsImportEvent.pickFilePressed()),
           );
         },
       ),
@@ -182,7 +172,7 @@ class _PickFileButton extends StatelessWidget {
 }
 
 class _LoadingIndicator extends StatelessWidget {
-  const _LoadingIndicator({Key? key}) : super(key: key);
+  const _LoadingIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {
