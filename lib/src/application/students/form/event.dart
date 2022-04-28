@@ -3,7 +3,7 @@ part of 'bloc.dart';
 @freezed
 class StudentsFormEvent with _$StudentsFormEvent {
   const factory StudentsFormEvent.started({
-    required Discipline discipline,
+    required List<Student> initialStudents,
   }) = _Started;
 
   const factory StudentsFormEvent.selected({

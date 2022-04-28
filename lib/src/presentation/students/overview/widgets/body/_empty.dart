@@ -17,13 +17,14 @@ class _EmptyStudents extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const Spacer(flex: 2),
-          // TODO(future): import from google sheets
-          // TODO: import students from csv
           PrimaryButton.wide(
             label: 'CADASTRAR ALUNOS',
             onPressed: () {
               final bloc = context.read<StudentsOverviewBloc>();
-              AppRouter.showStudentsForm(context, bloc.discipline);
+              AppRouter.showStudentsForm(
+                context: context,
+                discipline: bloc.discipline,
+              );
             },
           ),
           const Spacer(flex: 1),

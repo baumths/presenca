@@ -11,14 +11,22 @@ class StudentsFormPage extends StatelessWidget {
   const StudentsFormPage({
     Key? key,
     required this.discipline,
+    this.initialStudents = const <Student>[],
   }) : super(key: key);
 
   final Discipline discipline;
+  final List<Student> initialStudents;
 
-  static Route<void> route(Discipline discipline) {
+  static Route<void> route({
+    required Discipline discipline,
+    List<Student> initialStudents = const [],
+  }) {
     return MaterialPageRoute(
       fullscreenDialog: true,
-      builder: (_) => StudentsFormPage(discipline: discipline),
+      builder: (_) => StudentsFormPage(
+        discipline: discipline,
+        initialStudents: initialStudents,
+      ),
     );
   }
 
@@ -27,10 +35,15 @@ class StudentsFormPage extends StatelessWidget {
     return BlocProvider<StudentsFormBloc>(
       create: (_) {
         final bloc = StudentsFormBloc(
+          discipline: discipline,
           studentsRepository: context.read<StudentsRepository>(),
         );
 
-        return bloc..add(StudentsFormEvent.started(discipline: discipline));
+        final formStarted = StudentsFormEvent.started(
+          initialStudents: initialStudents,
+        );
+
+        return bloc..add(formStarted);
       },
       child: BlocListener<StudentsFormBloc, StudentsFormState>(
         listenWhen: (p, c) {

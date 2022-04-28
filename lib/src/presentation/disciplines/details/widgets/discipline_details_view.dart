@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../application/discipline/details/bloc.dart';
 import '../../../../domain/discipline.dart';
 import '../../../app/router.dart';
+import '../../../pages.dart';
 import 'body/body.dart';
 
 class DisciplineDetailsView extends StatelessWidget {
@@ -51,12 +53,16 @@ class DisciplineActionsSheet extends StatelessWidget {
       shrinkWrap: true,
       children: [
         ListTile(
+          dense: true,
           leading: const Icon(Icons.people_alt),
           title: const Text('Editar Alunos'),
           trailing: const Icon(Icons.arrow_forward_rounded),
           onTap: () {
             Navigator.pop(context);
-            AppRouter.showStudentsForm(context, discipline);
+            AppRouter.showStudentsForm(
+              context: context,
+              discipline: discipline,
+            );
           },
         ),
       ],

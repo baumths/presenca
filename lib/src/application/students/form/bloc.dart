@@ -11,12 +11,14 @@ part 'state.dart';
 
 class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
   StudentsFormBloc({
+    required this.discipline,
     required StudentsRepository studentsRepository,
   })  : _studentsRepository = studentsRepository,
         super(StudentsFormState.empty()) {
     on<StudentsFormEvent>(_onEvent);
   }
 
+  final Discipline discipline;
   final StudentsRepository _studentsRepository;
 
   Future<void> _onEvent(
@@ -36,15 +38,21 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
     _Started event,
     Emitter<StudentsFormState> emit,
   ) async {
-    final discipline = event.discipline;
-    final students = await _studentsRepository.find(discipline.id);
+    late final List<Student> students;
+
+    // TODO(future): find students in storage and warn user of overwriting
+    if (event.initialStudents.isEmpty) {
+      students = await _studentsRepository.find(discipline.id);
+    } else {
+      // TODO: allow delete of student when importing (dismissible???)
+      students = List<Student>.from(event.initialStudents);
+    }
 
     emit(
       state.copyWith(
-        discipline: Some(discipline),
         selectedStudent: const None(),
         failureOrSuccessOption: const None(),
-        students: students..sort(byStudentName),
+        students: students,
       ),
     );
   }
@@ -67,63 +75,56 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
   ) async {
     final String studentName = event.name.trim();
 
-    state.discipline.fold(
+    state.selectedStudent.fold(
       () {
-        // maybe show 'Something went wrong, please try again.'
+        // Adding new student
+        if (studentName.isEmpty) {
+          // Empty name, do nothing
+          return;
+        }
+
+        final student = Student.empty().copyWith(
+          disciplineId: discipline.id,
+          name: studentName,
+        );
+
+        final newStudents = <Student>[...state.students, student];
+
+        emit(
+          state.copyWith(
+            selectedStudent: const None(),
+            failureOrSuccessOption: const None(),
+            students: newStudents,
+          ),
+        );
       },
-      (discipline) {
-        state.selectedStudent.fold(
-          () {
-            // Adding new student
-            if (studentName.isEmpty) {
-              // Empty name, do nothing
-              return;
-            }
-
-            final student = Student.empty().copyWith(
-              disciplineId: discipline.id,
-              name: studentName,
-            );
-
-            final newStudents = <Student>[...state.students, student];
-
-            emit(
-              state.copyWith(
-                selectedStudent: const None(),
-                failureOrSuccessOption: const None(),
-                students: newStudents..sort(byStudentName),
+      (editingStudent) {
+        // Editing student
+        if (studentName.isEmpty) {
+          emit(
+            state.copyWith(
+              failureOrSuccessOption: const Some(
+                Left(StudentFailure.emptyName()),
               ),
-            );
-          },
-          (editingStudent) {
-            // Editing student
-            if (studentName.isEmpty) {
-              emit(
-                state.copyWith(
-                  failureOrSuccessOption: const Some(
-                    Left(StudentFailure.emptyName()),
-                  ),
-                ),
-              );
-              return;
-            }
+            ),
+          );
+          return;
+        }
 
-            final newStudents = <Student>[
-              for (final Student student in state.students)
-                if (student.id == editingStudent.id)
-                  student.copyWith(name: studentName)
-                else
-                  student
-            ];
+        final newStudents = <Student>[
+          for (final Student student in state.students)
+            if (student.id == editingStudent.id)
+              student.copyWith(name: studentName)
+            else
+              student
+        ];
 
-            emit(
-              state.copyWith(
-                selectedStudent: const None(),
-                failureOrSuccessOption: const None(),
-                students: newStudents..sort(byStudentName),
-              ),
-            );
-          },
+        emit(
+          state.copyWith(
+            selectedStudent: const None(),
+            failureOrSuccessOption: const None(),
+            students: newStudents,
+          ),
         );
       },
     );
@@ -161,26 +162,16 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
       ),
     );
 
-    await state.discipline.fold(
-      () {
-        // maybe show 'Something went wrong, please try again.'
-        return Future<void>.value();
-      },
-      (discipline) async {
-        final failureOrSuccess = await _studentsRepository.save(
-          discipline.id,
-          state.students,
-        );
+    final failureOrSuccess = await _studentsRepository.save(
+      discipline.id,
+      state.students,
+    );
 
-        emit(
-          state.copyWith(
-            failureOrSuccessOption: Some(failureOrSuccess),
-            isSaving: false,
-          ),
-        );
-      },
+    emit(
+      state.copyWith(
+        failureOrSuccessOption: Some(failureOrSuccess),
+        isSaving: false,
+      ),
     );
   }
 }
-
-int byStudentName(Student a, Student b) => a.name.compareTo(b.name);

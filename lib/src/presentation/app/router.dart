@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/discipline.dart';
+import '../../domain/entities/student.dart';
 import '../pages.dart';
 
 abstract class AppRouter {
@@ -37,12 +38,16 @@ abstract class AppRouter {
     );
   }
 
-  static void showStudentsForm(
-    BuildContext context,
-    Discipline discipline,
-  ) {
+  static void showStudentsForm({
+    required BuildContext context,
+    required Discipline discipline,
+    List<Student> initialStudents = const <Student>[],
+  }) {
     Navigator.of(context).push(
-      StudentsFormPage.route(discipline),
+      StudentsFormPage.route(
+        discipline: discipline,
+        initialStudents: initialStudents,
+      ),
     );
   }
 }

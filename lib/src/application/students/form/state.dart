@@ -5,7 +5,6 @@ class StudentsFormState with _$StudentsFormState {
   const StudentsFormState._();
 
   const factory StudentsFormState({
-    required Option<Discipline> discipline,
     required Option<Student> selectedStudent,
     required List<Student> students,
     required bool isSaving,
@@ -14,7 +13,6 @@ class StudentsFormState with _$StudentsFormState {
 
   factory StudentsFormState.empty() {
     return const StudentsFormState(
-      discipline: None(),
       selectedStudent: None(),
       students: <Student>[],
       isSaving: false,
