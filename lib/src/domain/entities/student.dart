@@ -86,7 +86,7 @@ class Student {
   String toString() => 'Student('
       'id: $id, '
       'disciplineId: $disciplineId, '
-      'name: $name'
+      'name: $name, '
       'active: $active'
       ')';
 }
