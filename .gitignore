@@ -1,4 +1,3 @@
-/android/
 /linux/
 **/*.lock
 **/*.g.dart
