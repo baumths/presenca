@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/repositories/disciplines_repository.dart';
 import '../../domain/repositories/students_repository.dart';
+import '../../infrastructure/adapters.dart';
 import 'router.dart';
 import 'theme.dart';
 
@@ -11,10 +12,12 @@ class PresencaApp extends StatelessWidget {
     Key? key,
     required this.disciplinesRepository,
     required this.studentsRepository,
+    required this.filePickerAdapter,
   }) : super(key: key);
 
   final DisciplinesRepository disciplinesRepository;
   final StudentsRepository studentsRepository;
+  final FilePickerAdapter filePickerAdapter;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +25,7 @@ class PresencaApp extends StatelessWidget {
       providers: [
         RepositoryProvider.value(value: disciplinesRepository),
         RepositoryProvider.value(value: studentsRepository),
+        RepositoryProvider.value(value: filePickerAdapter),
       ],
       child: const AppView(),
     );
