@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/discipline/details/bloc.dart';
 import '../../../../domain/discipline.dart';
+import '../../../../shared/shared.dart';
 import '../../../app/router.dart';
 import '../../../pages.dart';
 import 'body/body.dart';
@@ -62,6 +64,31 @@ class DisciplineActionsSheet extends StatelessWidget {
             AppRouter.showStudentsForm(
               context: context,
               discipline: discipline,
+            );
+          },
+        ),
+        const Divider(height: 0),
+        ListTile(
+          dense: true,
+          leading: const Icon(Icons.list_alt_rounded),
+          title: const Text('Importar Alunos'),
+          trailing: const Icon(Icons.arrow_forward_rounded),
+          onTap: () async {
+            Navigator.pop(context);
+
+            await showModalBottomSheet<void>(
+              isScrollControlled: false,
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: kDefaultBorderRadius.topLeft,
+                  topRight: kDefaultBorderRadius.topRight,
+                ),
+              ),
+              context: context,
+              builder: (_) => StudentsImportPage(
+                discipline: discipline,
+              ),
             );
           },
         ),
