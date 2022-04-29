@@ -2,97 +2,161 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/discipline/details/bloc.dart';
-import '../../../../domain/discipline.dart';
 import '../../../../shared/shared.dart';
-import '../../../app/router.dart';
-import '../../../pages.dart';
+import 'actions_sheet.dart';
 import 'body/body.dart';
 
-class DisciplineDetailsView extends StatelessWidget {
-  const DisciplineDetailsView({
-    Key? key,
-    required this.discipline,
-  }) : super(key: key);
+enum DetailsTab {
+  students('Alunos', Icons.people_alt_rounded),
+  attendances('Chamadas', Icons.calendar_view_day_rounded);
 
-  final Discipline discipline;
+  const DetailsTab(this.label, this.icon);
+
+  final String label;
+  final IconData icon;
+
+  static List<Widget> get labels => values.map((it) => Text(it.label)).toList();
+}
+
+class DisciplineDetailsView extends StatefulWidget {
+  const DisciplineDetailsView({
+    super.key,
+    required this.title,
+  });
+  final String title;
+
+  @override
+  State<DisciplineDetailsView> createState() => _DisciplineDetailsViewState();
+}
+
+class _DisciplineDetailsViewState extends State<DisciplineDetailsView>
+    with SingleTickerProviderStateMixin {
+  late final TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 0,
-        title: Text(discipline.name),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert_rounded),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            onPressed: () async {
-              await showModalBottomSheet<void>(
-                context: context,
-                enableDrag: false,
-                builder: (_) => DisciplineActionsSheet(discipline: discipline),
-              );
-            },
-          ),
-        ],
-      ),
-      body: DisciplineDetailsBody(discipline: discipline),
+      appBar: _AppBar(title: widget.title, tabController: tabController),
+      body: DisciplineDetailsBody(tabController: tabController),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: const _StartAttendanceFab(),
+      bottomNavigationBar: const _BottomBar(),
     );
   }
 }
 
-class DisciplineActionsSheet extends StatelessWidget {
-  const DisciplineActionsSheet({
-    Key? key,
-    required this.discipline,
-  }) : super(key: key);
+class _AppBar extends StatelessWidget implements PreferredSizeWidget {
+  const _AppBar({
+    super.key,
+    required this.title,
+    required this.tabController,
+  });
 
-  final Discipline discipline;
+  final String title;
+  final TabController tabController;
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        ListTile(
-          dense: true,
-          leading: const Icon(Icons.people_alt),
-          title: const Text('Editar Alunos'),
-          trailing: const Icon(Icons.arrow_forward_rounded),
-          onTap: () {
-            Navigator.pop(context);
-            AppRouter.showStudentsForm(
-              context: context,
-              discipline: discipline,
-            );
-          },
-        ),
-        const Divider(height: 0),
-        ListTile(
-          dense: true,
-          leading: const Icon(Icons.list_alt_rounded),
-          title: const Text('Importar Alunos'),
-          trailing: const Icon(Icons.arrow_forward_rounded),
-          onTap: () async {
-            Navigator.pop(context);
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
 
-            await showModalBottomSheet<void>(
-              isScrollControlled: false,
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: kDefaultBorderRadius.topLeft,
-                  topRight: kDefaultBorderRadius.topRight,
-                ),
+    return Material(
+      color: colorScheme.primary,
+      elevation: 2,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListTile(
+            leading: const BackButton(),
+            iconColor: colorScheme.onPrimary,
+            textColor: colorScheme.onPrimary,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+            horizontalTitleGap: 8,
+            title: Text(
+              title,
+              style: textTheme.titleLarge?.copyWith(
+                color: colorScheme.onPrimary,
               ),
-              context: context,
-              builder: (_) => StudentsImportPage(
-                discipline: discipline,
+            ),
+          ),
+          TabBar(
+            controller: tabController,
+            labelPadding: const EdgeInsets.all(8),
+            indicatorColor: colorScheme.primary,
+            tabs: DetailsTab.labels,
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size(double.infinity, 96);
+}
+
+class _BottomBar extends StatelessWidget {
+  const _BottomBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Material(
+      color: colorScheme.surfaceVariant,
+      elevation: 20,
+      child: SizedBox(
+        height: kDefaultButtonHeight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              splashRadius: 24,
+              splashColor: colorScheme.secondary.withOpacity(.2),
+              tooltip: 'Ações',
+              icon: const Icon(Icons.call_to_action_rounded),
+              padding: EdgeInsets.zero,
+              color: colorScheme.secondary,
+              onPressed: () async => await showModalBottomSheet<void>(
+                context: context,
+                builder: (_) {
+                  final bloc = context.read<DisciplineDetailsBloc>();
+                  return DisciplineActionsSheet(
+                    discipline: bloc.discipline,
+                  );
+                },
               ),
-            );
-          },
+            ),
+            const SizedBox(width: 8),
+          ],
         ),
-      ],
+      ),
+    );
+  }
+}
+
+class _StartAttendanceFab extends StatelessWidget {
+  const _StartAttendanceFab({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      child: const Icon(Icons.add_task_rounded),
+      onPressed: () {},
     );
   }
 }

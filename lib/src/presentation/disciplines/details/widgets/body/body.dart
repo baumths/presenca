@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../domain/discipline.dart';
-import '../../../../students/students.dart';
+import '../../../../../application/discipline/details/bloc.dart';
+import '../../../../pages.dart';
+
+part '_attendances_tab.dart';
+part '_students_tab.dart';
 
 class DisciplineDetailsBody extends StatelessWidget {
   const DisciplineDetailsBody({
-    Key? key,
-    required this.discipline,
-  }) : super(key: key);
+    super.key,
+    required this.tabController,
+  });
 
-  final Discipline discipline;
+  final TabController tabController;
 
   @override
   Widget build(BuildContext context) {
-    return StudentsOverviewPage(discipline: discipline);
+    return TabBarView(
+      controller: tabController,
+      children: const [
+        StudentsTab(),
+        AttendancesTab(),
+      ],
+    );
   }
 }
