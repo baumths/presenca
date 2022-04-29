@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/students/form/bloc.dart';
-import '../../../../shared/shared.dart';
 import 'discard_dialog.dart';
 import 'students_form_body.dart';
 
@@ -23,17 +22,7 @@ class StudentsFormView extends StatelessWidget {
           builder: (_) => const DiscardDialog(),
         );
 
-        if (discardPressed ?? false) {
-          // ignore: use_build_context_synchronously
-          SnackBarHelper.showWarning(
-            context,
-            'As alterações foram descartadas.',
-          );
-
-          return true;
-        }
-
-        return false;
+        return discardPressed ?? false;
       },
       child: Scaffold(
         appBar: AppBar(
