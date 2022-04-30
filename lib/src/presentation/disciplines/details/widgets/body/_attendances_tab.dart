@@ -5,8 +5,7 @@ class AttendancesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: null,
-    );
+    final bloc = context.watch<DisciplineDetailsBloc>();
+    return AttendancesOverviewPage(discipline: bloc.discipline);
   }
 }

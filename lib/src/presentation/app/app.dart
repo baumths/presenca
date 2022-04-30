@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/repositories/disciplines_repository.dart';
-import '../../domain/repositories/students_repository.dart';
+import '../../domain/repositories/repositories.dart';
 import '../../infrastructure/adapters.dart';
 import 'router.dart';
 import 'theme.dart';
 
 class PresencaApp extends StatelessWidget {
   const PresencaApp({
-    Key? key,
+    super.key,
+    required this.attendancesRepository,
     required this.disciplinesRepository,
     required this.studentsRepository,
     required this.filePickerAdapter,
-  }) : super(key: key);
+  });
 
+  final AttendancesRepository attendancesRepository;
   final DisciplinesRepository disciplinesRepository;
   final StudentsRepository studentsRepository;
   final FilePickerAdapter filePickerAdapter;
@@ -23,6 +24,7 @@ class PresencaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
+        RepositoryProvider.value(value: attendancesRepository),
         RepositoryProvider.value(value: disciplinesRepository),
         RepositoryProvider.value(value: studentsRepository),
         RepositoryProvider.value(value: filePickerAdapter),
@@ -33,7 +35,7 @@ class PresencaApp extends StatelessWidget {
 }
 
 class AppView extends StatelessWidget {
-  const AppView({Key? key}) : super(key: key);
+  const AppView({super.key});
 
   @override
   Widget build(BuildContext context) {
