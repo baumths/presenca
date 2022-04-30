@@ -59,7 +59,8 @@ class StudentsRepositoryImpl implements StudentsRepository {
   }
 
   List<Student> studentsFromHive(List hiveList) {
-    final students = List<String>.from(hiveList);
-    return students.map(Student.fromJson).toList();
+    return <Student>[
+      for (final dynamic json in hiveList) Student.fromJson(json as String),
+    ];
   }
 }
