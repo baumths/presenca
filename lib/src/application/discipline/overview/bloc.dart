@@ -1,5 +1,3 @@
-import 'dart:async' show StreamSubscription;
-
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -20,48 +18,31 @@ class DisciplinesOverviewBloc
 
   final DisciplinesRepository _disciplinesRepository;
 
-  StreamSubscription<List<Discipline>>? _streamSubscription;
-
   Future<void> _onEvent(
     DisciplinesOverviewEvent event,
     Emitter<DisciplinesOverviewState> emit,
   ) async {
     await event.map(
-      started: _onStarted,
-      refreshed: (event) => _onRefreshed(event, emit),
+      started: (event) => _onStarted(event, emit),
     );
   }
 
-  Future<void> _onStarted(_Started event) async {
-    await _streamSubscription?.cancel();
-
-    final stream = _disciplinesRepository.watch();
-
-    _streamSubscription = stream.listen((List<Discipline> disciplines) {
-      add(DisciplinesOverviewEvent.refreshed(disciplines: disciplines));
-    });
-  }
-
-  Future<void> _onRefreshed(
-    _Refreshed event,
+  Future<void> _onStarted(
+    _Started event,
     Emitter<DisciplinesOverviewState> emit,
   ) async {
-    late final DisciplinesOverviewState state;
+    await emit.forEach(
+      _disciplinesRepository.watch(),
+      onError: (_, __) => const DisciplinesOverviewState.initial(),
+      onData: (List<Discipline> disciplines) {
+        if (disciplines.isEmpty) {
+          return const DisciplinesOverviewState.initial();
+        }
 
-    if (event.disciplines.isEmpty) {
-      state = const DisciplinesOverviewState.initial();
-    } else {
-      state = DisciplinesOverviewState.loadSuccess(
-        disciplines: event.disciplines,
-      );
-    }
-
-    emit(state);
-  }
-
-  @override
-  Future<void> close() async {
-    await _streamSubscription?.cancel();
-    return super.close();
+        return DisciplinesOverviewState.loadSuccess(
+          disciplines: disciplines,
+        );
+      },
+    );
   }
 }

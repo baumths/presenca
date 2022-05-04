@@ -1,5 +1,3 @@
-import 'dart:async' show StreamSubscription;
-
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -23,53 +21,38 @@ class StudentsOverviewBloc
   final Discipline discipline;
   final StudentsRepository _studentsRepository;
 
-  StreamSubscription<List<Student>>? _streamSubscription;
-
   Future<void> _onEvent(
     StudentsOverviewEvent event,
     Emitter<StudentsOverviewState> emit,
   ) async {
     await event.map(
-      started: _onStarted,
-      refreshed: (event) => _onRefreshed(event, emit),
+      started: (event) => _onStarted(event, emit),
     );
   }
 
-  Future<void> _onStarted(_Started event) async {
-    await _streamSubscription?.cancel();
-
-    final stream = _studentsRepository.watch(discipline.id);
-
-    _streamSubscription = stream.listen((List<Student> students) {
-      add(StudentsOverviewEvent.refreshed(students: students));
-    });
-  }
-
-  Future<void> _onRefreshed(
-    _Refreshed event,
+  Future<void> _onStarted(
+    _Started event,
     Emitter<StudentsOverviewState> emit,
   ) async {
-    final activeStudents = <Student>[
-      for (final Student student in event.students)
-        if (student.active) student,
-    ];
+    await emit.forEach(
+      _studentsRepository.watch(discipline.id),
+      onError: (_, __) => const StudentsOverviewState.initial(),
+      onData: (List<Student> students) {
+        final activeStudents = <Student>[
+          for (final Student student in students)
+            if (student.active) student,
+        ];
 
-    activeStudents.sort((a, b) => a.name.compareTo(b.name));
+        if (activeStudents.isEmpty) {
+          return const StudentsOverviewState.initial();
+        }
 
-    late final StudentsOverviewState state;
+        activeStudents.sort((a, b) => a.name.compareTo(b.name));
 
-    if (activeStudents.isEmpty) {
-      state = const StudentsOverviewState.initial();
-    } else {
-      state = StudentsOverviewState.loadSuccess(students: activeStudents);
-    }
-
-    emit(state);
-  }
-
-  @override
-  Future<void> close() async {
-    await _streamSubscription?.cancel();
-    return super.close();
+        return StudentsOverviewState.loadSuccess(
+          students: activeStudents,
+        );
+      },
+    );
   }
 }
