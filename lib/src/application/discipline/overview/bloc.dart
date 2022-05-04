@@ -9,9 +9,9 @@ part 'bloc.freezed.dart';
 part 'event.dart';
 part 'state.dart';
 
-class DisciplineOverviewBloc
+class DisciplinesOverviewBloc
     extends Bloc<DisciplinesOverviewEvent, DisciplinesOverviewState> {
-  DisciplineOverviewBloc({
+  DisciplinesOverviewBloc({
     required DisciplinesRepository disciplinesRepository,
   })  : _disciplinesRepository = disciplinesRepository,
         super(const DisciplinesOverviewState.initial()) {

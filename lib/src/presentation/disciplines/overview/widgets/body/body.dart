@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../application/discipline/overview/bloc.dart';
 import '../../../../../domain/entities/discipline.dart';
@@ -11,20 +12,17 @@ part '_loading.dart';
 part '_success.dart';
 
 class DisciplinesOverviewBody extends StatelessWidget {
-  const DisciplinesOverviewBody({
-    Key? key,
-    required this.state,
-  }) : super(key: key);
-
-  final DisciplinesOverviewState state;
+  const DisciplinesOverviewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return state.map(
-      initial: (_) => const _EmptyDisciplines(),
-      loadInProgress: (_) => const _LoadingDisciplines(),
-      loadSuccess: (state) => DisciplinesOverview(
-        disciplines: state.disciplines,
+    return BlocBuilder<DisciplinesOverviewBloc, DisciplinesOverviewState>(
+      builder: (context, state) => state.map(
+        initial: (_) => const _EmptyDisciplines(),
+        loadInProgress: (_) => const _LoadingDisciplines(),
+        loadSuccess: (state) => DisciplinesOverview(
+          disciplines: state.disciplines,
+        ),
       ),
     );
   }

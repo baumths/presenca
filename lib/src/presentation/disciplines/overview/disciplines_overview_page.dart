@@ -6,13 +6,13 @@ import '../../../domain/repositories/disciplines_repository.dart';
 import 'widgets/disciplines_overview_view.dart';
 
 class DisciplinesOverviewPage extends StatelessWidget {
-  const DisciplinesOverviewPage({Key? key}) : super(key: key);
+  const DisciplinesOverviewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<DisciplineOverviewBloc>(
+    return BlocProvider<DisciplinesOverviewBloc>(
       create: (BuildContext context) {
-        final DisciplineOverviewBloc bloc = DisciplineOverviewBloc(
+        final bloc = DisciplinesOverviewBloc(
           disciplinesRepository: context.read<DisciplinesRepository>(),
         );
 
