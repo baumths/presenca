@@ -113,13 +113,16 @@ class AttendanceCardNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: backgroundColor,
-      child: Padding(
-        padding: AppPadding.allMedium,
-        child: Text(
-          note,
-          style: textStyle,
+    return SizedBox(
+      width: double.infinity,
+      child: ColoredBox(
+        color: backgroundColor,
+        child: Padding(
+          padding: AppPadding.allMedium,
+          child: Text(
+            note,
+            style: textStyle,
+          ),
         ),
       ),
     );
