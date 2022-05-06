@@ -10,9 +10,11 @@ class AttendanceDetailsPage extends StatelessWidget {
   const AttendanceDetailsPage({
     super.key,
     required this.attendance,
+    this.child,
   });
 
   final Attendance attendance;
+  final Widget? child;
 
   static Route<void> route(Attendance attendance) {
     return MaterialPageRoute(
@@ -31,9 +33,10 @@ class AttendanceDetailsPage extends StatelessWidget {
 
         return bloc..add(const AttendanceDetailsEvent.started());
       },
-      child: AttendanceDetailsView(
-        title: attendance.date.toString(),
-      ),
+      child: child ??
+          AttendanceDetailsView(
+            title: attendance.date.toString(),
+          ),
     );
   }
 }

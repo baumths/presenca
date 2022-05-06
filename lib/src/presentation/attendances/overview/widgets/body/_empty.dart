@@ -11,19 +11,17 @@ class EmptyAttendances extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Spacer(flex: 2),
           const Text(
             'Essa disciplina ainda não possui chamadas.',
             textAlign: TextAlign.center,
           ),
-          const Spacer(flex: 2),
+          const SizedBox(height: 32),
           PrimaryButton.wide(
             label: 'INICIAR CHAMADA',
             onPressed: () {
               // TODO: create new attendance
             },
           ),
-          const Spacer(flex: 1),
         ],
       ),
     );

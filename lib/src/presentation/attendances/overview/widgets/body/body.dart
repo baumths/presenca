@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../application/attendances/overview/bloc.dart';
 import '../../../../../domain/attendance.dart';
 import '../../../../../shared/shared.dart';
+import '../../../details/attendance_details_page.dart';
 import '../attendance_card.dart';
 
 part '_empty.dart';
@@ -18,21 +19,23 @@ class AttendancesOverviewBody extends StatelessWidget {
     return BlocBuilder<AttendancesOverviewBloc, AttendancesOverviewState>(
       builder: (context, state) => state.when(
         loading: () => const LoadingAttendances(),
-        success: (attendancesOption) => attendancesOption.fold(
-          () {
-            return AttendancesList(
-              attendances: [
-                Attendance.empty(),
-                Attendance.empty(),
-                Attendance.empty(),
-                Attendance.empty(),
-                Attendance.empty(),
-              ],
-            );
-            return const EmptyAttendances();
-          },
-          (attendances) => AttendancesList(attendances: attendances),
-        ),
+        success: (attendances) {
+          if (attendances.isEmpty) {
+            // return const EmptyAttendances();
+          }
+
+          return AttendancesList(
+            attendances: [
+              Attendance.empty().copyWith(
+                note: 'Lorem ipsum dolor sit amet.' * 5,
+              ),
+              Attendance.empty(),
+              Attendance.empty(),
+              Attendance.empty(),
+              Attendance.empty(),
+            ],
+          );
+        },
       ),
     );
   }

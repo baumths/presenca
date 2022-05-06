@@ -10,19 +10,19 @@ class AttendancesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const delegate = SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2,
-      mainAxisSpacing: 8,
-      crossAxisSpacing: 8,
-      mainAxisExtent: 160,
-    );
-
-    return GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      gridDelegate: delegate,
+    return ListView.separated(
+      padding: AppPadding.allMedium,
       itemCount: attendances.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
-        return AttendanceCard(attendance: attendances[index]);
+        final attendance = attendances[index];
+
+        return AttendanceDetailsPage(
+          attendance: attendance,
+          child: AttendanceCard(
+            attendance: attendance,
+          ),
+        );
       },
     );
   }
