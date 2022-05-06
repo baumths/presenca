@@ -3,16 +3,12 @@ import 'package:flutter/material.dart';
 import '../../shared/constants.dart';
 
 final ThemeData theme = ThemeData(
-  colorScheme: colorScheme,
+  colorSchemeSeed: Colors.deepPurple,
+  useMaterial3: true,
   visualDensity: VisualDensity.comfortable,
   inputDecorationTheme: const InputDecorationTheme(
     contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
     border: OutlineInputBorder(borderRadius: kDefaultBorderRadius),
   ),
-);
-
-final ColorScheme colorScheme = ColorScheme.fromSwatch(
-  primarySwatch: Colors.deepPurple,
-  primaryColorDark: Colors.deepPurpleAccent,
-  accentColor: Colors.orange.shade800,
+  iconTheme: const IconThemeData(size: 20),
 );
