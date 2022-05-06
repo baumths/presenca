@@ -15,7 +15,7 @@ enum DetailsTab {
   final String label;
   final IconData icon;
 
-  static List<Widget> get labels => values.map((it) => Text(it.label)).toList();
+  static List<Widget> get labels => [for (final it in values) Text(it.label)];
 }
 
 class DisciplineDetailsView extends StatefulWidget {
@@ -47,77 +47,36 @@ class _DisciplineDetailsViewState extends State<DisciplineDetailsView>
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      appBar: _AppBar(title: widget.title, tabController: tabController),
+      appBar: AppBar(
+        titleSpacing: 0,
+        title: Text(widget.title),
+        bottom: TabBar(
+          controller: tabController,
+          labelPadding: AppPadding.allSmall,
+          tabs: DetailsTab.labels,
+          indicatorColor: colorScheme.onPrimary,
+        ),
+      ),
       body: DisciplineDetailsBody(tabController: tabController),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: const _StartAttendanceFab(),
-      bottomNavigationBar: const _BottomBar(),
+      floatingActionButton: const StartAttendanceFab(),
+      bottomNavigationBar: const DisciplineDetailsBottomBar(),
+      backgroundColor: colorScheme.surfaceVariant,
     );
   }
 }
 
-class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-  const _AppBar({
-    super.key,
-    required this.title,
-    required this.tabController,
-  });
-
-  final String title;
-  final TabController tabController;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final colorScheme = theme.colorScheme;
-
-    return Material(
-      color: colorScheme.primary,
-      elevation: 2,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            leading: const BackButton(),
-            iconColor: colorScheme.onPrimary,
-            textColor: colorScheme.onPrimary,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-            horizontalTitleGap: 8,
-            title: Text(
-              title,
-              style: textTheme.titleLarge?.copyWith(
-                color: colorScheme.onPrimary,
-              ),
-            ),
-          ),
-          TabBar(
-            controller: tabController,
-            labelPadding: const EdgeInsets.all(8),
-            indicatorColor: colorScheme.primary,
-            tabs: DetailsTab.labels,
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size(double.infinity, 96);
-}
-
-class _BottomBar extends StatelessWidget {
-  const _BottomBar({super.key});
+class DisciplineDetailsBottomBar extends StatelessWidget {
+  const DisciplineDetailsBottomBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Material(
-      color: colorScheme.surfaceVariant,
-      elevation: 20,
       child: SizedBox(
         height: kDefaultButtonHeight,
         child: Row(
@@ -125,11 +84,9 @@ class _BottomBar extends StatelessWidget {
           children: [
             IconButton(
               splashRadius: 24,
-              splashColor: colorScheme.secondary.withOpacity(.2),
               tooltip: 'Ações',
+              color: colorScheme.onPrimaryContainer,
               icon: const Icon(Icons.call_to_action_rounded),
-              padding: EdgeInsets.zero,
-              color: colorScheme.secondary,
               onPressed: () async => await showModalBottomSheet<void>(
                 context: context,
                 builder: (_) {
@@ -148,13 +105,12 @@ class _BottomBar extends StatelessWidget {
   }
 }
 
-class _StartAttendanceFab extends StatelessWidget {
-  const _StartAttendanceFab({super.key});
+class StartAttendanceFab extends StatelessWidget {
+  const StartAttendanceFab({super.key});
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      backgroundColor: Theme.of(context).colorScheme.primary,
       child: const Icon(Icons.add_task_rounded),
       onPressed: () {},
     );
