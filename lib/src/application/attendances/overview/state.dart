@@ -5,6 +5,6 @@ class AttendancesOverviewState with _$AttendancesOverviewState {
   const factory AttendancesOverviewState.loading() = AttendancesOverviewLoading;
 
   const factory AttendancesOverviewState.success({
-    required Option<List<Attendance>> attendancesOption,
+    required List<Attendance> attendances,
   }) = AttendancesOverviewSuccess;
 }

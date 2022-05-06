@@ -37,14 +37,14 @@ class AttendancesOverviewBloc
   ) async {
     await emit.forEach<List<Attendance>>(
       _attendancesRepository.watch(discipline.id),
-      onData: (List<Attendance> data) {
+      onData: (List<Attendance> attendances) {
         return AttendancesOverviewState.success(
-          attendancesOption: data.isEmpty ? const None() : Some(data),
+          attendances: attendances,
         );
       },
       onError: (_, __) {
         return const AttendancesOverviewState.success(
-          attendancesOption: None(),
+          attendances: [],
         );
       },
     );
