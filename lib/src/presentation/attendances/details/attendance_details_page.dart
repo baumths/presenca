@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../../application/attendances/details/bloc.dart';
 import '../../../domain/attendance.dart';
 import '../../../domain/student.dart';
+import '../../../shared/shared.dart';
 import 'widgets/attendance_details_view.dart';
 
 class AttendanceDetailsPage extends StatelessWidget {
@@ -15,6 +17,10 @@ class AttendanceDetailsPage extends StatelessWidget {
 
   final Attendance attendance;
   final Widget? child;
+
+  String formattedDate(String locale) {
+    return DateFormat.yMMMd(locale).format(attendance.date);
+  }
 
   static Route<void> route(Attendance attendance) {
     return MaterialPageRoute(
@@ -35,7 +41,7 @@ class AttendanceDetailsPage extends StatelessWidget {
       },
       child: child ??
           AttendanceDetailsView(
-            title: attendance.date.toString(),
+            title: formattedDate(context.l10n.localeName),
           ),
     );
   }
