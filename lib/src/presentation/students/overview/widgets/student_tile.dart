@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/entities/student.dart';
+import '../../../../shared/shared.dart';
 
 class StudentTile extends StatelessWidget {
   const StudentTile({
-    Key? key,
+    super.key,
     required this.student,
-    this.tileColor,
-  }) : super(key: key);
+  });
 
   final Student student;
-  final Color? tileColor;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      dense: true,
-      title: Text(student.name),
-      tileColor: tileColor,
+    final theme = Theme.of(context);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: kDefaultBorderRadius / 2,
+      ),
+      child: Padding(
+        padding: AppPadding.tile,
+        child: Text(student.name, style: const TextStyle(fontSize: 14)),
+      ),
     );
   }
 }

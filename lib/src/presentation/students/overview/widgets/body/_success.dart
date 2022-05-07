@@ -10,14 +10,13 @@ class StudentsOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return ListView.builder(
+    return ListView.separated(
       itemCount: students.length,
+      padding: AppPadding.allSmall,
+      separatorBuilder: (_, __) => const SizedBox(height: 2),
       itemBuilder: (BuildContext context, int index) {
         return StudentTile(
           student: students[index],
-          tileColor: index.isOdd ? theme.colorScheme.surfaceVariant : null,
         );
       },
     );
