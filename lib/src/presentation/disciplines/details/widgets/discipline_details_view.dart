@@ -57,7 +57,8 @@ class _DisciplineDetailsViewState extends State<DisciplineDetailsView>
           controller: tabController,
           labelPadding: AppPadding.allSmall,
           tabs: DetailsTab.labels,
-          indicatorColor: colorScheme.onPrimary,
+          labelColor: colorScheme.onSurfaceVariant,
+          indicatorColor: colorScheme.onSurfaceVariant,
         ),
       ),
       body: DisciplineDetailsBody(tabController: tabController),
@@ -76,30 +77,27 @@ class DisciplineDetailsBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Material(
-      child: SizedBox(
-        height: kDefaultButtonHeight,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            IconButton(
-              splashRadius: 24,
-              tooltip: 'Ações',
-              color: colorScheme.onPrimaryContainer,
-              icon: const Icon(Icons.call_to_action_rounded),
-              onPressed: () async => await showModalBottomSheet<void>(
-                context: context,
-                builder: (_) {
-                  final bloc = context.read<DisciplineDetailsBloc>();
-                  return DisciplineActionsSheet(
-                    discipline: bloc.discipline,
-                  );
-                },
-              ),
+    return BottomAppBar(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton(
+            splashRadius: 24,
+            tooltip: 'Ações',
+            color: colorScheme.onPrimaryContainer,
+            icon: const Icon(Icons.call_to_action_rounded),
+            onPressed: () async => await showModalBottomSheet<void>(
+              context: context,
+              builder: (_) {
+                final bloc = context.read<DisciplineDetailsBloc>();
+                return DisciplineActionsSheet(
+                  discipline: bloc.discipline,
+                );
+              },
             ),
-            const SizedBox(width: 8),
-          ],
-        ),
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
     );
   }
