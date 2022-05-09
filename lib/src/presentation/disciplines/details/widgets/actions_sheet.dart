@@ -41,7 +41,7 @@ class DisciplineActionsSheet extends StatelessWidget {
             Navigator.pop(context);
 
             await showModalBottomSheet<void>(
-              isScrollControlled: false,
+              isScrollControlled: true,
               backgroundColor: Theme.of(context).colorScheme.surface,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
