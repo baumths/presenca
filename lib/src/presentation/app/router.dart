@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/attendance.dart';
 import '../../domain/entities/discipline.dart';
 import '../../domain/entities/student.dart';
 import '../pages.dart';
@@ -49,15 +48,6 @@ abstract class AppRouter {
         discipline: discipline,
         initialStudents: initialStudents,
       ),
-    );
-  }
-
-  static void showAttendanceDetails(
-    BuildContext context,
-    Attendance attendance,
-  ) {
-    Navigator.of(context).push(
-      AttendanceDetailsPage.route(attendance),
     );
   }
 }

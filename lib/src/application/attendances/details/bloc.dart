@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
 import '../../../domain/attendance.dart';
-import '../../../domain/discipline.dart';
 import '../../../domain/student.dart';
 
 part 'bloc.freezed.dart';
@@ -48,7 +47,12 @@ class AttendanceDetailsBloc
         attendees: attendees,
         students: students,
         isLoading: false,
+        formattedAttendanceDate: _formatAttendanceDate(event.localeName),
       ),
     );
+  }
+
+  String _formatAttendanceDate(String locale) {
+    return DateFormat.yMMMEd(locale).format(attendance.date);
   }
 }

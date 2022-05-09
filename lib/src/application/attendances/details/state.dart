@@ -8,6 +8,7 @@ class AttendanceDetailsState with _$AttendanceDetailsState {
     required Map<String, bool> attendees,
     required List<Student> students,
     required bool isLoading,
+    required String formattedAttendanceDate,
   }) = _AttendanceDetailsState;
 
   factory AttendanceDetailsState.initial() {
@@ -15,6 +16,7 @@ class AttendanceDetailsState with _$AttendanceDetailsState {
       attendees: {},
       students: [],
       isLoading: true,
+      formattedAttendanceDate: '',
     );
   }
 

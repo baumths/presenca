@@ -15,13 +15,8 @@ class AttendancesList extends StatelessWidget {
       itemCount: attendances.length,
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
-        final attendance = attendances[index];
-
-        return AttendanceDetailsPage(
-          attendance: attendance,
-          child: AttendanceCard(
-            attendance: attendance,
-          ),
+        return AttendanceCard(
+          attendance: attendances[index],
         );
       },
     );
