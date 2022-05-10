@@ -19,7 +19,10 @@ class EmptyAttendances extends StatelessWidget {
           PrimaryButton.wide(
             label: 'INICIAR CHAMADA',
             onPressed: () {
-              // TODO: create new attendance
+              AppRouter.showAttendanceForm(
+                context,
+                context.read<AttendancesOverviewBloc>().discipline,
+              );
             },
           ),
         ],

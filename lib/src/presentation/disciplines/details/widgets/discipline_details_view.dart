@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/discipline/details/bloc.dart';
 import '../../../../shared/shared.dart';
+import '../../../app/router.dart';
 import 'actions_sheet.dart';
 import 'body/body.dart';
 
@@ -110,7 +111,12 @@ class StartAttendanceFab extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       child: const Icon(Icons.add_task_rounded),
-      onPressed: () {},
+      onPressed: () {
+        AppRouter.showAttendanceForm(
+          context,
+          context.read<DisciplineDetailsBloc>().discipline,
+        );
+      },
     );
   }
 }

@@ -50,4 +50,13 @@ abstract class AppRouter {
       ),
     );
   }
+
+  static void showAttendanceForm(
+    BuildContext context,
+    Discipline discipline,
+  ) {
+    Navigator.of(context).push(
+      AttendanceFormPage.route(discipline),
+    );
+  }
 }

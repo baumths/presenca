@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../application/attendances/overview/bloc.dart';
 import '../../../../../domain/attendance.dart';
 import '../../../../../shared/shared.dart';
+import '../../../../app/router.dart';
 import '../attendance_card.dart';
 
 part '_empty.dart';
