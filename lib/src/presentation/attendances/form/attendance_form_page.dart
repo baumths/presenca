@@ -15,6 +15,7 @@ class AttendanceFormPage extends StatelessWidget {
 
   static Route<void> route(Discipline discipline) {
     return MaterialPageRoute(
+      fullscreenDialog: true,
       builder: (_) => AttendanceFormPage(discipline: discipline),
     );
   }
