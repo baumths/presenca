@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../shared/constants.dart';
+import '../../shared/shared.dart';
 
 final ThemeData theme = ThemeData(
   colorSchemeSeed: Colors.deepPurple,
@@ -11,4 +11,7 @@ final ThemeData theme = ThemeData(
     border: OutlineInputBorder(borderRadius: kDefaultBorderRadius),
   ),
   iconTheme: const IconThemeData(size: 20),
+  dialogTheme: const DialogTheme(
+    shape: RoundedRectangleBorder(borderRadius: kDefaultBorderRadius),
+  ),
 );
