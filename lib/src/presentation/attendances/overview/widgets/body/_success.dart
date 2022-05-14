@@ -11,7 +11,7 @@ class AttendancesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      padding: AppPadding.allMedium,
+      padding: AppPadding.allSmall,
       itemCount: attendances.length,
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {

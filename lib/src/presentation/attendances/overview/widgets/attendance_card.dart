@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../application/attendances/details/bloc.dart';
 import '../../../../domain/attendance.dart';
@@ -78,7 +79,7 @@ class AttendanceCardBody extends StatelessWidget {
           Divider(height: 0, color: theme.colorScheme.secondaryContainer)
         else
           const AttendanceCardNote(),
-        const StudentsCountTile(),
+        const InfoRow(),
       ],
     );
   }
@@ -139,33 +140,81 @@ class AttendanceCardNote extends StatelessWidget {
   }
 }
 
-class StudentsCountTile extends StatelessWidget {
-  const StudentsCountTile({super.key});
+class InfoRow extends StatelessWidget {
+  const InfoRow({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return SizedBox(
-      height: 48,
-      child: Padding(
-        padding: AppPadding.tile,
-        child: Row(
-          children: [
-            Icon(Icons.people_alt, color: theme.colorScheme.secondary),
-            const SizedBox(width: 16),
-            Text(
-              'Alunos',
-              style: theme.textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w500,
-                color: theme.colorScheme.secondary,
+    return IconTheme(
+      data: theme.iconTheme.copyWith(
+        color: theme.colorScheme.secondary,
+      ),
+      child: DividerTheme(
+        data: DividerThemeData(
+          color: theme.colorScheme.secondaryContainer,
+        ),
+        child: SizedBox(
+          height: 48,
+          child: Row(
+            children: const [
+              SizedBox(width: 16),
+              Flexible(
+                child: StudentCounter(),
               ),
-            ),
-            const Spacer(),
-            const StudentsCounterText(),
-          ],
+              VerticalDivider(width: 32, thickness: 2),
+              Flexible(
+                child: TimeTile(),
+              ),
+              SizedBox(width: 16),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class TimeTile extends StatelessWidget {
+  const TimeTile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final bloc = context.watch<AttendanceDetailsBloc>();
+    final formattedTime =
+        DateFormat.Hm(context.l10n.localeName).format(bloc.attendance.date);
+
+    return Row(
+      children: [
+        const Icon(Icons.schedule_rounded),
+        const SizedBox(width: 8),
+        const Spacer(),
+        Text(
+          formattedTime,
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: theme.colorScheme.secondary,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class StudentCounter extends StatelessWidget {
+  const StudentCounter({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: const [
+        Icon(Icons.people_alt),
+        SizedBox(width: 8),
+        Spacer(),
+        StudentsCounterText(),
+      ],
     );
   }
 }
@@ -184,23 +233,19 @@ class StudentsCounterText extends StatelessWidget {
 
         return RichText(
           text: TextSpan(
-            style: theme.textTheme.titleLarge?.copyWith(
+            style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.secondary,
             ),
             children: [
               TextSpan(
                 text: count,
                 style: TextStyle(
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.bold,
                   color: theme.colorScheme.secondary,
                 ),
               ),
-              const TextSpan(
-                text: '/',
-                style: TextStyle(fontSize: 16),
-              ),
               TextSpan(
-                text: total,
+                text: '/$total',
                 style: const TextStyle(fontSize: 12),
               ),
             ],
