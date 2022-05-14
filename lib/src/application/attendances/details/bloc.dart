@@ -45,7 +45,7 @@ class AttendanceDetailsBloc
     emit(
       state.copyWith(
         attendees: attendees,
-        students: students,
+        students: students.where((s) => s.active).toList(growable: false),
         isLoading: false,
         formattedAttendanceDate: _formatAttendanceDate(event.localeName),
       ),
@@ -53,6 +53,6 @@ class AttendanceDetailsBloc
   }
 
   String _formatAttendanceDate(String locale) {
-    return DateFormat.yMMMEd(locale).format(attendance.date);
+    return DateFormat.MMMEd(locale).format(attendance.date);
   }
 }
