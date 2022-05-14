@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/attendances/form/bloc.dart';
 import '../../../domain/discipline.dart';
+import '../../../domain/repositories/repositories.dart';
 import 'widgets/attendance_form_view.dart';
 
 class AttendanceFormPage extends StatelessWidget {
@@ -25,7 +26,8 @@ class AttendanceFormPage extends StatelessWidget {
     return BlocProvider(
       create: (_) {
         final bloc = AttendanceFormBloc(
-          studentsRepository: context.read(),
+          attendancesRepository: context.read<AttendancesRepository>(),
+          studentsRepository: context.read<StudentsRepository>(),
         );
 
         final event = AttendanceFormEvent.started(discipline: discipline);

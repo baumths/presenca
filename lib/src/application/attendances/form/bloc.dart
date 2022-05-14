@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
@@ -13,12 +14,15 @@ part 'state.dart';
 class AttendanceFormBloc
     extends Bloc<AttendanceFormEvent, AttendanceFormState> {
   AttendanceFormBloc({
+    required AttendancesRepository attendancesRepository,
     required StudentsRepository studentsRepository,
   })  : _studentsRepository = studentsRepository,
+        _attendancesRepository = attendancesRepository,
         super(AttendanceFormState.empty()) {
     on<AttendanceFormEvent>(_onEvent);
   }
 
+  final AttendancesRepository _attendancesRepository;
   final StudentsRepository _studentsRepository;
 
   Future<void> _onEvent(
@@ -29,6 +33,9 @@ class AttendanceFormBloc
       started: (event) => _onStarted(event, emit),
       dateChanged: (event) => _onDateChanged(event, emit),
       timeChanged: (event) => _onTimeChanged(event, emit),
+      noteChanged: (event) => _onNoteChanged(event, emit),
+      attendeePressed: (event) => _onAttendeePressed(event, emit),
+      submitted: (event) => _onSubmitted(event, emit),
     );
   }
 
@@ -46,6 +53,7 @@ class AttendanceFormBloc
 
     emit(
       state.copyWith(
+        saveFailureOrSuccessOption: const None(),
         attendance: state.attendance.copyWith(
           disciplineId: event.discipline.id,
         ),
@@ -69,6 +77,7 @@ class AttendanceFormBloc
 
     emit(
       state.copyWith(
+        saveFailureOrSuccessOption: const None(),
         attendance: state.attendance.copyWith(
           date: newDate,
         ),
@@ -91,9 +100,73 @@ class AttendanceFormBloc
 
     emit(
       state.copyWith(
+        saveFailureOrSuccessOption: const None(),
         attendance: state.attendance.copyWith(
           date: newDate,
         ),
+      ),
+    );
+  }
+
+  Future<void> _onNoteChanged(
+    _NoteChanged event,
+    Emitter<AttendanceFormState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        attendance: state.attendance.copyWith(
+          note: event.note,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onAttendeePressed(
+    _AttendeePressed event,
+    Emitter<AttendanceFormState> emit,
+  ) async {
+    final newAttendees = <Attendee>[
+      for (final Attendee attendee in state.attendees)
+        if (attendee.student.id == event.attendee.student.id)
+          attendee.copyWith(attended: !attendee.attended)
+        else
+          attendee,
+    ];
+
+    emit(
+      state.copyWith(
+        saveFailureOrSuccessOption: const None(),
+        attendees: newAttendees,
+      ),
+    );
+  }
+
+  Future<void> _onSubmitted(
+    _Submitted event,
+    Emitter<AttendanceFormState> emit,
+  ) async {
+    final attendedStudentIds = <String>[
+      for (final Attendee attendee in state.attendees)
+        if (attendee.attended) attendee.student.id
+    ];
+
+    final attendance = state.attendance.copyWith(
+      attendedStudentIds: attendedStudentIds,
+    );
+
+    final attendances = await _attendancesRepository.find(
+      attendance.disciplineId,
+    );
+
+    final saveFailureOrSuccess = await _attendancesRepository.save(
+      attendance.disciplineId,
+      [...attendances, attendance],
+    );
+
+    emit(
+      state.copyWith(
+        attendance: attendance,
+        saveFailureOrSuccessOption: Some(saveFailureOrSuccess),
       ),
     );
   }

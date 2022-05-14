@@ -12,4 +12,12 @@ class AttendanceFormEvent with _$AttendanceFormEvent {
     required int hour,
     required int minute,
   }) = _TimeChanged;
+
+  const factory AttendanceFormEvent.noteChanged(String note) = _NoteChanged;
+
+  const factory AttendanceFormEvent.attendeePressed(
+    Attendee attendee,
+  ) = _AttendeePressed;
+
+  const factory AttendanceFormEvent.submitted() = _Submitted;
 }

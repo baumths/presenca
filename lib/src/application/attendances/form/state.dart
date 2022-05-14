@@ -7,12 +7,14 @@ class AttendanceFormState with _$AttendanceFormState {
   const factory AttendanceFormState({
     required Attendance attendance,
     required List<Attendee> attendees,
+    required Option<Either<AttendanceFailure, Unit>> saveFailureOrSuccessOption,
   }) = _AttendanceFormState;
 
   factory AttendanceFormState.empty() {
     return AttendanceFormState(
       attendance: Attendance.empty(),
       attendees: const <Attendee>[],
+      saveFailureOrSuccessOption: const None(),
     );
   }
 

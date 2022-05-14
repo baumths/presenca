@@ -4,21 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../application/attendances/form/bloc.dart';
 import '../../../../shared/shared.dart';
 
-class DateAndTimeField extends StatelessWidget {
-  const DateAndTimeField({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: const [
-        Expanded(flex: 3, child: DateSelector()),
-        SizedBox(width: 8),
-        Expanded(flex: 2, child: TimeSelector()),
-      ],
-    );
-  }
-}
-
 class DateSelector extends StatelessWidget {
   const DateSelector({super.key});
 
@@ -37,7 +22,7 @@ class DateSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DateOrTimeSelector(
-      icon: Icons.schedule_rounded,
+      icon: Icons.edit_calendar_rounded,
       label: BlocBuilder<AttendanceFormBloc, AttendanceFormState>(
         buildWhen: (p, c) => p.didDateChange(c),
         builder: (context, state) {
@@ -119,7 +104,6 @@ class DateOrTimeSelector extends StatelessWidget {
     final backgroundColor = theme.colorScheme.secondaryContainer;
 
     return Material(
-      type: MaterialType.card,
       color: backgroundColor,
       borderRadius: kDefaultBorderRadius,
       child: InkWell(

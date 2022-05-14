@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../application/attendances/form/bloc.dart';
 import '../../../../shared/shared.dart';
 import 'body.dart';
 
@@ -18,13 +20,29 @@ class AttendanceFormView extends StatelessWidget {
             icon: const Icon(Icons.check),
             padding: AppPadding.allMedium,
             tooltip: 'Salvar',
-            onPressed: () {
-              // TODO: submit form
-            },
+            onPressed: () => context
+                .read<AttendanceFormBloc>()
+                .add(const AttendanceFormEvent.submitted()),
           ),
         ],
       ),
-      body: const AttendanceFormBody(),
+      body: BlocListener<AttendanceFormBloc, AttendanceFormState>(
+        listenWhen: (p, c) {
+          return p.saveFailureOrSuccessOption != c.saveFailureOrSuccessOption;
+        },
+        listener: (_, state) {
+          state.saveFailureOrSuccessOption.fold(
+            () {
+              SnackBarHelper.showError(
+                context,
+                'Nao foi possivel salvar chamada',
+              );
+            },
+            (_) => Navigator.pop(context),
+          );
+        },
+        child: const AttendanceFormBody(),
+      ),
     );
   }
 }
