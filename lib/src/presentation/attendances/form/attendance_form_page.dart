@@ -24,8 +24,13 @@ class AttendanceFormPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) {
-        final bloc = AttendanceFormBloc();
-        return bloc;
+        final bloc = AttendanceFormBloc(
+          studentsRepository: context.read(),
+        );
+
+        final event = AttendanceFormEvent.started(discipline: discipline);
+
+        return bloc..add(event);
       },
       child: const AttendanceFormView(),
     );

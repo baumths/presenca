@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../application/attendances/form/bloc.dart';
 import '../../../../shared/shared.dart';
 
 class DateAndTimeField extends StatelessWidget {
@@ -21,14 +22,13 @@ class DateAndTimeField extends StatelessWidget {
 class DateSelector extends StatelessWidget {
   const DateSelector({super.key});
 
-  Future<DateTime?> _pickDate(BuildContext context) {
-    final now = DateTime.now();
-    final firstDate = DateTime(now.year - 10);
-    final lastDate = DateTime(now.year + 10);
+  Future<DateTime?> _pickDate(BuildContext context, DateTime initialDate) {
+    final firstDate = DateTime(initialDate.year);
+    final lastDate = DateTime(initialDate.year + 1);
 
     return showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: initialDate,
       firstDate: firstDate,
       lastDate: lastDate,
     );
@@ -36,15 +36,24 @@ class DateSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final date = DateFormat.MMMMd(context.l10n.localeName).format(now);
-
     return DateOrTimeSelector(
-      label: date,
-      icon: Icons.edit_calendar_rounded,
+      icon: Icons.schedule_rounded,
+      label: BlocBuilder<AttendanceFormBloc, AttendanceFormState>(
+        buildWhen: (p, c) => p.didDateChange(c),
+        builder: (context, state) {
+          return Text(
+            state.formattedDate(context.l10n.localeName),
+          );
+        },
+      ),
       onPressed: () async {
-        final date = await _pickDate(context);
-        // TODO dispatch to bloc
+        final bloc = context.read<AttendanceFormBloc>();
+
+        final date = await _pickDate(context, bloc.state.date);
+
+        if (date != null) {
+          bloc.add(AttendanceFormEvent.dateChanged(date));
+        }
       },
     );
   }
@@ -53,24 +62,38 @@ class DateSelector extends StatelessWidget {
 class TimeSelector extends StatelessWidget {
   const TimeSelector({super.key});
 
-  Future<TimeOfDay?> _pickTime(BuildContext context) {
+  Future<TimeOfDay?> _pickTime(BuildContext context, DateTime initialDate) {
     return showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: TimeOfDay.fromDateTime(initialDate),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final time = DateFormat.Hm(context.l10n.localeName).format(now);
-
     return DateOrTimeSelector(
-      label: time,
       icon: Icons.schedule_rounded,
+      label: BlocBuilder<AttendanceFormBloc, AttendanceFormState>(
+        buildWhen: (p, c) => p.didTimeChange(c),
+        builder: (context, state) {
+          return Text(
+            state.formattedTime(context.l10n.localeName),
+          );
+        },
+      ),
       onPressed: () async {
-        final time = await _pickTime(context);
-        // TODO dispatch to bloc
+        final bloc = context.read<AttendanceFormBloc>();
+
+        final time = await _pickTime(context, bloc.state.date);
+
+        if (time != null) {
+          bloc.add(
+            AttendanceFormEvent.timeChanged(
+              hour: time.hour,
+              minute: time.minute,
+            ),
+          );
+        }
       },
     );
   }
@@ -85,7 +108,7 @@ class DateOrTimeSelector extends StatelessWidget {
     required this.onPressed,
   });
 
-  final String label;
+  final Widget label;
   final IconData icon;
   final VoidCallback onPressed;
 
@@ -111,9 +134,9 @@ class DateOrTimeSelector extends StatelessWidget {
               Icon(icon, color: color),
               const SizedBox(width: 8),
               Flexible(
-                child: Text(
-                  label,
-                  style: theme.textTheme.titleMedium?.copyWith(color: color),
+                child: DefaultTextStyle(
+                  style: theme.textTheme.titleMedium!.copyWith(color: color),
+                  child: label,
                 ),
               ),
             ],
