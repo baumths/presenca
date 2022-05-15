@@ -12,7 +12,7 @@ class DisciplinesOverviewBloc
   DisciplinesOverviewBloc({
     required DisciplinesRepository disciplinesRepository,
   })  : _disciplinesRepository = disciplinesRepository,
-        super(const DisciplinesOverviewState.initial()) {
+        super(const DisciplinesOverviewState.loadInProgress()) {
     on<DisciplinesOverviewEvent>(_onEvent);
   }
 
@@ -33,12 +33,12 @@ class DisciplinesOverviewBloc
   ) async {
     await emit.forEach(
       _disciplinesRepository.watch(),
-      onError: (_, __) => const DisciplinesOverviewState.initial(),
+      onError: (_, __) {
+        return const DisciplinesOverviewState.loadSuccess(
+          disciplines: [],
+        );
+      },
       onData: (List<Discipline> disciplines) {
-        if (disciplines.isEmpty) {
-          return const DisciplinesOverviewState.initial();
-        }
-
         return DisciplinesOverviewState.loadSuccess(
           disciplines: disciplines,
         );

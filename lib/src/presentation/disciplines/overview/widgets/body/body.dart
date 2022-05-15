@@ -18,11 +18,16 @@ class DisciplinesOverviewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DisciplinesOverviewBloc, DisciplinesOverviewState>(
       builder: (context, state) => state.map(
-        initial: (_) => const _EmptyDisciplines(),
         loadInProgress: (_) => const _LoadingDisciplines(),
-        loadSuccess: (state) => DisciplinesOverview(
-          disciplines: state.disciplines,
-        ),
+        loadSuccess: (state) {
+          if (state.disciplines.isEmpty) {
+            return const _EmptyDisciplines();
+          }
+
+          return DisciplinesOverview(
+            disciplines: state.disciplines,
+          );
+        },
       ),
     );
   }
