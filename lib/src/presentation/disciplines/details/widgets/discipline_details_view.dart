@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../application/discipline/details/bloc.dart';
 import '../../../../shared/shared.dart';
 import '../../../app/router.dart';
-import 'actions_sheet.dart';
+import '../../../pages.dart';
 import 'body/body.dart';
 
 enum DetailsTab {
@@ -37,7 +37,10 @@ class _DisciplineDetailsViewState extends State<DisciplineDetailsView>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(
+      length: DetailsTab.values.length,
+      vsync: this,
+    );
   }
 
   @override
@@ -63,7 +66,7 @@ class _DisciplineDetailsViewState extends State<DisciplineDetailsView>
         ),
       ),
       body: DisciplineDetailsBody(tabController: tabController),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: const StartAttendanceFab(),
       bottomNavigationBar: const DisciplineDetailsBottomBar(),
       backgroundColor: colorScheme.surfaceVariant,
@@ -78,27 +81,56 @@ class DisciplineDetailsBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
+    late final DisciplineDetailsBloc bloc = context.read();
+
     return BottomAppBar(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          IconButton(
-            splashRadius: 24,
-            tooltip: 'Ações',
-            color: colorScheme.onPrimaryContainer,
-            icon: const Icon(Icons.call_to_action_rounded),
-            onPressed: () async => await showModalBottomSheet<void>(
-              context: context,
-              builder: (_) {
-                final bloc = context.read<DisciplineDetailsBloc>();
-                return DisciplineActionsSheet(
+      child: SizedBox(
+        height: 48,
+        child: Row(
+          children: [
+            const SizedBox(width: 8),
+            IconButton(
+              iconSize: 24,
+              splashRadius: 24,
+              tooltip: 'Importar Alunos',
+              color: colorScheme.onPrimaryContainer,
+              visualDensity: kVisualDensity,
+              padding: AppPadding.allSmall,
+              icon: const Icon(Icons.group_add_rounded),
+              onPressed: () async {
+                await showModalBottomSheet<void>(
+                  isScrollControlled: true,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: kDefaultBorderRadius.topLeft,
+                      topRight: kDefaultBorderRadius.topRight,
+                    ),
+                  ),
+                  context: context,
+                  builder: (_) => StudentsImportPage(
+                    discipline: bloc.discipline,
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              iconSize: 24,
+              splashRadius: 24,
+              tooltip: 'Editar Alunos',
+              color: colorScheme.onPrimaryContainer,
+              visualDensity: kVisualDensity,
+              padding: AppPadding.allSmall,
+              icon: const Icon(Icons.manage_accounts),
+              onPressed: () {
+                AppRouter.showStudentsForm(
+                  context: context,
                   discipline: bloc.discipline,
                 );
               },
             ),
-          ),
-          const SizedBox(width: 8),
-        ],
+          ],
+        ),
       ),
     );
   }
