@@ -51,12 +51,14 @@ class _DisciplineDetailsViewState extends State<DisciplineDetailsView>
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
         title: Text(widget.title),
+        titleTextStyle: theme.textTheme.titleMedium,
         bottom: TabBar(
           controller: tabController,
           labelPadding: AppPadding.allSmall,
@@ -126,6 +128,33 @@ class DisciplineDetailsBottomBar extends StatelessWidget {
                 AppRouter.showStudentsForm(
                   context: context,
                   discipline: bloc.discipline,
+                );
+              },
+            ),
+            IconButton(
+              iconSize: 24,
+              splashRadius: 24,
+              tooltip: 'Exportar Chamadas',
+              color: colorScheme.onPrimaryContainer,
+              visualDensity: kVisualDensity,
+              padding: AppPadding.allSmall,
+              icon: const RotatedBox(
+                quarterTurns: -1,
+                child: Icon(Icons.login),
+              ),
+              onPressed: () async {
+                await showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: kDefaultBorderRadius.copyWith(
+                      bottomLeft: Radius.zero,
+                      bottomRight: Radius.zero,
+                    ),
+                  ),
+                  builder: (_) {
+                    return DisciplineExportPage(discipline: bloc.discipline);
+                  },
                 );
               },
             ),

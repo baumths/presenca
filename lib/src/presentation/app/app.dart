@@ -14,12 +14,14 @@ class PresencaApp extends StatelessWidget {
     required this.disciplinesRepository,
     required this.studentsRepository,
     required this.filePickerAdapter,
+    required this.fileSaverAdapter,
   });
 
   final AttendancesRepository attendancesRepository;
   final DisciplinesRepository disciplinesRepository;
   final StudentsRepository studentsRepository;
   final FilePickerAdapter filePickerAdapter;
+  final FileSaverAdapter fileSaverAdapter;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class PresencaApp extends StatelessWidget {
         RepositoryProvider.value(value: disciplinesRepository),
         RepositoryProvider.value(value: studentsRepository),
         RepositoryProvider.value(value: filePickerAdapter),
+        RepositoryProvider.value(value: fileSaverAdapter),
       ],
       child: const AppView(),
     );

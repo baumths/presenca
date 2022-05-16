@@ -16,12 +16,14 @@ Future<Widget> createAndInitializeApp() async {
   final studentsRepository = await StudentsRepositoryImpl.create();
 
   final filePickerAdapter = FilePickerAdapterImpl();
+  final fileSaverAdapter = FileSaverAdapterImpl();
 
   return PresencaApp(
     attendancesRepository: attendancesRepository,
     disciplinesRepository: disciplinesRepository,
     studentsRepository: studentsRepository,
     filePickerAdapter: filePickerAdapter,
+    fileSaverAdapter: fileSaverAdapter,
   );
 }
 
