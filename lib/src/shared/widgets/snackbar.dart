@@ -67,9 +67,8 @@ abstract class SnackBarHelper {
                 padding: const EdgeInsets.only(left: 4.0, right: 8.0),
                 child: Icon(icon, color: color),
               ),
-              Text(
-                message,
-                overflow: TextOverflow.ellipsis,
+              Flexible(
+                child: Text(message),
               ),
             ],
           ),
