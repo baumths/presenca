@@ -44,7 +44,7 @@ class PickFileView extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
-          _BorderedColumn(
+          BorderedColumn(
             children: [
               _Header(),
               SizedBox(height: 16),
@@ -72,36 +72,6 @@ class _Header extends StatelessWidget {
       'Importar Alunos',
       style: textTheme.titleLarge?.copyWith(
         color: colorScheme.secondary,
-      ),
-    );
-  }
-}
-
-class _BorderedColumn extends StatelessWidget {
-  const _BorderedColumn({
-    super.key,
-    this.children = const <Widget>[],
-  });
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).colorScheme.secondary,
-          width: 2,
-        ),
-        borderRadius: kDefaultBorderRadius,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: children,
-        ),
       ),
     );
   }
