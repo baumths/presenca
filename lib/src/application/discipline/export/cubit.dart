@@ -19,7 +19,7 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
   })  : _attendancesRepository = attendancesRepository,
         _studentsRepository = studentsRepository,
         _fileSaverAdapter = fileSaverAdapter,
-        super(DisciplineExportState.initial());
+        super(const DisciplineExportState.initial());
 
   final Discipline discipline;
   final AttendancesRepository _attendancesRepository;
@@ -32,11 +32,7 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
       return;
     }
 
-    emit(
-      state.copyWith(
-        isLoading: true,
-      ),
-    );
+    emit(const DisciplineExportState.loading());
 
     final disciplineAggregate = DisciplineAggregate(
       discipline: discipline,
@@ -53,17 +49,12 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
       fileContent,
     );
 
-    // TODO:
-    if (path == null) {
-      // user canceled
-    } else {
-      // show success feedback
-    }
+    final bool userCanceled = path == null;
 
     emit(
-      state.copyWith(
-        isLoading: false,
-      ),
+      userCanceled
+          ? const DisciplineExportState.initial()
+          : DisciplineExportState.success(filePath: path),
     );
   }
 }

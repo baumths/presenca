@@ -5,6 +5,7 @@ import '../../../application/discipline/export/cubit.dart';
 import '../../../domain/discipline.dart';
 import '../../../domain/repositories/repositories.dart';
 import '../../../infrastructure/adapters.dart';
+import '../../../shared/shared.dart';
 import 'widgets/discipline_export_view.dart';
 
 class DisciplineExportPage extends StatelessWidget {
@@ -26,7 +27,21 @@ class DisciplineExportPage extends StatelessWidget {
           fileSaverAdapter: context.read<FileSaverAdapter>(),
         );
       },
-      child: const DisciplineExportView(),
+      child: BlocListener<DisciplineExportCubit, DisciplineExportState>(
+        listener: (context, state) {
+          state.whenOrNull(
+            success: (fileName) {
+              Navigator.pop(context);
+
+              SnackBarHelper.showSuccess(
+                context,
+                'Arquivo salvo em: $fileName',
+              );
+            },
+          );
+        },
+        child: const DisciplineExportView(),
+      ),
     );
   }
 }
