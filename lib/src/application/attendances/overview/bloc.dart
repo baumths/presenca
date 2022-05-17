@@ -38,6 +38,9 @@ class AttendancesOverviewBloc
     await emit.forEach<List<Attendance>>(
       _attendancesRepository.watch(discipline.id),
       onData: (List<Attendance> attendances) {
+        attendances = List<Attendance>.of(attendances)
+          ..sort((a, b) => b.date.compareTo(a.date));
+
         return AttendancesOverviewState.success(
           attendances: attendances,
         );
