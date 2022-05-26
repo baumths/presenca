@@ -35,6 +35,12 @@ dev_dependencies:
   freezed: ^2.0.2
   json_serializable: ^6.1.5
 
+dependency_overrides:
+  file_saver:
+    git:
+      url: git@github.com:incrediblezayed/file_saver.git
+      ref: c0ea84007896c6014c72785a8bcde0e9c53dc804
+
 flutter:
   generate: true
   uses-material-design: true
