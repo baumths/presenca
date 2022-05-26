@@ -178,8 +178,6 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
       ),
     );
 
-    await Future<void>.delayed(const Duration(seconds: 10));
-
     final failureOrSuccess = await _studentsRepository.save(
       discipline.id,
       state.students,
