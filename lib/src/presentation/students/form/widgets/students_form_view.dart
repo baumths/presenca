@@ -31,26 +31,23 @@ class StudentsFormView extends StatelessWidget {
         ),
         body: const StudentsFormBody(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: const _SaveFab(),
+        floatingActionButton: const SaveStudentsFormFab(),
       ),
     );
   }
 }
 
-class _SaveFab extends StatelessWidget {
-  const _SaveFab({Key? key}) : super(key: key);
+class SaveStudentsFormFab extends StatelessWidget {
+  const SaveStudentsFormFab({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: .9,
-      child: FloatingActionButton.extended(
-        icon: const Icon(Icons.check),
-        label: const Text('SALVAR'),
-        onPressed: () => context
-            .read<StudentsFormBloc>()
-            .add(const StudentsFormEvent.submitted()),
-      ),
+    return FloatingActionButton.extended(
+      icon: const Icon(Icons.done_rounded, size: 24),
+      label: const Text('Salvar'),
+      onPressed: () => context
+          .read<StudentsFormBloc>()
+          .add(const StudentsFormEvent.submitted()),
     );
   }
 }

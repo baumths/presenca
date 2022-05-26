@@ -2,9 +2,9 @@ part of 'body.dart';
 
 class StudentsOverview extends StatelessWidget {
   const StudentsOverview({
-    Key? key,
+    super.key,
     required this.students,
-  }) : super(key: key);
+  });
 
   final List<Student> students;
 
@@ -15,8 +15,11 @@ class StudentsOverview extends StatelessWidget {
       padding: AppPadding.allSmall,
       separatorBuilder: (_, __) => const SizedBox(height: 2),
       itemBuilder: (BuildContext context, int index) {
+        final student = students[index];
+
         return StudentTile(
-          student: students[index],
+          key: Key(student.id),
+          student: student,
         );
       },
     );

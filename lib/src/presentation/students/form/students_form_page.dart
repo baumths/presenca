@@ -9,10 +9,10 @@ import 'widgets/students_form_view.dart';
 
 class StudentsFormPage extends StatelessWidget {
   const StudentsFormPage({
-    Key? key,
+    super.key,
     required this.discipline,
     this.initialStudents = const <Student>[],
-  }) : super(key: key);
+  });
 
   final Discipline discipline;
   final List<Student> initialStudents;
@@ -83,16 +83,42 @@ class StudentsFormPage extends StatelessWidget {
 }
 
 class _Overlay extends StatelessWidget {
-  const _Overlay({Key? key}) : super(key: key);
+  const _Overlay({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return BlocBuilder<StudentsFormBloc, StudentsFormState>(
       buildWhen: (p, c) => p.isSaving != c.isSaving,
       builder: (BuildContext context, StudentsFormState state) {
-        return LoadingOverlay(
-          visible: state.isSaving,
-          description: 'Salvando Lista de Alunos...',
+        return IgnorePointer(
+          ignoring: !state.isSaving,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            color: state.isSaving
+                ? Colors.black.withOpacity(0.5)
+                : Colors.transparent,
+            width: screenSize.width,
+            height: screenSize.height,
+            child: Visibility(
+              visible: state.isSaving,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Salvando Lista de Alunos...',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );

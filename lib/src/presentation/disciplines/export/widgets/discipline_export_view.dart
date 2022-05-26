@@ -18,9 +18,9 @@ class DisciplineExportView extends StatelessWidget {
           Flexible(
             child: BorderedColumn(
               children: [
-                ExportHeader(),
+                DisciplineExportTitle(),
                 SizedBox(height: 16),
-                ExportDescription(),
+                DisciplineExportDescription(),
               ],
             ),
           ),
@@ -32,8 +32,8 @@ class DisciplineExportView extends StatelessWidget {
   }
 }
 
-class ExportHeader extends StatelessWidget {
-  const ExportHeader({super.key});
+class DisciplineExportTitle extends StatelessWidget {
+  const DisciplineExportTitle({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +42,14 @@ class ExportHeader extends StatelessWidget {
     return Text(
       'Exportação CSV',
       style: theme.textTheme.titleLarge?.copyWith(
-        color: theme.colorScheme.secondary,
+        color: theme.colorScheme.onSurface,
       ),
     );
   }
 }
 
-class ExportDescription extends StatelessWidget {
-  const ExportDescription({super.key});
+class DisciplineExportDescription extends StatelessWidget {
+  const DisciplineExportDescription({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class ExportDescription extends StatelessWidget {
 
     return DefaultTextStyle(
       style: theme.textTheme.bodyMedium!.copyWith(
-        color: theme.colorScheme.secondary,
+        color: theme.colorScheme.onSurface,
         fontSize: 12,
       ),
       child: Column(
@@ -112,61 +112,75 @@ class ExportButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return SizedBox(
-      height: 48,
-      child: BlocBuilder<DisciplineExportCubit, DisciplineExportState>(
-        builder: (context, state) {
-          if (state.isLoading) {
-            return Row(
-              children: [
-                const SizedBox(width: 16),
-                const SizedBox.square(
-                  dimension: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 3,
+    return BlocBuilder<DisciplineExportCubit, DisciplineExportState>(
+      builder: (context, state) {
+        return FadeUpwardsSwitcher(
+          child: SizedBox(
+            key: Key('${state.isLoading}'),
+            height: kDefaultButtonHeight,
+            width: double.infinity,
+            child: state.isLoading
+                ? const _LoadingIndicator()
+                : MaterialButton(
+                    color: theme.colorScheme.primary,
+                    textColor: theme.colorScheme.onPrimary,
+                    shape: kDefaultShapeBorder,
+                    child: const Text('Exportar Disciplina'),
+                    onPressed: () {
+                      context.read<DisciplineExportCubit>().exportDiscipline();
+                    },
                   ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: DefaultTextStyle(
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      color: theme.colorScheme.secondary,
-                      fontSize: 14,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text('Exportando Disciplina'),
-                        Text(
-                          'Isso pode levar alguns segundos...',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            );
-          }
+          ),
+        );
+      },
+    );
+  }
+}
 
-          return ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: theme.colorScheme.primary,
-              onPrimary: theme.colorScheme.onPrimary,
-              shape: const RoundedRectangleBorder(
-                borderRadius: kDefaultBorderRadius,
+class _LoadingIndicator extends StatelessWidget {
+  const _LoadingIndicator({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Material(
+      shape: kDefaultShapeBorder,
+      color: theme.colorScheme.surface,
+      child: Row(
+        children: [
+          const SizedBox(width: 16),
+          const SizedBox.square(
+            dimension: 24,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: DefaultTextStyle(
+              style: theme.textTheme.bodyMedium!.copyWith(
+                color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text('Exportando Disciplina'),
+                  Text(
+                    'Isso pode levar alguns segundos...',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
             ),
-            child: const Text('Exportar Disciplina'),
-            onPressed: () {
-              context.read<DisciplineExportCubit>().exportDiscipline();
-            },
-          );
-        },
+          )
+        ],
       ),
     );
   }

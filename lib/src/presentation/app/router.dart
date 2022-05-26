@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/entities/discipline.dart';
 import '../../domain/entities/student.dart';
+import '../../shared/shared.dart';
 import '../pages.dart';
 
 abstract class AppRouter {
@@ -18,8 +19,12 @@ abstract class AppRouter {
     BuildContext context,
     Discipline? editingDiscipline,
   ) {
-    Navigator.of(context).push(
-      DisciplineFormPage.route(editingDiscipline),
+    showModalBottomSheet<void>(
+      context: context,
+      shape: kBottomSheetShapeBorder,
+      builder: (_) => DisciplineFormPage(
+        editingDiscipline: editingDiscipline,
+      ),
     );
   }
 
@@ -29,12 +34,6 @@ abstract class AppRouter {
   ) {
     Navigator.of(context).push(
       DisciplineDetailsPage.route(discipline),
-    );
-  }
-
-  static void popUntilDisciplinesOverview(BuildContext context) {
-    Navigator.of(context).popUntil(
-      (route) => route.settings.name == kDisciplinesOverviewRouteName,
     );
   }
 

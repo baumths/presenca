@@ -48,11 +48,16 @@ class AttendanceDetailsBloc
         students: students.where((s) => s.active).toList(growable: false),
         isLoading: false,
         formattedAttendanceDate: _formatAttendanceDate(event.localeName),
+        formattedAttendanceTime: _formatAttendanceTime(event.localeName),
       ),
     );
   }
 
   String _formatAttendanceDate(String locale) {
-    return DateFormat.MMMEd(locale).format(attendance.date);
+    return DateFormat('E,', locale).add_MMMMd().format(attendance.date);
+  }
+
+  String _formatAttendanceTime(String locale) {
+    return DateFormat('HH:mm', locale).format(attendance.date);
   }
 }

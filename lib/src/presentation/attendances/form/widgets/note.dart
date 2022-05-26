@@ -11,10 +11,9 @@ class AttendanceFormNote extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color = theme.colorScheme.primary;
-    final backgroundColor = theme.colorScheme.secondaryContainer;
 
     return Material(
-      color: backgroundColor,
+      color: theme.colorScheme.secondaryContainer,
       borderRadius: kDefaultBorderRadius,
       child: InkWell(
         borderRadius: kDefaultBorderRadius,
@@ -120,7 +119,7 @@ class _NotesDialogState extends State<NotesDialog> {
 
     return Dialog(
       backgroundColor: theme.colorScheme.background,
-      shape: const RoundedRectangleBorder(borderRadius: kDefaultBorderRadius),
+      shape: kDefaultShapeBorder,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -139,15 +138,11 @@ class _NotesDialogState extends State<NotesDialog> {
             controller: _textEditingController,
             style: const TextStyle(fontWeight: FontWeight.w400),
             decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
               filled: true,
-              fillColor: Colors.grey.shade200,
+              border: InputBorder.none,
+              fillColor: theme.colorScheme.surfaceVariant,
+              contentPadding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
               hintText: 'digite aqui...',
-              hintStyle: const TextStyle(
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w400,
-              ),
             ),
           ),
           ButtonBar(

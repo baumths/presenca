@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../application/discipline/overview/bloc.dart';
 import '../../../../../domain/entities/discipline.dart';
-import '../../../../../shared/shared.dart';
 import '../../../../app/router.dart';
 import '../discipline_tile.dart';
 

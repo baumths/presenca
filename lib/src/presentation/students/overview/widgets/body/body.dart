@@ -13,9 +13,9 @@ part '_success.dart';
 
 class StudentsOverviewBody extends StatelessWidget {
   const StudentsOverviewBody({
-    Key? key,
+    super.key,
     required this.state,
-  }) : super(key: key);
+  });
 
   final StudentsOverviewState state;
 

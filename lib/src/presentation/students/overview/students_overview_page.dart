@@ -8,9 +8,9 @@ import 'widgets/students_overview_view.dart';
 
 class StudentsOverviewPage extends StatelessWidget {
   const StudentsOverviewPage({
-    Key? key,
+    super.key,
     required this.discipline,
-  }) : super(key: key);
+  });
 
   final Discipline discipline;
 

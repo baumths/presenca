@@ -34,17 +34,18 @@ class DisciplineFormBloc
     _Started event,
     Emitter<DisciplineFormState> emit,
   ) async {
-    event.initialDisciplineOption.fold(
-      () {},
-      (initialDiscipline) {
-        emit(
-          state.copyWith(
-            discipline: initialDiscipline,
-            isEditing: true,
-            saveFailureOrSuccessOption: const None(),
-          ),
-        );
-      },
+    final Discipline? editingDiscipline = event.editingDiscipline;
+
+    if (editingDiscipline == null) {
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        discipline: editingDiscipline,
+        isEditing: true,
+        saveFailureOrSuccessOption: const None(),
+      ),
     );
   }
 
@@ -54,36 +55,18 @@ class DisciplineFormBloc
   ) async {
     final String name = event.name.trim();
 
-    if (name.isEmpty) {
-      emit(
-        state.copyWith(
-          errorMessage: 'Por favor, informe um nome.',
-          saveFailureOrSuccessOption: const None(),
-        ),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          discipline: state.discipline.copyWith(name: name),
-          errorMessage: null,
-          saveFailureOrSuccessOption: const None(),
-        ),
-      );
-    }
+    emit(
+      state.copyWith(
+        discipline: state.discipline.copyWith(name: name),
+        saveFailureOrSuccessOption: const None(),
+      ),
+    );
   }
 
   Future<void> _onSubmitted(
     _Submitted event,
     Emitter<DisciplineFormState> emit,
   ) async {
-    emit(
-      state.copyWith(
-        isSaving: true,
-        saveFailureOrSuccessOption: const None(),
-        errorMessage: null,
-      ),
-    );
-
     Either<DisciplineFailure, Unit>? failureOrSuccess;
 
     final discipline = state.discipline;
@@ -95,8 +78,6 @@ class DisciplineFormBloc
     emit(
       state.copyWith(
         discipline: discipline,
-        isSaving: false,
-        errorMessage: null,
         saveFailureOrSuccessOption: optionOf(failureOrSuccess),
       ),
     );

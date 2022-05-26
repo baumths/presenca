@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../application/attendances/details/bloc.dart';
 import '../../../../domain/attendance.dart';
 import '../../../../shared/shared.dart';
 import '../../details/attendance_details_page.dart';
-import '../../details/widgets/attendance_title.dart';
 
 class AttendanceCard extends StatelessWidget {
   const AttendanceCard({
@@ -41,8 +39,11 @@ class AttendanceCardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Material(
       type: MaterialType.card,
+      color: theme.colorScheme.surfaceVariant,
       borderRadius: kDefaultBorderRadius,
       child: InkWell(
         borderRadius: kDefaultBorderRadius,
@@ -56,7 +57,13 @@ class AttendanceCardContent extends StatelessWidget {
           );
           // AppRouter.showAttendanceDetails(context, attendance);
         },
-        child: const AttendanceCardBody(),
+        child: DividerTheme(
+          data: theme.dividerTheme.copyWith(
+            thickness: 1,
+            color: theme.colorScheme.secondary.withOpacity(.1),
+          ),
+          child: const AttendanceCardBody(),
+        ),
       ),
     );
   }
@@ -67,16 +74,15 @@ class AttendanceCardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final bloc = context.read<AttendanceDetailsBloc>();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const AttendanceCardHeader(),
+        const AttendanceCardTitle(),
         if (bloc.attendance.note.isEmpty)
-          Divider(height: 0, color: theme.colorScheme.secondaryContainer)
+          const Divider(height: 0)
         else
           const AttendanceCardNote(),
         const InfoRow(),
@@ -85,8 +91,8 @@ class AttendanceCardBody extends StatelessWidget {
   }
 }
 
-class AttendanceCardHeader extends StatelessWidget {
-  const AttendanceCardHeader({super.key});
+class AttendanceCardTitle extends StatelessWidget {
+  const AttendanceCardTitle({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -100,14 +106,22 @@ class AttendanceCardHeader extends StatelessWidget {
           children: [
             Icon(
               Icons.calendar_today_rounded,
-              color: theme.colorScheme.onPrimaryContainer,
+              color: theme.colorScheme.onSurfaceVariant,
             ),
             const SizedBox(width: 16),
-            AttendanceTitle(
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onPrimaryContainer,
-                fontWeight: FontWeight.w500,
-              ),
+            BlocBuilder<AttendanceDetailsBloc, AttendanceDetailsState>(
+              buildWhen: (p, c) {
+                return p.formattedAttendanceDate != c.formattedAttendanceDate;
+              },
+              builder: (context, state) {
+                return Text(
+                  state.formattedAttendanceDate,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w500,
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -127,12 +141,15 @@ class AttendanceCardNote extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ColoredBox(
-        color: theme.colorScheme.secondaryContainer.withOpacity(.3),
+        color: theme.colorScheme.secondary.withOpacity(.1),
         child: Padding(
           padding: AppPadding.allMedium,
           child: Text(
             note,
-            style: theme.textTheme.bodySmall,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.secondary,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),
@@ -149,25 +166,21 @@ class InfoRow extends StatelessWidget {
 
     return IconTheme(
       data: theme.iconTheme.copyWith(
-        color: theme.colorScheme.secondary,
+        color: theme.colorScheme.onSurfaceVariant,
       ),
-      child: DividerTheme(
-        data: DividerThemeData(
-          color: theme.colorScheme.secondaryContainer,
-        ),
-        child: SizedBox(
-          height: 48,
+      child: SizedBox(
+        height: 48,
+        child: Padding(
+          padding: AppPadding.horizontalMedium,
           child: Row(
             children: const [
-              SizedBox(width: 16),
               Flexible(
                 child: StudentCounter(),
               ),
-              VerticalDivider(width: 32, thickness: 2),
+              VerticalDivider(width: 32),
               Flexible(
                 child: TimeTile(),
               ),
-              SizedBox(width: 16),
             ],
           ),
         ),
@@ -183,20 +196,23 @@ class TimeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final bloc = context.watch<AttendanceDetailsBloc>();
-    final formattedTime =
-        DateFormat.Hm(context.l10n.localeName).format(bloc.attendance.date);
-
     return Row(
       children: [
-        const Icon(Icons.schedule_rounded),
+        const Icon(Icons.schedule),
         const SizedBox(width: 8),
         const Spacer(),
-        Text(
-          formattedTime,
-          style: theme.textTheme.titleMedium?.copyWith(
-            color: theme.colorScheme.secondary,
-          ),
+        BlocBuilder<AttendanceDetailsBloc, AttendanceDetailsState>(
+          buildWhen: (p, c) {
+            return p.formattedAttendanceTime != c.formattedAttendanceTime;
+          },
+          builder: (context, state) {
+            return Text(
+              state.formattedAttendanceTime,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            );
+          },
         ),
       ],
     );
@@ -211,7 +227,7 @@ class StudentCounter extends StatelessWidget {
     return Row(
       children: const [
         Icon(Icons.people_alt),
-        SizedBox(width: 8),
+        SizedBox(width: 16),
         Spacer(),
         StudentsCounterText(),
       ],
@@ -234,15 +250,12 @@ class StudentsCounterText extends StatelessWidget {
         return RichText(
           text: TextSpan(
             style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.secondary,
+              color: theme.colorScheme.onSurfaceVariant,
             ),
             children: [
               TextSpan(
                 text: count,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.secondary,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               TextSpan(
                 text: '/$total',

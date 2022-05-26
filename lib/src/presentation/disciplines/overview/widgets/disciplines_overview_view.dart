@@ -15,7 +15,6 @@ class DisciplineOverviewView extends StatelessWidget {
         title: const Text('Disciplinas'),
       ),
       body: const DisciplinesOverviewBody(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: const CreateDisciplineFab(),
     );
   }
@@ -30,7 +29,7 @@ class CreateDisciplineFab extends StatelessWidget {
       builder: (context, state) => state.maybeWhen(
         orElse: () => const SizedBox(),
         loadSuccess: (_) => FloatingActionButton.extended(
-          label: const Text('CRIAR DISCIPLINA'),
+          label: const Text('Criar'),
           icon: const Icon(Icons.add),
           onPressed: () => AppRouter.showDisciplineForm(context, null),
         ),

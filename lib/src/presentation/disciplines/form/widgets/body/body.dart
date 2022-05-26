@@ -1,33 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../application/discipline/form/bloc.dart';
-import '../../../../../shared/shared.dart';
-
-part '_name_field.dart';
-part '_submit_button.dart';
+import 'name_input.dart';
+import 'save_button.dart';
 
 class DisciplineFormBody extends StatelessWidget {
-  const DisciplineFormBody({
-    Key? key,
-    required this.state,
-  }) : super(key: key);
-
-  final DisciplineFormState state;
+  const DisciplineFormBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final EdgeInsets viewInsets = MediaQuery.of(context).viewInsets;
-    final bottomPadding = viewInsets.bottom + 24.0;
+    final viewInsets = MediaQuery.of(context).viewInsets;
+    final bottomPadding = viewInsets.bottom + 8;
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, bottomPadding),
+      padding: EdgeInsets.fromLTRB(16, 0, 16, bottomPadding),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: const [
-          _NameFormField(),
-          _SubmitDisciplineButton(),
+          DisciplineNameInput(),
+          SizedBox(width: 8),
+          DisciplineFormSaveButton(),
         ],
       ),
     );

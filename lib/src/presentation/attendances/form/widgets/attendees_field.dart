@@ -35,6 +35,12 @@ class AttendeesCheckboxList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AttendanceFormBloc, AttendanceFormState>(
       builder: (context, state) {
+        if (state.attendees.isEmpty) {
+          return const Center(
+            child: Text('A lista de alunos está vazia.'),
+          );
+        }
+
         return ListView.separated(
           itemCount: state.attendees.length,
           separatorBuilder: (_, __) => const Divider(height: 0),
@@ -42,6 +48,7 @@ class AttendeesCheckboxList extends StatelessWidget {
             final attendee = state.attendees[index];
 
             return AttendeeCheckboxTile(
+              key: Key(attendee.student.id),
               attendee: attendee,
             );
           },
@@ -61,26 +68,22 @@ class AttendeeCheckboxTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final color = theme.colorScheme.primary;
-    final checkColor = theme.colorScheme.onPrimary;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return CheckboxListTile(
       dense: true,
-      checkColor: checkColor,
-      selectedTileColor: color.withOpacity(.1),
-      activeColor: color,
-      contentPadding: AppPadding.allSmall,
       visualDensity: kVisualDensity,
-      title: Text(attendee.student.name),
-      selected: attendee.attended,
-      value: attendee.attended,
+      contentPadding: AppPadding.allSmall,
       controlAffinity: ListTileControlAffinity.leading,
-      onChanged: (_) {
-        context
-            .read<AttendanceFormBloc>()
-            .add(AttendanceFormEvent.attendeePressed(attendee));
-      },
+      activeColor: colorScheme.primary,
+      checkColor: colorScheme.onPrimary,
+      selectedTileColor: colorScheme.primary.withOpacity(.1),
+      title: Text(attendee.student.name),
+      value: attendee.attended,
+      selected: attendee.attended,
+      onChanged: (_) => context
+          .read<AttendanceFormBloc>()
+          .add(AttendanceFormEvent.attendeePressed(attendee)),
     );
   }
 }

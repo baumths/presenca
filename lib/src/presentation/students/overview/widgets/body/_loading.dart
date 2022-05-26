@@ -1,7 +1,7 @@
 part of 'body.dart';
 
 class _LoadingStudents extends StatelessWidget {
-  const _LoadingStudents({Key? key}) : super(key: key);
+  const _LoadingStudents({super.key});
 
   @override
   Widget build(BuildContext context) {

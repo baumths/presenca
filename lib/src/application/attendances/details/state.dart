@@ -9,6 +9,7 @@ class AttendanceDetailsState with _$AttendanceDetailsState {
     required List<Student> students,
     required bool isLoading,
     required String formattedAttendanceDate,
+    required String formattedAttendanceTime,
   }) = _AttendanceDetailsState;
 
   factory AttendanceDetailsState.initial() {
@@ -17,8 +18,13 @@ class AttendanceDetailsState with _$AttendanceDetailsState {
       students: [],
       isLoading: true,
       formattedAttendanceDate: '',
+      formattedAttendanceTime: '',
     );
   }
 
   bool didStudentAttend(Student student) => attendees[student.id] ?? false;
+
+  String get dateAndTimeDisplay {
+    return '$formattedAttendanceDate - $formattedAttendanceTime';
+  }
 }

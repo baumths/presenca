@@ -17,12 +17,18 @@ class StudentTile extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: theme.colorScheme.surfaceVariant,
         borderRadius: kDefaultBorderRadius / 2,
       ),
       child: Padding(
         padding: AppPadding.tile,
-        child: Text(student.name, style: const TextStyle(fontSize: 14)),
+        child: Text(
+          student.name,
+          style: TextStyle(
+            fontSize: 14,
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
       ),
     );
   }

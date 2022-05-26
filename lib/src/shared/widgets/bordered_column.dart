@@ -18,8 +18,8 @@ class BorderedColumn extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: kDefaultBorderRadius,
         border: Border.all(
-          color: color ?? Theme.of(context).colorScheme.secondary,
-          width: 2,
+          color: color ?? Theme.of(context).colorScheme.outline,
+          width: 1,
         ),
       ),
       child: Padding(

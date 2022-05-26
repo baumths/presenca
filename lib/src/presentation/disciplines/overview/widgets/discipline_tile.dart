@@ -1,26 +1,38 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/entities/discipline.dart';
+import '../../../../shared/shared.dart';
 import '../../../app/router.dart';
 
 class DisciplineTile extends StatelessWidget {
   const DisciplineTile({
-    Key? key,
+    super.key,
     required this.discipline,
-    this.tileColor,
-  }) : super(key: key);
+  });
 
   final Discipline discipline;
-  final Color? tileColor;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(discipline.name),
-      trailing: const Icon(Icons.arrow_forward_rounded),
-      tileColor: tileColor,
-      onLongPress: () => AppRouter.showDisciplineForm(context, discipline),
-      onTap: () => AppRouter.showDisciplineDetails(context, discipline),
+    final theme = Theme.of(context);
+
+    return ListTileTheme(
+      data: theme.listTileTheme.copyWith(
+        shape: kDefaultShapeBorder,
+        horizontalTitleGap: 8,
+        tileColor: theme.colorScheme.secondaryContainer,
+        iconColor: theme.colorScheme.onSecondaryContainer,
+        textColor: theme.colorScheme.onSecondaryContainer,
+      ),
+      child: Padding(
+        padding: AppPadding.horizontalSmall,
+        child: ListTile(
+          title: Text(discipline.name),
+          trailing: const Icon(Icons.arrow_forward_rounded),
+          onLongPress: () => AppRouter.showDisciplineForm(context, discipline),
+          onTap: () => AppRouter.showDisciplineDetails(context, discipline),
+        ),
+      ),
     );
   }
 }

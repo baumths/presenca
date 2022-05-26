@@ -7,7 +7,7 @@ import 'student_name_input.dart';
 import 'student_tile.dart';
 
 class StudentsFormBody extends StatelessWidget {
-  const StudentsFormBody({Key? key}) : super(key: key);
+  const StudentsFormBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,32 +22,46 @@ class StudentsFormBody extends StatelessWidget {
             child: StudentNameInput(),
           ),
         ),
-        const Expanded(child: _StudentsList()),
+        const Expanded(
+          child: StudentsList(),
+        ),
       ],
     );
   }
 }
 
-class _StudentsList extends StatelessWidget {
-  const _StudentsList({
-    Key? key,
-  }) : super(key: key);
+class StudentsList extends StatelessWidget {
+  const StudentsList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StudentsFormBloc, StudentsFormState>(
-      buildWhen: (p, c) => p.students != c.students,
-      builder: (BuildContext context, StudentsFormState state) {
-        final List<Student> students = state.students;
+    final theme = Theme.of(context);
 
-        return ListView.separated(
-          itemCount: students.length,
-          separatorBuilder: (_, __) => const Divider(height: 0),
-          itemBuilder: (BuildContext context, int index) {
-            return StudentTile(student: students[index]);
-          },
-        );
-      },
+    return ListTileTheme(
+      data: theme.listTileTheme.copyWith(
+        dense: true,
+        horizontalTitleGap: 0,
+        contentPadding: const EdgeInsets.only(left: 16, right: 8),
+        selectedColor: theme.colorScheme.primary,
+        selectedTileColor: theme.colorScheme.primaryContainer,
+      ),
+      child: BlocBuilder<StudentsFormBloc, StudentsFormState>(
+        buildWhen: (p, c) => p.students != c.students,
+        builder: (BuildContext context, StudentsFormState state) {
+          final List<Student> students = state.students;
+
+          return ListView.separated(
+            itemCount: students.length,
+            separatorBuilder: (_, __) => Divider(
+              height: 0,
+              color: theme.colorScheme.outline.withOpacity(.5),
+            ),
+            itemBuilder: (_, int index) => StudentTile(
+              student: students[index],
+            ),
+          );
+        },
+      ),
     );
   }
 }

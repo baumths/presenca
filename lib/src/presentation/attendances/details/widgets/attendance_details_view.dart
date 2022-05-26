@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'attendance_title.dart';
+import '../../../../application/attendances/details/bloc.dart';
 import 'body.dart';
 
 class AttendanceDetailsView extends StatelessWidget {
@@ -9,12 +10,23 @@ class AttendanceDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
       appBar: AppBar(
         titleSpacing: 0,
         title: const AttendanceTitle(),
       ),
       body: const AttendanceDetailsBody(),
+    );
+  }
+}
+
+class AttendanceTitle extends StatelessWidget {
+  const AttendanceTitle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      context.watch<AttendanceDetailsBloc>().state.dateAndTimeDisplay,
+      style: const TextStyle(fontSize: 20),
     );
   }
 }

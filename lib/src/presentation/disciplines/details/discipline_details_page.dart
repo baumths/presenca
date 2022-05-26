@@ -7,9 +7,9 @@ import 'widgets/discipline_details_view.dart';
 
 class DisciplineDetailsPage extends StatelessWidget {
   const DisciplineDetailsPage({
-    Key? key,
+    super.key,
     required this.discipline,
-  }) : super(key: key);
+  });
 
   final Discipline discipline;
 

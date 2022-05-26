@@ -5,7 +5,7 @@ import '../../../../application/students/form/bloc.dart';
 import '../../../../shared/shared.dart';
 
 class StudentNameInput extends StatefulWidget {
-  const StudentNameInput({Key? key}) : super(key: key);
+  const StudentNameInput({super.key});
 
   @override
   State<StudentNameInput> createState() => _StudentNameInputState();
@@ -36,7 +36,7 @@ class _StudentNameInputState extends State<StudentNameInput> {
       final bloc = context.read<StudentsFormBloc>();
       bloc.add(
         StudentsFormEvent.editingComplete(
-          name: _textController.text,
+          _textController.text,
         ),
       );
     }

@@ -30,6 +30,7 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
       selected: (event) => _onSelected(event, emit),
       editingComplete: (event) => _onEditingComplete(event, emit),
       activeToggled: (event) => _onActiveToggled(event, emit),
+      deletePressed: (event) => _onDeletePressed(event, emit),
       submitted: (event) => _onSubmitted(event, emit),
     );
   }
@@ -151,6 +152,21 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
     );
   }
 
+  Future<void> _onDeletePressed(
+    _DeletePressed event,
+    Emitter<StudentsFormState> emit,
+  ) async {
+    final newStudents = state.students
+        .where((student) => student.id != event.student.id)
+        .toList();
+
+    emit(
+      state.copyWith(
+        students: newStudents,
+      ),
+    );
+  }
+
   Future<void> _onSubmitted(
     _Submitted event,
     Emitter<StudentsFormState> emit,
@@ -161,6 +177,8 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
         isSaving: true,
       ),
     );
+
+    await Future<void>.delayed(const Duration(seconds: 10));
 
     final failureOrSuccess = await _studentsRepository.save(
       discipline.id,

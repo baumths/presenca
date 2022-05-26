@@ -35,7 +35,7 @@ class AttendanceFormView extends StatelessWidget {
             () {
               SnackBarHelper.showError(
                 context,
-                'Nao foi possivel salvar chamada',
+                'Nao foi possível salvar chamada',
               );
             },
             (_) => Navigator.pop(context),

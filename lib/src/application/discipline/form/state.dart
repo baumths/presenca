@@ -7,24 +7,18 @@ class DisciplineFormState with _$DisciplineFormState {
   const factory DisciplineFormState({
     required Discipline discipline,
     required bool isEditing,
-    required bool isSaving,
     required Option<Either<DisciplineFailure, Unit>> saveFailureOrSuccessOption,
-    required String? errorMessage,
   }) = _DisciplineFormState;
 
   factory DisciplineFormState.initial() {
     return DisciplineFormState(
       discipline: Discipline.empty(),
       isEditing: false,
-      isSaving: false,
       saveFailureOrSuccessOption: const None(),
-      errorMessage: null,
     );
   }
 
   bool get canSubmit {
-    return errorMessage == null &&
-        saveFailureOrSuccessOption.isNone() &&
-        discipline.name.isNotEmpty;
+    return saveFailureOrSuccessOption.isNone() && discipline.name.isNotEmpty;
   }
 }

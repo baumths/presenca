@@ -39,76 +39,77 @@ class PickFileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: AppPadding.allMedium,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: const [
           BorderedColumn(
             children: [
-              _Header(),
+              StudentsImportTitle(),
               SizedBox(height: 16),
-              _HelperMessage(),
+              StudentsImportDescription(),
             ],
           ),
           SizedBox(height: 16),
-          _PickFileButton(),
+          PickFileButton(),
         ],
       ),
     );
   }
 }
 
-class _Header extends StatelessWidget {
-  const _Header({super.key});
+class StudentsImportTitle extends StatelessWidget {
+  const StudentsImportTitle({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final colorScheme = theme.colorScheme;
 
     return Text(
       'Importar Alunos',
-      style: textTheme.titleLarge?.copyWith(
-        color: colorScheme.secondary,
+      style: theme.textTheme.titleLarge?.copyWith(
+        color: theme.colorScheme.onSurface,
       ),
     );
   }
 }
 
-class _HelperMessage extends StatelessWidget {
-  const _HelperMessage({super.key});
+class StudentsImportDescription extends StatelessWidget {
+  const StudentsImportDescription({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final colorScheme = theme.colorScheme;
 
     return RichText(
       text: TextSpan(
-        style: textTheme.bodyMedium,
-        children: [
-          const TextSpan(text: 'A importação possui somente suporte para '),
+        style: theme.textTheme.bodyMedium?.copyWith(
+          color: theme.colorScheme.onSurface,
+        ),
+        children: const [
+          TextSpan(text: 'A importação possui somente suporte para '),
           TextSpan(
             text: 'arquivos CSV',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: colorScheme.secondary,
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          const TextSpan(
+          TextSpan(
             text: ' no momento.\n\n',
           ),
-          const TextSpan(
+          TextSpan(
             text: 'Ao importar uma planilha, apenas a primeira coluna será '
                 'utilizada, as outras serão ignoradas.'
                 '\n\n',
           ),
-          const TextSpan(
-            text: 'Ao realizar a importação, a lista de alunos desta '
-                'disciplina será sobrescrita.',
+          TextSpan(
+            text: 'Atenção! ',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text: 'Ao realizar a importação, a lista de alunos dessa '
+                'disciplina será sobrescrita, mas você ainda poderá '
+                'cancelar a importação ou até editar o nome de cada '
+                'aluno individualmente após selecionar o arquivo.',
           ),
         ],
       ),
@@ -116,27 +117,33 @@ class _HelperMessage extends StatelessWidget {
   }
 }
 
-class _PickFileButton extends StatelessWidget {
-  const _PickFileButton({super.key});
+class PickFileButton extends StatelessWidget {
+  const PickFileButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: kDefaultButtonHeight,
-      child: BlocBuilder<StudentsImportBloc, StudentsImportState>(
-        builder: (context, state) {
-          if (state.isLoading) {
-            return const _LoadingIndicator();
-          }
+    final theme = Theme.of(context);
 
-          return PrimaryButton.wide(
-            label: 'Selecionar Arquivo',
-            onPressed: () => context
-                .read<StudentsImportBloc>()
-                .add(const StudentsImportEvent.pickFilePressed()),
-          );
-        },
-      ),
+    return BlocBuilder<StudentsImportBloc, StudentsImportState>(
+      builder: (context, state) {
+        return FadeUpwardsSwitcher(
+          child: state.isLoading
+              ? const _LoadingIndicator()
+              : SizedBox(
+                  height: kDefaultButtonHeight,
+                  width: double.infinity,
+                  child: MaterialButton(
+                    color: theme.colorScheme.primary,
+                    textColor: theme.colorScheme.onPrimary,
+                    shape: kDefaultShapeBorder,
+                    child: const Text('Selecionar Arquivo'),
+                    onPressed: () => context
+                        .read<StudentsImportBloc>()
+                        .add(const StudentsImportEvent.pickFilePressed()),
+                  ),
+                ),
+        );
+      },
     );
   }
 }
@@ -147,28 +154,30 @@ class _LoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final colorScheme = theme.colorScheme;
 
-    return SizedBox(
-      height: kDefaultButtonHeight,
-      child: Row(
-        children: [
-          const SizedBox(width: 16),
-          const SizedBox.square(
-            dimension: 20,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              'Processando...',
-              style: textTheme.titleSmall?.copyWith(
-                color: colorScheme.primary,
+    return Material(
+      color: theme.colorScheme.surface,
+      shape: kDefaultShapeBorder,
+      child: SizedBox(
+        height: kDefaultButtonHeight,
+        child: Row(
+          children: [
+            const SizedBox(width: 16),
+            const SizedBox.square(
+              dimension: 20,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                'Importando...',
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

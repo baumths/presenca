@@ -84,7 +84,6 @@ class TimeSelector extends StatelessWidget {
   }
 }
 
-// TODO: maybe extract to `.../shared`
 class DateOrTimeSelector extends StatelessWidget {
   const DateOrTimeSelector({
     super.key,
@@ -101,10 +100,9 @@ class DateOrTimeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color = theme.colorScheme.primary;
-    final backgroundColor = theme.colorScheme.secondaryContainer;
 
     return Material(
-      color: backgroundColor,
+      color: theme.colorScheme.secondaryContainer,
       borderRadius: kDefaultBorderRadius,
       child: InkWell(
         onTap: onPressed,

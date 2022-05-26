@@ -3,15 +3,22 @@ import 'package:flutter/material.dart';
 import '../../shared/shared.dart';
 
 final ThemeData theme = ThemeData(
-  colorSchemeSeed: Colors.deepPurple,
+  colorScheme: colorScheme,
   useMaterial3: true,
   visualDensity: VisualDensity.comfortable,
-  inputDecorationTheme: const InputDecorationTheme(
-    contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-    border: OutlineInputBorder(borderRadius: kDefaultBorderRadius),
-  ),
   iconTheme: const IconThemeData(size: 20),
-  dialogTheme: const DialogTheme(
-    shape: RoundedRectangleBorder(borderRadius: kDefaultBorderRadius),
+  dialogTheme: const DialogTheme(shape: kDefaultShapeBorder),
+  bottomAppBarTheme: BottomAppBarTheme(color: colorScheme.surface),
+  dividerTheme: DividerThemeData(
+    color: colorScheme.outline,
+    thickness: 1.0,
   ),
+  bottomSheetTheme: const BottomSheetThemeData(
+    shape: kBottomSheetShapeBorder,
+  ),
+);
+
+final ColorScheme colorScheme = ColorScheme.fromSeed(
+  seedColor: Colors.teal,
+  brightness: Brightness.light,
 );

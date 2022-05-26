@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/attendances/details/bloc.dart';
@@ -21,11 +20,13 @@ class AttendeesList extends StatelessWidget {
 
         return ListView.separated(
           itemCount: students.length,
-          padding: AppPadding.allSmall,
           separatorBuilder: (_, __) => const SizedBox(height: 4),
+          padding: AppPadding.allSmall,
           itemBuilder: (context, index) {
             final student = students[index];
+
             return AttendeeTile(
+              key: Key(student.id),
               student: student,
               attended: state.didStudentAttend(student),
             );
@@ -52,7 +53,7 @@ class EmptyAttendeesList extends StatelessWidget {
             child: Padding(
               padding: AppPadding.tile,
               child: Text(
-                'Esta chamada está vazia',
+                'Essa chamada está vazia',
                 textAlign: TextAlign.center,
               ),
             ),
@@ -77,26 +78,18 @@ class AttendeeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    late Color backgroundColor = colorScheme.surface;
-    late Color color = colorScheme.secondary;
+    final Color color = colorScheme.onTertiaryContainer;
+    late Color backgroundColor = colorScheme.tertiaryContainer.withOpacity(.3);
     late IconData icon = Icons.radio_button_off;
-    Border? border;
-    FontWeight? fontWeight;
 
     if (attended) {
-      fontWeight = FontWeight.w500;
-      backgroundColor = colorScheme.surface;
-      border = Border.all(color: color, width: 2);
-      color = colorScheme.primary;
+      backgroundColor = colorScheme.tertiaryContainer;
       icon = Icons.radio_button_on;
     }
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: kDefaultBorderRadius / 2,
-        border: border,
-      ),
+    return Material(
+      shape: kDefaultShapeBorder,
+      color: backgroundColor,
       child: Padding(
         padding: AppPadding.tile,
         child: Row(
@@ -109,7 +102,6 @@ class AttendeeTile extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14,
                   color: color,
-                  fontWeight: fontWeight,
                 ),
               ),
             ),

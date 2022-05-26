@@ -1,7 +1,7 @@
 part of 'body.dart';
 
 class AttendancesTab extends StatelessWidget {
-  const AttendancesTab({Key? key}) : super(key: key);
+  const AttendancesTab({super.key});
 
   @override
   Widget build(BuildContext context) {
