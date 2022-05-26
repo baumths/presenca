@@ -25,15 +25,9 @@ class DisciplineDetailsBottomBar extends StatelessWidget {
                 tooltip: 'Importar Alunos',
                 onPressed: () async {
                   await showModalBottomSheet<void>(
-                    isScrollControlled: true,
-                    backgroundColor: Theme.of(context).colorScheme.surface,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: kDefaultBorderRadius.topLeft,
-                        topRight: kDefaultBorderRadius.topRight,
-                      ),
-                    ),
                     context: context,
+                    isScrollControlled: true,
+                    shape: kBottomSheetShapeBorder,
                     builder: (_) => StudentsImportPage(
                       discipline: bloc.discipline,
                     ),
@@ -62,12 +56,7 @@ class DisciplineDetailsBottomBar extends StatelessWidget {
                   await showModalBottomSheet<void>(
                     context: context,
                     isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: kDefaultBorderRadius.copyWith(
-                        bottomLeft: Radius.zero,
-                        bottomRight: Radius.zero,
-                      ),
-                    ),
+                    shape: kBottomSheetShapeBorder,
                     builder: (_) => DisciplineExportPage(
                       discipline: bloc.discipline,
                     ),
