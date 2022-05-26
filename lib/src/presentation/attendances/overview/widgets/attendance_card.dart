@@ -48,14 +48,25 @@ class AttendanceCardContent extends StatelessWidget {
       child: InkWell(
         borderRadius: kDefaultBorderRadius,
         onTap: () async {
+          // final mediaQuery = MediaQuery.of(context);
+
+          // workaround for bottom sheet under status bar
+          // local [MediaQuery]'s `padding.top` returns 0.0
+          final mediaQuery = MediaQueryData.fromWindow(
+            WidgetsBinding.instance.window,
+          );
+
+          final maxHeight = mediaQuery.size.height - mediaQuery.padding.top;
+
           await showModalBottomSheet<void>(
             context: context,
+            shape: kBottomSheetShapeBorder,
             isScrollControlled: true,
+            constraints: BoxConstraints(maxHeight: maxHeight),
             builder: (_) => AttendanceDetailsPage(
               bloc: context.read(),
             ),
           );
-          // AppRouter.showAttendanceDetails(context, attendance);
         },
         child: DividerTheme(
           data: theme.dividerTheme.copyWith(
