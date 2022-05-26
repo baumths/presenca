@@ -58,7 +58,6 @@ class DisciplineExportDescription extends StatelessWidget {
     return DefaultTextStyle(
       style: theme.textTheme.bodyMedium!.copyWith(
         color: theme.colorScheme.onSurface,
-        fontSize: 12,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
