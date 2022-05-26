@@ -11,9 +11,10 @@ class FilePickerAdapterImpl extends FilePickerAdapter {
   @override
   Future<List<List<String>>> pickCsv() async {
     final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
       withReadStream: true,
-      allowedExtensions: ['csv'],
+      // Not working
+      // type: FileType.custom,
+      // allowedExtensions: ['csv'],
     );
 
     if (result == null) {
@@ -21,6 +22,11 @@ class FilePickerAdapterImpl extends FilePickerAdapter {
     }
 
     final PlatformFile file = result.files.single;
+
+    if (file.extension != 'csv') {
+      // TODO(future): return a [Failure] to inform user
+      return const [];
+    }
     final Stream<List<int>>? dataStream = file.readStream;
 
     if (dataStream == null) {
