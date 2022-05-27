@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
+import '../theme/padding.dart';
+
 abstract class SnackBarHelper {
   static void showSuccess(BuildContext context, String message) {
     context.showSnackBar(
@@ -48,30 +51,20 @@ abstract class SnackBarHelper {
   }) {
     return SnackBar(
       padding: EdgeInsets.zero,
-      backgroundColor: Colors.grey.shade900,
       behavior: SnackBarBehavior.floating,
-      content: DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border(
-            left: BorderSide(
-              width: 6,
-              color: color,
+      shape: kDefaultShapeBorder,
+      content: Padding(
+        padding: AppPadding.allSmall,
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 4.0, right: 8.0),
+              child: Icon(icon, color: color),
             ),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 4.0, right: 8.0),
-                child: Icon(icon, color: color),
-              ),
-              Flexible(
-                child: Text(message),
-              ),
-            ],
-          ),
+            Flexible(
+              child: Text(message),
+            ),
+          ],
         ),
       ),
     );
