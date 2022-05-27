@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/discipline/overview/bloc.dart';
+import '../../../../shared/shared.dart';
 import '../../../app/router.dart';
+import '../../../settings/settings.dart';
 import 'body/body.dart';
 
 class DisciplineOverviewView extends StatelessWidget {
@@ -15,7 +17,21 @@ class DisciplineOverviewView extends StatelessWidget {
         title: const Text('Disciplinas'),
       ),
       body: const DisciplinesOverviewBody(),
-      floatingActionButton: const CreateDisciplineFab(),
+      bottomNavigationBar: BottomBar(
+        fab: const CreateDisciplineFab(),
+        buttons: [
+          BottomBarButton(
+            icon: const Icon(Icons.brush),
+            tooltip: 'Tema',
+            onPressed: () {
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (_) => const ThemeSettingsView(),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
