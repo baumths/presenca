@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../application/settings/theme/cubit.dart';
 import '../../domain/repositories/repositories.dart';
 import '../../infrastructure/adapters.dart';
+import '../../infrastructure/services.dart';
 import 'router.dart';
 import 'theme.dart';
 
@@ -15,16 +16,16 @@ class PresencaApp extends StatelessWidget {
     required this.disciplinesRepository,
     required this.settingsRepository,
     required this.studentsRepository,
+    required this.saveFileService,
     required this.filePickerAdapter,
-    required this.fileSaverAdapter,
   });
 
   final AttendancesRepository attendancesRepository;
   final DisciplinesRepository disciplinesRepository;
   final SettingsRepository settingsRepository;
   final StudentsRepository studentsRepository;
+  final SaveFileService saveFileService;
   final FilePickerAdapter filePickerAdapter;
-  final FileSaverAdapter fileSaverAdapter;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +35,8 @@ class PresencaApp extends StatelessWidget {
         RepositoryProvider.value(value: disciplinesRepository),
         RepositoryProvider.value(value: settingsRepository),
         RepositoryProvider.value(value: studentsRepository),
+        RepositoryProvider.value(value: saveFileService),
         RepositoryProvider.value(value: filePickerAdapter),
-        RepositoryProvider.value(value: fileSaverAdapter),
       ],
       child: BlocProvider<ThemeSettingsCubit>(
         create: (context) {

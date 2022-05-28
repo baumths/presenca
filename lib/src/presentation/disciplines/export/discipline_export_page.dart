@@ -3,9 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/discipline/export/cubit.dart';
 import '../../../domain/discipline.dart';
-import '../../../domain/repositories/repositories.dart';
-import '../../../infrastructure/adapters.dart';
-import '../../../shared/shared.dart';
 import 'widgets/discipline_export_view.dart';
 
 class DisciplineExportPage extends StatelessWidget {
@@ -22,22 +19,15 @@ class DisciplineExportPage extends StatelessWidget {
       create: (_) {
         return DisciplineExportCubit(
           discipline: discipline,
-          attendancesRepository: context.read<AttendancesRepository>(),
-          studentsRepository: context.read<StudentsRepository>(),
-          fileSaverAdapter: context.read<FileSaverAdapter>(),
+          attendancesRepository: context.read(),
+          studentsRepository: context.read(),
+          saveFileService: context.read(),
         );
       },
       child: BlocListener<DisciplineExportCubit, DisciplineExportState>(
         listener: (context, state) {
           state.whenOrNull(
-            success: (fileName) {
-              Navigator.pop(context);
-
-              SnackBarHelper.showSuccess(
-                context,
-                'Arquivo salvo em: $fileName',
-              );
-            },
+            success: () => Navigator.pop(context),
           );
         },
         child: const DisciplineExportView(),

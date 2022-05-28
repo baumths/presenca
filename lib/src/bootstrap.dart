@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'infrastructure/adapters.dart';
 import 'infrastructure/repositories.dart';
+import 'infrastructure/services.dart';
 import 'presentation/app/app.dart';
 
 Future<Widget> createAndInitializeApp() async {
@@ -16,16 +17,17 @@ Future<Widget> createAndInitializeApp() async {
   final settingsRepository = await SettingsRepositoryImpl.create();
   final studentsRepository = await StudentsRepositoryImpl.create();
 
+  final saveFileService = SaveFileServiceImpl();
+
   final filePickerAdapter = FilePickerAdapterImpl();
-  final fileSaverAdapter = FileSaverAdapterImpl();
 
   return PresencaApp(
     attendancesRepository: attendancesRepository,
     disciplinesRepository: disciplinesRepository,
     settingsRepository: settingsRepository,
     studentsRepository: studentsRepository,
+    saveFileService: saveFileService,
     filePickerAdapter: filePickerAdapter,
-    fileSaverAdapter: fileSaverAdapter,
   );
 }
 

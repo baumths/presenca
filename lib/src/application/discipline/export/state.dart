@@ -6,9 +6,7 @@ class DisciplineExportState with _$DisciplineExportState {
 
   const factory DisciplineExportState.initial() = _Initial;
   const factory DisciplineExportState.loading() = _Loading;
-  const factory DisciplineExportState.success({
-    required String filePath,
-  }) = _Success;
+  const factory DisciplineExportState.success() = _Success;
 
   bool get isLoading => maybeWhen(loading: () => true, orElse: () => false);
 }

@@ -1,10 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../domain/attendance.dart';
 import '../../../domain/discipline.dart';
 import '../../../domain/student.dart';
-import '../../../infrastructure/adapters.dart';
+import '../../../infrastructure/services.dart';
 import 'models/discipline_aggregate.dart';
 
 part 'cubit.freezed.dart';
@@ -15,23 +16,19 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
     required this.discipline,
     required AttendancesRepository attendancesRepository,
     required StudentsRepository studentsRepository,
-    required FileSaverAdapter fileSaverAdapter,
+    required SaveFileService saveFileService,
   })  : _attendancesRepository = attendancesRepository,
         _studentsRepository = studentsRepository,
-        _fileSaverAdapter = fileSaverAdapter,
+        _saveFileService = saveFileService,
         super(const DisciplineExportState.initial());
 
   final Discipline discipline;
   final AttendancesRepository _attendancesRepository;
   final StudentsRepository _studentsRepository;
 
-  final FileSaverAdapter _fileSaverAdapter;
+  final SaveFileService _saveFileService;
 
   Future<void> exportDiscipline() async {
-    if (state.isLoading) {
-      return;
-    }
-
     emit(const DisciplineExportState.loading());
 
     final disciplineAggregate = DisciplineAggregate(
@@ -44,17 +41,17 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
     final String fileName = disciplineAggregate.fileName;
     final List<List<String>> fileContent = disciplineAggregate.toCsv();
 
-    final String? path = await _fileSaverAdapter.saveCsv(
+    final String path = await _saveFileService.saveCsv(
       fileName,
       fileContent,
     );
 
-    final bool userCanceled = path == null;
-
-    emit(
-      userCanceled
-          ? const DisciplineExportState.initial()
-          : DisciplineExportState.success(filePath: path),
+    await Share.shareFiles(
+      [path],
+      mimeTypes: ['text/csv'],
+      text: fileName,
     );
+
+    emit(const DisciplineExportState.success());
   }
 }
