@@ -59,7 +59,7 @@ class AppView extends StatelessWidget {
       builder: (context, state) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: createThemeData(state.seedColor),
+          theme: createLightThemeData(state.seedColor),
           darkTheme: createDarkThemeData(state.seedColor),
           themeMode: state.themeMode,
           title: 'Presença',

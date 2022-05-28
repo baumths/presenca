@@ -7,9 +7,9 @@ import 'students_form_body.dart';
 
 class StudentsFormView extends StatelessWidget {
   const StudentsFormView({
-    Key? key,
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   final String title;
 
@@ -17,6 +17,9 @@ class StudentsFormView extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        // Remove keyboard before exiting
+        FocusScope.of(context).unfocus();
+
         final bool? discardPressed = await showDialog<bool>(
           context: context,
           builder: (_) => const DiscardDialog(),
@@ -28,6 +31,7 @@ class StudentsFormView extends StatelessWidget {
         appBar: AppBar(
           titleSpacing: 0,
           title: Text(title),
+          titleTextStyle: Theme.of(context).textTheme.titleMedium,
         ),
         body: const StudentsFormBody(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -43,7 +47,7 @@ class SaveStudentsFormFab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
-      icon: const Icon(Icons.done_rounded, size: 24),
+      icon: const Icon(Icons.done_rounded),
       label: const Text('Salvar'),
       onPressed: () => context
           .read<StudentsFormBloc>()

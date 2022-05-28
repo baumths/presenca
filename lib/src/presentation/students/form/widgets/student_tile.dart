@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/students/form/bloc.dart';
 import '../../../../domain/student.dart';
-import '../../../../shared/shared.dart';
 
 class StudentTile extends StatelessWidget {
   const StudentTile({
@@ -53,11 +52,9 @@ class DefaultStudentTile extends StatelessWidget {
     return ListTile(
       title: Text(student.name),
       trailing: IconButton(
-        iconSize: 20,
-        splashRadius: 20,
-        visualDensity: kVisualDensity,
-        tooltip: 'Marcar como Inativo',
+        splashRadius: 24,
         color: Colors.green,
+        tooltip: 'Marcar como Inativo',
         icon: const Icon(Icons.toggle_on),
         onPressed: () => context
             .read<StudentsFormBloc>()
@@ -117,17 +114,16 @@ class InactiveStudentTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            splashRadius: 20,
+            splashRadius: 24,
+            color: Theme.of(context).colorScheme.error,
             tooltip: 'Remover',
             icon: const Icon(Icons.delete),
-            color: Theme.of(context).colorScheme.error,
             onPressed: () => context
                 .read<StudentsFormBloc>()
                 .add(StudentsFormEvent.deletePressed(student)),
           ),
           IconButton(
-            splashRadius: 20,
-            visualDensity: kVisualDensity,
+            splashRadius: 24,
             tooltip: 'Marcar como Ativo',
             icon: const Icon(Icons.toggle_off),
             onPressed: () => context

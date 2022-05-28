@@ -12,10 +12,7 @@ class AttendeesField extends StatelessWidget {
     final color = Theme.of(context).colorScheme.secondaryContainer;
 
     return DividerTheme(
-      data: DividerThemeData(
-        color: color,
-        thickness: 1,
-      ),
+      data: DividerThemeData(color: color),
       child: Material(
         child: DecoratedBox(
           decoration: BoxDecoration(
@@ -72,9 +69,9 @@ class AttendeeCheckboxTile extends StatelessWidget {
 
     return CheckboxListTile(
       dense: true,
-      visualDensity: kVisualDensity,
       contentPadding: AppPadding.allSmall,
       controlAffinity: ListTileControlAffinity.leading,
+      visualDensity: VisualDensity.compact,
       activeColor: colorScheme.primary,
       checkColor: colorScheme.onPrimary,
       selectedTileColor: colorScheme.primary.withOpacity(.1),

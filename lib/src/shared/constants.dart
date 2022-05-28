@@ -14,8 +14,3 @@ const kDefaultShapeBorder = RoundedRectangleBorder(
 const kBottomSheetShapeBorder = RoundedRectangleBorder(
   borderRadius: BorderRadius.vertical(top: kDefaultRadius),
 );
-
-const VisualDensity kVisualDensity = VisualDensity(
-  horizontal: -4,
-  vertical: -4,
-);

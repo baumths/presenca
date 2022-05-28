@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/students/form/bloc.dart';
-import '../../../../shared/shared.dart';
 
 class StudentNameInput extends StatefulWidget {
   const StudentNameInput({super.key});
@@ -106,7 +105,6 @@ class _StudentNameInputState extends State<StudentNameInput> {
             focusNode: _focusNode,
             autofocus: true,
             onEditingComplete: onDone,
-            onSubmitted: (_) {},
             decoration: InputDecoration(
               labelText: labelText,
               labelStyle: const TextStyle(fontSize: 16),
@@ -116,9 +114,7 @@ class _StudentNameInputState extends State<StudentNameInput> {
               errorText: errorMessage,
               errorMaxLines: 3,
               suffixIcon: IconButton(
-                padding: EdgeInsets.zero,
                 splashRadius: 24,
-                visualDensity: kVisualDensity,
                 onPressed: onDone,
                 icon: suffixIcon,
               ),

@@ -2,27 +2,29 @@ import 'package:flutter/material.dart';
 
 import '../../shared/shared.dart';
 
-ThemeData createThemeData(Color seedColor) {
-  return ThemeData(
-    colorSchemeSeed: seedColor,
-    useMaterial3: true,
-    visualDensity: VisualDensity.comfortable,
-    iconTheme: const IconThemeData(size: 20),
-    dialogTheme: const DialogTheme(shape: kDefaultShapeBorder),
-    dividerTheme: const DividerThemeData(thickness: 1.0),
-    bottomSheetTheme: const BottomSheetThemeData(
-      shape: kBottomSheetShapeBorder,
-    ),
+ThemeData createLightThemeData(Color seedColor) {
+  return _createThemeDataFromBrightness(
+    seedColor: seedColor,
+    brightness: Brightness.light,
   );
 }
 
 ThemeData createDarkThemeData(Color seedColor) {
+  return _createThemeDataFromBrightness(
+    seedColor: seedColor,
+    brightness: Brightness.dark,
+  );
+}
+
+ThemeData _createThemeDataFromBrightness({
+  required Color seedColor,
+  required Brightness brightness,
+}) {
   return ThemeData(
     colorSchemeSeed: seedColor,
-    brightness: Brightness.dark,
+    brightness: brightness,
     useMaterial3: true,
-    visualDensity: VisualDensity.comfortable,
-    iconTheme: const IconThemeData(size: 20),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
     dialogTheme: const DialogTheme(shape: kDefaultShapeBorder),
     dividerTheme: const DividerThemeData(thickness: 1.0),
     bottomSheetTheme: const BottomSheetThemeData(
