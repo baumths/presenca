@@ -18,7 +18,7 @@ class FileSaverAdapterImpl implements FileSaverAdapter {
 
     return await FilePicker.platform.saveFile(
       type: FileType.custom,
-      fileName: fileName.endsWith('.csv') ? fileName : '$fileName.csv',
+      fileName: fileName,
       initialDirectory: dir.path,
       allowedExtensions: ['csv'],
       lockParentWindow: true,
@@ -28,6 +28,7 @@ class FileSaverAdapterImpl implements FileSaverAdapter {
   @override
   Future<String?> saveCsv(String fileName, List<List<String>> csv) async {
     late final String content = const ListToCsvConverter().convert(csv);
+    fileName = fileName.endsWith('.csv') ? fileName : '$fileName.csv';
 
     if (kIsWeb) {
       final String path = await FileSaver.instance.saveFile(
