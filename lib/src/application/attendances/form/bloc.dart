@@ -5,6 +5,7 @@ import 'package:intl/intl.dart' show DateFormat;
 
 import '../../../domain/attendance.dart';
 import '../../../domain/discipline.dart';
+import '../../../domain/entities/attendee.dart';
 import '../../../domain/student.dart';
 
 part 'bloc.freezed.dart';
@@ -49,7 +50,7 @@ class AttendanceFormBloc
         .where((student) => student.active)
         .map(Attendee.fromStudent)
         .toList(growable: false)
-      ..sort((a, b) => a.student.name.compareTo(b.student.name));
+      ..sort((a, b) => a.name.compareTo(b.name));
 
     emit(
       state.copyWith(
@@ -127,7 +128,7 @@ class AttendanceFormBloc
   ) async {
     final newAttendees = <Attendee>[
       for (final Attendee attendee in state.attendees)
-        if (attendee.student.id == event.attendee.student.id)
+        if (attendee.studentId == event.attendee.studentId)
           attendee.copyWith(attended: !attendee.attended)
         else
           attendee,
@@ -147,7 +148,7 @@ class AttendanceFormBloc
   ) async {
     final attendedStudentIds = <String>[
       for (final Attendee attendee in state.attendees)
-        if (attendee.attended) attendee.student.id
+        if (attendee.attended) attendee.studentId
     ];
 
     final attendance = state.attendance.copyWith(

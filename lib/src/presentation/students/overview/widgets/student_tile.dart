@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../domain/entities/student.dart';
 import '../../../../shared/shared.dart';
+import '../../../app/router.dart';
 
 class StudentTile extends StatelessWidget {
   const StudentTile({
@@ -15,18 +16,20 @@ class StudentTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant,
+    return Material(
+      color: theme.colorScheme.surfaceVariant,
+      borderRadius: kDefaultBorderRadius / 2,
+      child: InkWell(
+        onTap: () => AppRouter.showStudentOverview(context, student),
         borderRadius: kDefaultBorderRadius / 2,
-      ),
-      child: Padding(
-        padding: AppPadding.tile,
-        child: Text(
-          student.name,
-          style: TextStyle(
-            fontSize: 14,
-            color: theme.colorScheme.onSurfaceVariant,
+        child: Padding(
+          padding: AppPadding.tile,
+          child: Text(
+            student.name,
+            style: TextStyle(
+              fontSize: 14,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
       ),

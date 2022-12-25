@@ -38,18 +38,3 @@ class AttendanceFormState with _$AttendanceFormState {
     return date.hour != other.date.hour || date.minute != other.date.minute;
   }
 }
-
-@freezed
-class Attendee with _$Attendee {
-  const factory Attendee({
-    required Student student,
-    required bool attended,
-  }) = _Attendee;
-
-  factory Attendee.fromStudent(Student student) {
-    return Attendee(
-      student: student,
-      attended: false,
-    );
-  }
-}

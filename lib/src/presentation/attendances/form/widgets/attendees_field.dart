@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/attendances/form/bloc.dart';
+import '../../../../domain/entities/attendee.dart';
 import '../../../../shared/shared.dart';
 
 class AttendeesField extends StatelessWidget {
@@ -45,7 +46,7 @@ class AttendeesCheckboxList extends StatelessWidget {
             final attendee = state.attendees[index];
 
             return AttendeeCheckboxTile(
-              key: Key(attendee.student.id),
+              key: Key(attendee.studentId),
               attendee: attendee,
             );
           },
@@ -75,7 +76,7 @@ class AttendeeCheckboxTile extends StatelessWidget {
       activeColor: colorScheme.primary,
       checkColor: colorScheme.onPrimary,
       selectedTileColor: colorScheme.primary.withOpacity(.1),
-      title: Text(attendee.student.name),
+      title: Text(attendee.name),
       value: attendee.attended,
       selected: attendee.attended,
       onChanged: (_) => context

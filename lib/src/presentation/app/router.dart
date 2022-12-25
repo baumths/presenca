@@ -58,4 +58,8 @@ abstract class AppRouter {
       AttendanceFormPage.route(discipline),
     );
   }
+
+  static void showStudentOverview(BuildContext context, Student student) {
+    Navigator.of(context).push(StudentOverviewPage.route(student));
+  }
 }
