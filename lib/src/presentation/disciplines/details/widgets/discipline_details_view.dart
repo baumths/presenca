@@ -20,8 +20,8 @@ class DisciplineDetailsView extends StatefulWidget {
 class _DisciplineDetailsViewState extends State<DisciplineDetailsView>
     with SingleTickerProviderStateMixin {
   static const List<Widget> tabs = [
-    Text('Alunos'),
-    Text('Chamadas'),
+    Tab(text: 'Alunos'),
+    Tab(text: 'Chamadas'),
   ];
 
   late final TabController tabController;
@@ -52,14 +52,6 @@ class _DisciplineDetailsViewState extends State<DisciplineDetailsView>
         titleTextStyle: theme.textTheme.titleMedium,
         bottom: TabBar(
           controller: tabController,
-          labelPadding: AppPadding.allSmall,
-          labelColor: theme.colorScheme.onSecondaryContainer,
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-          splashBorderRadius: kDefaultBorderRadius,
-          indicator: ShapeDecoration(
-            shape: kDefaultShapeBorder,
-            color: theme.colorScheme.secondaryContainer,
-          ),
           tabs: tabs,
         ),
       ),
