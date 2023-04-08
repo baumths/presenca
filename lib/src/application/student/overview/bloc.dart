@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/entities/attendee.dart';
 import '../../../domain/student.dart';
-import '../../../domain/usecase.dart';
+import '../../../domain/usecases/find_student_attendances.dart';
 
 part 'bloc.freezed.dart';
 part 'event.dart';
@@ -12,13 +12,13 @@ part 'state.dart';
 class StudentOverviewBloc
     extends Bloc<StudentOverviewEvent, StudentOverviewState> {
   StudentOverviewBloc({
-    required AsyncUsecase<Student, List<Attendee>> findStudentAttendances,
+    required FindStudentAttendancesUsecase findStudentAttendances,
   })  : _findStudentAttendances = findStudentAttendances,
         super(const StudentOverviewState.loadInProgress()) {
     on<StudentOverviewEvent>(_onEvent);
   }
 
-  final AsyncUsecase<Student, List<Attendee>> _findStudentAttendances;
+  final FindStudentAttendancesUsecase _findStudentAttendances;
 
   Future<void> _onEvent(
     StudentOverviewEvent event,

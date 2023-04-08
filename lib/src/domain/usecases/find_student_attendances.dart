@@ -1,13 +1,17 @@
 import '../../domain/entities/attendee.dart';
 import '../../domain/entities/student.dart';
 import '../../domain/repositories/attendances_repository.dart';
-import '../../domain/usecase.dart';
 
-class FindStudentAttendancesUsecase
-    implements AsyncUsecase<Student, List<Attendee>> {
+abstract class FindStudentAttendancesUsecase {
+  const FindStudentAttendancesUsecase();
+
+  Future<List<Attendee>> call(Student student);
+}
+
+class FindStudentAttendancesUsecaseImpl extends FindStudentAttendancesUsecase {
   final AttendancesRepository _attendancesRepository;
 
-  const FindStudentAttendancesUsecase({
+  const FindStudentAttendancesUsecaseImpl({
     required AttendancesRepository attendancesRepository,
   }) : _attendancesRepository = attendancesRepository;
 

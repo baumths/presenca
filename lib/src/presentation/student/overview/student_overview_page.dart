@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/student/overview/bloc.dart';
 import '../../../domain/student.dart';
-import '../../../infrastructure/usecases/find_student_attendances.dart';
+import '../../../domain/usecases/find_student_attendances.dart';
 import 'widgets/student_overview_view.dart';
 
 class StudentOverviewPage extends StatelessWidget {
@@ -25,7 +25,7 @@ class StudentOverviewPage extends StatelessWidget {
     return BlocProvider<StudentOverviewBloc>(
       create: (BuildContext context) {
         final bloc = StudentOverviewBloc(
-          findStudentAttendances: FindStudentAttendancesUsecase(
+          findStudentAttendances: FindStudentAttendancesUsecaseImpl(
             attendancesRepository: RepositoryProvider.of(context),
           ),
         );
