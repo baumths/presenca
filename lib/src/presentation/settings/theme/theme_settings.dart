@@ -2,22 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/settings/theme/cubit.dart';
-import '../../../shared/shared.dart';
 
 class ThemeSettingsView extends StatelessWidget {
   const ThemeSettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        DarkModeTile(),
-        SizedBox(height: 8),
-        Flexible(child: ColorSelector()),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: const [
+          Header(),
+          SizedBox(height: 16),
+          DarkModeTile(),
+          SizedBox(height: 16),
+          Flexible(child: ColorSelector(colors: Colors.primaries)),
+        ],
+      ),
     );
+  }
+}
+
+class Header extends StatelessWidget {
+  const Header({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('Tema', style: Theme.of(context).textTheme.headlineLarge);
   }
 }
 
@@ -29,21 +42,25 @@ class DarkModeTile extends StatelessWidget {
     return BlocBuilder<ThemeSettingsCubit, ThemeSettingsState>(
       buildWhen: (p, c) => p.themeMode != c.themeMode,
       builder: (context, state) {
-        return SwitchListTile(
-          shape: kBottomSheetShapeBorder,
-          contentPadding: AppPadding.horizontalMedium.copyWith(right: 4),
-          title: const Text(
-            'Modo Escuro',
-            style: TextStyle(fontWeight: FontWeight.w400),
-          ),
-          value: state.themeMode == ThemeMode.dark,
-          onChanged: (_) => context //
-              .read<ThemeSettingsCubit>()
-              .updateThemeMode(
-                state.themeMode == ThemeMode.dark
-                    ? ThemeMode.light
-                    : ThemeMode.dark,
+        return SegmentedButton<ThemeMode>(
+          emptySelectionAllowed: false,
+          multiSelectionEnabled: false,
+          showSelectedIcon: false,
+          selected: <ThemeMode>{state.themeMode},
+          onSelectionChanged: (Set<ThemeMode> modes) {
+            if (modes.isNotEmpty) {
+              assert(modes.length == 1);
+              context.read<ThemeSettingsCubit>().updateThemeMode(modes.first);
+            }
+          },
+          segments: [
+            for (final ThemeMode mode in ThemeMode.values)
+              ButtonSegment(
+                value: mode,
+                icon: Icon(mode.icon),
+                label: Text(mode.label),
               ),
+          ],
         );
       },
     );
@@ -51,51 +68,37 @@ class DarkModeTile extends StatelessWidget {
 }
 
 class ColorSelector extends StatelessWidget {
-  const ColorSelector({super.key});
+  const ColorSelector({super.key, required this.colors});
 
-  static const gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 6,
-    mainAxisExtent: 40,
-    crossAxisSpacing: 4,
-    mainAxisSpacing: 8,
-  );
-
-  static double get height {
-    final rowCount = Colors.primaries.length / gridDelegate.crossAxisCount;
-    final itemsExtent = rowCount * gridDelegate.mainAxisExtent!;
-    return itemsExtent + (rowCount - 1) * gridDelegate.mainAxisSpacing;
-  }
+  final List<Color> colors;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: SizedBox(
-        height: height,
-        child: BlocBuilder<ThemeSettingsCubit, ThemeSettingsState>(
-          builder: (context, state) {
-            final selectedColor = state.seedColor;
+    return BlocBuilder<ThemeSettingsCubit, ThemeSettingsState>(
+      builder: (context, state) {
+        final selectedColor = state.seedColor;
 
-            return GridView.builder(
-              itemCount: Colors.primaries.length,
-              padding: AppPadding.horizontalMedium,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: gridDelegate,
-              itemBuilder: (context, int index) {
-                final color = Colors.primaries[index];
+        return GridView.builder(
+          itemCount: colors.length,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            mainAxisExtent: 48,
+            maxCrossAxisExtent: 48,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+          ),
+          itemBuilder: (context, int index) {
+            final color = colors[index];
 
-                return ColorOption(
-                  color: color,
-                  isSelected: color == selectedColor,
-                  onPressed: () => context //
-                      .read<ThemeSettingsCubit>()
-                      .updateSeedColor(color),
-                );
+            return ColorOption(
+              color: color,
+              isSelected: color == selectedColor,
+              onPressed: () {
+                context.read<ThemeSettingsCubit>().updateSeedColor(color);
               },
             );
           },
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -121,7 +124,7 @@ class ColorOption extends StatelessWidget {
     Widget? child;
 
     if (isSelected) {
-      child = const Icon(Icons.check_circle_outline, size: 36);
+      child = const Icon(Icons.circle, color: Colors.white);
     } else {
       onTap = onPressed;
     }
@@ -135,5 +138,29 @@ class ColorOption extends StatelessWidget {
         child: child,
       ),
     );
+  }
+}
+
+extension on ThemeMode {
+  String get label {
+    switch (this) {
+      case ThemeMode.system:
+        return 'Sistema';
+      case ThemeMode.light:
+        return 'Claro';
+      case ThemeMode.dark:
+        return 'Escuro';
+    }
+  }
+
+  IconData get icon {
+    switch (this) {
+      case ThemeMode.system:
+        return Icons.vibration;
+      case ThemeMode.light:
+        return Icons.light_mode;
+      case ThemeMode.dark:
+        return Icons.dark_mode;
+    }
   }
 }
