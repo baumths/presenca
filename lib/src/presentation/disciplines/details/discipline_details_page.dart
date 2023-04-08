@@ -26,7 +26,7 @@ class DisciplineDetailsPage extends StatelessWidget {
         final bloc = DisciplineDetailsBloc(discipline: discipline);
         return bloc..add(const DisciplineDetailsEvent.started());
       },
-      child: DisciplineDetailsView(title: discipline.name),
+      child: DisciplineDetailsView(discipline: discipline),
     );
   }
 }
