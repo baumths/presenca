@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../../../../domain/discipline.dart';
 import '../../../../shared/shared.dart';
+import '../../../app/router.dart';
+import '../../../pages.dart';
 import 'body/body.dart';
-import 'bottom_bar.dart';
 
 class DisciplineDetailsView extends StatefulWidget {
   const DisciplineDetailsView({
     super.key,
-    required this.title,
+    required this.discipline,
   });
-  final String title;
+  final Discipline discipline;
 
   @override
   State<DisciplineDetailsView> createState() => _DisciplineDetailsViewState();
@@ -46,7 +48,7 @@ class _DisciplineDetailsViewState extends State<DisciplineDetailsView>
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
-        title: Text(widget.title),
+        title: Text(widget.discipline.name),
         titleTextStyle: theme.textTheme.titleMedium,
         bottom: TabBar(
           controller: tabController,
@@ -62,7 +64,75 @@ class _DisciplineDetailsViewState extends State<DisciplineDetailsView>
         ),
       ),
       body: DisciplineDetailsBody(tabController: tabController),
-      bottomNavigationBar: const DisciplineDetailsBottomBar(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add_task_rounded),
+        onPressed: () {
+          AppRouter.showAttendanceForm(context, widget.discipline);
+        },
+      ),
+      bottomNavigationBar: DisciplineDetailsBottomBar(
+        discipline: widget.discipline,
+      ),
+    );
+  }
+}
+
+class DisciplineDetailsBottomBar extends StatelessWidget {
+  const DisciplineDetailsBottomBar({super.key, required this.discipline});
+
+  final Discipline discipline;
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.group_add_rounded),
+            tooltip: 'Importar Alunos',
+            onPressed: () async {
+              await showModalBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                shape: kBottomSheetShapeBorder,
+                builder: (_) => StudentsImportPage(
+                  discipline: discipline,
+                ),
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+          IconButton(
+            icon: const Icon(Icons.manage_accounts),
+            tooltip: 'Editar Alunos',
+            onPressed: () {
+              AppRouter.showStudentsForm(
+                context: context,
+                discipline: discipline,
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+          IconButton(
+            icon: const RotatedBox(
+              quarterTurns: -1,
+              child: Icon(Icons.login),
+            ),
+            tooltip: 'Exportar Chamadas',
+            onPressed: () async {
+              await showModalBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                shape: kBottomSheetShapeBorder,
+                builder: (_) => DisciplineExportPage(
+                  discipline: discipline,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
