@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/settings/theme/cubit.dart';
+import '../../../shared/shared.dart' show BottomSheetDragHandle;
 
 class ThemeSettingsView extends StatelessWidget {
   const ThemeSettingsView({super.key});
@@ -9,16 +10,23 @@ class ThemeSettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: const [
-          Header(),
-          SizedBox(height: 16),
-          DarkModeTile(),
-          SizedBox(height: 16),
-          Flexible(child: ColorSelector(colors: Colors.primaries)),
+      /// Top padding added by [BottomSheetDragHandle].
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      child: CustomScrollView(
+        shrinkWrap: true,
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate(
+              const [
+                BottomSheetDragHandle(),
+                Header(),
+                SizedBox(height: 16),
+                ThemeModeSelector(),
+                SizedBox(height: 16),
+              ],
+            ),
+          ),
+          const SliverColorSelector(colors: Colors.primaries),
         ],
       ),
     );
@@ -30,12 +38,12 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('Tema', style: Theme.of(context).textTheme.headlineLarge);
+    return Text('Tema', style: Theme.of(context).textTheme.titleLarge);
   }
 }
 
-class DarkModeTile extends StatelessWidget {
-  const DarkModeTile({super.key});
+class ThemeModeSelector extends StatelessWidget {
+  const ThemeModeSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +61,22 @@ class DarkModeTile extends StatelessWidget {
               context.read<ThemeSettingsCubit>().updateThemeMode(modes.first);
             }
           },
-          segments: [
-            for (final ThemeMode mode in ThemeMode.values)
-              ButtonSegment(
-                value: mode,
-                icon: Icon(mode.icon),
-                label: Text(mode.label),
-              ),
+          segments: const [
+            ButtonSegment(
+              value: ThemeMode.light,
+              icon: Icon(Icons.light_mode_outlined),
+              label: Text('Claro'),
+            ),
+            ButtonSegment(
+              value: ThemeMode.dark,
+              icon: Icon(Icons.dark_mode_outlined),
+              label: Text('Escuro'),
+            ),
+            ButtonSegment(
+              value: ThemeMode.system,
+              icon: Icon(Icons.smartphone),
+              label: Text('Sistema'),
+            ),
           ],
         );
       },
@@ -67,8 +84,8 @@ class DarkModeTile extends StatelessWidget {
   }
 }
 
-class ColorSelector extends StatelessWidget {
-  const ColorSelector({super.key, required this.colors});
+class SliverColorSelector extends StatelessWidget {
+  const SliverColorSelector({super.key, required this.colors});
 
   final List<Color> colors;
 
@@ -78,25 +95,20 @@ class ColorSelector extends StatelessWidget {
       builder: (context, state) {
         final selectedColor = state.seedColor;
 
-        return GridView.builder(
-          itemCount: colors.length,
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            mainAxisExtent: 48,
-            maxCrossAxisExtent: 48,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 16,
-          ),
-          itemBuilder: (context, int index) {
-            final color = colors[index];
-
-            return ColorOption(
-              color: color,
-              isSelected: color == selectedColor,
-              onPressed: () {
-                context.read<ThemeSettingsCubit>().updateSeedColor(color);
-              },
-            );
-          },
+        return SliverGrid.extent(
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+          maxCrossAxisExtent: 40,
+          children: [
+            for (final Color color in Colors.primaries)
+              ColorOption(
+                color: color,
+                isSelected: color.value == selectedColor.value,
+                onPressed: () {
+                  context.read<ThemeSettingsCubit>().updateSeedColor(color);
+                },
+              )
+          ],
         );
       },
     );
@@ -138,29 +150,5 @@ class ColorOption extends StatelessWidget {
         child: child,
       ),
     );
-  }
-}
-
-extension on ThemeMode {
-  String get label {
-    switch (this) {
-      case ThemeMode.system:
-        return 'Sistema';
-      case ThemeMode.light:
-        return 'Claro';
-      case ThemeMode.dark:
-        return 'Escuro';
-    }
-  }
-
-  IconData get icon {
-    switch (this) {
-      case ThemeMode.system:
-        return Icons.vibration;
-      case ThemeMode.light:
-        return Icons.light_mode;
-      case ThemeMode.dark:
-        return Icons.dark_mode;
-    }
   }
 }
