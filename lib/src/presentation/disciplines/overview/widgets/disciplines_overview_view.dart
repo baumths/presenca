@@ -27,6 +27,7 @@ class DisciplineOverviewView extends StatelessWidget {
               onPressed: () {
                 showModalBottomSheet<void>(
                   context: context,
+                  isScrollControlled: true,
                   builder: (_) => const ThemeSettingsView(),
                 );
               },
