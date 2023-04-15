@@ -60,7 +60,6 @@ class AttendanceCardContent extends StatelessWidget {
 
           await showModalBottomSheet<void>(
             context: context,
-            shape: kBottomSheetShapeBorder,
             isScrollControlled: true,
             constraints: BoxConstraints(maxHeight: maxHeight),
             builder: (_) => AttendanceDetailsPage(

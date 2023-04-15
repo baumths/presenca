@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../domain/entities/discipline.dart';
 import '../../domain/entities/student.dart';
-import '../../shared/shared.dart';
 import '../pages.dart';
 
 abstract class AppRouter {
@@ -21,7 +20,6 @@ abstract class AppRouter {
   ) {
     showModalBottomSheet<void>(
       context: context,
-      shape: kBottomSheetShapeBorder,
       builder: (_) => DisciplineFormPage(
         editingDiscipline: editingDiscipline,
       ),

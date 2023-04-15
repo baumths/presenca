@@ -10,7 +10,3 @@ const kDefaultBorderRadius = BorderRadius.all(kDefaultRadius);
 const kDefaultShapeBorder = RoundedRectangleBorder(
   borderRadius: kDefaultBorderRadius,
 );
-
-const kBottomSheetShapeBorder = RoundedRectangleBorder(
-  borderRadius: BorderRadius.vertical(top: kDefaultRadius),
-);
