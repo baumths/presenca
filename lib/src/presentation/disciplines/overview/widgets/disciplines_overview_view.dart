@@ -22,13 +22,13 @@ class DisciplineOverviewView extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.brush),
+              icon: const Icon(Icons.palette_outlined),
               tooltip: 'Tema',
               onPressed: () {
                 showModalBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
-                  builder: (_) => const ThemeSettingsView(),
+                  builder: ThemeSettingsView.bottomSheetBuilder,
                 );
               },
             ),
