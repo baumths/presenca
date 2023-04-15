@@ -13,7 +13,7 @@ class StudentsOverview extends StatelessWidget {
     return ListView.separated(
       itemCount: students.length,
       padding: AppPadding.allSmall,
-      separatorBuilder: (_, __) => const SizedBox(height: 2),
+      separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (BuildContext context, int index) {
         final student = students[index];
 
