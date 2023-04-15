@@ -43,25 +43,18 @@ class AttendanceCardContent extends StatelessWidget {
 
     return Material(
       type: MaterialType.card,
-      color: theme.colorScheme.surfaceVariant,
-      borderRadius: kDefaultBorderRadius,
+      color: theme.colorScheme.surfaceVariant.withOpacity(.3),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: theme.colorScheme.outlineVariant),
+        borderRadius: kDefaultBorderRadius,
+      ),
       child: InkWell(
         borderRadius: kDefaultBorderRadius,
-        onTap: () async {
-          // final mediaQuery = MediaQuery.of(context);
-
-          // workaround for bottom sheet under status bar
-          // local [MediaQuery]'s `padding.top` returns 0.0
-          final mediaQuery = MediaQueryData.fromWindow(
-            WidgetsBinding.instance.window,
-          );
-
-          final maxHeight = mediaQuery.size.height - mediaQuery.padding.top;
-
-          await showModalBottomSheet<void>(
+        onTap: () {
+          showModalBottomSheet<void>(
             context: context,
+            useSafeArea: true,
             isScrollControlled: true,
-            constraints: BoxConstraints(maxHeight: maxHeight),
             builder: (_) => AttendanceDetailsPage(
               bloc: context.read(),
             ),
@@ -69,8 +62,7 @@ class AttendanceCardContent extends StatelessWidget {
         },
         child: DividerTheme(
           data: theme.dividerTheme.copyWith(
-            thickness: 1,
-            color: theme.colorScheme.secondary.withOpacity(.1),
+            color: theme.colorScheme.outlineVariant,
           ),
           child: const AttendanceCardBody(),
         ),
@@ -84,18 +76,14 @@ class AttendanceCardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<AttendanceDetailsBloc>();
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const AttendanceCardTitle(),
-        if (bloc.attendance.note.isEmpty)
-          const Divider(height: 0)
-        else
-          const AttendanceCardNote(),
-        const InfoRow(),
+      children: const [
+        AttendanceCardTitle(),
+        AttendanceCardNote(),
+        Divider(height: 0),
+        InfoRow(),
       ],
     );
   }
@@ -148,18 +136,19 @@ class AttendanceCardNote extends StatelessWidget {
     final theme = Theme.of(context);
     final note = context.read<AttendanceDetailsBloc>().attendance.note;
 
+    if (note.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return SizedBox(
       width: double.infinity,
-      child: ColoredBox(
-        color: theme.colorScheme.secondary.withOpacity(.1),
-        child: Padding(
-          padding: AppPadding.allMedium,
-          child: Text(
-            note,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.secondary,
-              fontWeight: FontWeight.w500,
-            ),
+      child: Padding(
+        padding: AppPadding.allMedium,
+        child: Text(
+          note,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
