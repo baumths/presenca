@@ -5,15 +5,31 @@ import '../../../application/settings/theme/cubit.dart';
 import '../../../shared/shared.dart' show BottomSheetDragHandle;
 
 class ThemeSettingsView extends StatelessWidget {
-  const ThemeSettingsView({super.key});
+  const ThemeSettingsView({super.key, this.scrollController});
+
+  static Widget bottomSheetBuilder(BuildContext context) {
+    return DraggableScrollableSheet(
+      expand: false,
+      maxChildSize: .7,
+      initialChildSize: .55,
+      builder: (context, scrollController) {
+        return ThemeSettingsView(
+          scrollController: scrollController,
+        );
+      },
+    );
+  }
+
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       /// Top padding added by [BottomSheetDragHandle].
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: CustomScrollView(
         shrinkWrap: true,
+        controller: scrollController,
         slivers: [
           SliverList(
             delegate: SliverChildListDelegate(
