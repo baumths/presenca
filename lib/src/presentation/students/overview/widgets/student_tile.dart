@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/entities/student.dart';
-import '../../../../shared/shared.dart';
 import '../../../app/router.dart';
 
 class StudentTile extends StatelessWidget {
@@ -14,23 +13,20 @@ class StudentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
-    return Material(
-      color: theme.colorScheme.surfaceVariant,
-      borderRadius: kDefaultBorderRadius / 2,
-      child: InkWell(
-        onTap: () => AppRouter.showStudentOverview(context, student),
-        borderRadius: kDefaultBorderRadius / 2,
-        child: Padding(
-          padding: AppPadding.tile,
-          child: Text(
-            student.name,
-            style: TextStyle(
-              fontSize: 14,
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
+    return ListTile(
+      onTap: () => AppRouter.showStudentOverview(context, student),
+      tileColor: colorScheme.surfaceVariant.withOpacity(0.3),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: colorScheme.outlineVariant),
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+      ),
+      title: Text(
+        student.name,
+        style: TextStyle(
+          fontSize: 14,
+          color: colorScheme.onSurfaceVariant,
         ),
       ),
     );
