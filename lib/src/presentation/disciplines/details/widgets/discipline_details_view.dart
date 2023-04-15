@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/discipline.dart';
-import '../../../../shared/shared.dart';
 import '../../../app/router.dart';
 import '../../../pages.dart';
 import 'body/body.dart';
@@ -87,7 +86,6 @@ class DisciplineDetailsBottomBar extends StatelessWidget {
               await showModalBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
-                shape: kBottomSheetShapeBorder,
                 builder: (_) => StudentsImportPage(
                   discipline: discipline,
                 ),
@@ -116,7 +114,6 @@ class DisciplineDetailsBottomBar extends StatelessWidget {
               await showModalBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
-                shape: kBottomSheetShapeBorder,
                 builder: (_) => DisciplineExportPage(
                   discipline: discipline,
                 ),
