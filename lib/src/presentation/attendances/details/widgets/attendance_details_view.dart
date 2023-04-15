@@ -12,6 +12,7 @@ class AttendanceDetailsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
+        notificationPredicate: (_) => false,
         title: const AttendanceTitle(),
       ),
       body: const AttendanceDetailsBody(),

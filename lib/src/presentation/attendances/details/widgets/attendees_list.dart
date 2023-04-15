@@ -10,6 +10,8 @@ class AttendeesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocBuilder<AttendanceDetailsBloc, AttendanceDetailsState>(
       builder: (context, state) {
         final students = state.students;
@@ -18,19 +20,25 @@ class AttendeesList extends StatelessWidget {
           return const EmptyAttendeesList();
         }
 
-        return ListView.separated(
-          itemCount: students.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 4),
-          padding: AppPadding.allSmall,
-          itemBuilder: (context, index) {
-            final student = students[index];
+        return CheckboxTheme(
+          data: theme.checkboxTheme.copyWith(
+            fillColor: MaterialStatePropertyAll(theme.colorScheme.primary),
+            checkColor: MaterialStatePropertyAll(theme.colorScheme.onPrimary),
+          ),
+          child: ListView.separated(
+            itemCount: students.length,
+            padding: AppPadding.allSmall,
+            separatorBuilder: (_, __) => const SizedBox(height: 8),
+            itemBuilder: (context, index) {
+              final student = students[index];
 
-            return AttendeeTile(
-              key: Key(student.id),
-              student: student,
-              attended: state.didStudentAttend(student),
-            );
-          },
+              return AttendeeTile(
+                key: Key(student.id),
+                student: student,
+                attended: state.didStudentAttend(student),
+              );
+            },
+          ),
         );
       },
     );
@@ -78,36 +86,24 @@ class AttendeeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final Color color = colorScheme.onTertiaryContainer;
-    late Color backgroundColor = colorScheme.tertiaryContainer.withOpacity(.3);
-    late IconData icon = Icons.radio_button_off;
-
-    if (attended) {
-      backgroundColor = colorScheme.tertiaryContainer;
-      icon = Icons.radio_button_on;
-    }
-
-    return Material(
-      shape: kDefaultShapeBorder,
-      color: backgroundColor,
-      child: Padding(
-        padding: AppPadding.tile,
-        child: Row(
-          children: [
-            Icon(icon, color: color),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                student.name,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: color,
-                ),
-              ),
-            ),
-          ],
+    return CheckboxListTile(
+      onChanged: null,
+      value: attended,
+      selected: attended,
+      title: Text(
+        student.name,
+        style: TextStyle(
+          fontSize: 14,
+          color: colorScheme.onSurfaceVariant,
         ),
       ),
+      contentPadding: const EdgeInsetsDirectional.only(start: 16, end: 8),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: colorScheme.outlineVariant),
+        borderRadius: kDefaultBorderRadius,
+      ),
+      selectedTileColor: colorScheme.surfaceVariant,
+      tileColor: colorScheme.surfaceVariant.withOpacity(.3),
     );
   }
 }

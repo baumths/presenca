@@ -34,12 +34,16 @@ class AttendanceDetailsNote extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return Padding(
-      padding: AppPadding.allSmall.copyWith(bottom: 0),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
+    return Material(
+      elevation: 3,
+      color: theme.colorScheme.surface,
+      child: Card(
+        elevation: 0,
+        margin: AppPadding.allSmall,
+        color: theme.colorScheme.surfaceVariant.withOpacity(.3),
+        shape: RoundedRectangleBorder(
           borderRadius: kDefaultBorderRadius,
-          border: Border.all(color: theme.colorScheme.outline),
+          side: BorderSide(color: theme.colorScheme.outlineVariant),
         ),
         child: Padding(
           padding: AppPadding.allMedium,
