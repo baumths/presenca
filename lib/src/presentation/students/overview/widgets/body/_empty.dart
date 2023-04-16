@@ -1,7 +1,7 @@
 part of 'body.dart';
 
 class _EmptyStudents extends StatelessWidget {
-  const _EmptyStudents({super.key});
+  const _EmptyStudents();
 
   @override
   Widget build(BuildContext context) {

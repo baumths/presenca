@@ -137,7 +137,7 @@ class ExportButton extends StatelessWidget {
 }
 
 class _LoadingIndicator extends StatelessWidget {
-  const _LoadingIndicator({super.key});
+  const _LoadingIndicator();
 
   @override
   Widget build(BuildContext context) {
