@@ -96,12 +96,7 @@ class DisciplineDetailsBottomBar extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.manage_accounts),
             tooltip: 'Editar Alunos',
-            onPressed: () {
-              AppRouter.showStudentsForm(
-                context: context,
-                discipline: discipline,
-              );
-            },
+            onPressed: () => AppRouter.showStudentsForm(context, discipline),
           ),
           IconButton(
             icon: const Icon(Icons.publish_rounded),

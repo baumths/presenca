@@ -35,9 +35,9 @@ abstract class AppRouter {
     );
   }
 
-  static void showStudentsForm({
-    required BuildContext context,
-    required Discipline discipline,
+  static void showStudentsForm(
+    BuildContext context,
+    Discipline discipline, {
     List<Student> initialStudents = const <Student>[],
   }) {
     Navigator.of(context).push(

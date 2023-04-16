@@ -24,10 +24,7 @@ class _EmptyStudents extends StatelessWidget {
             ),
             onPressed: () {
               final bloc = context.read<StudentsOverviewBloc>();
-              AppRouter.showStudentsForm(
-                context: context,
-                discipline: bloc.discipline,
-              );
+              AppRouter.showStudentsForm(context, bloc.discipline);
             },
             child: const Text('Cadastrar Alunos'),
           ),
