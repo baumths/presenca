@@ -21,8 +21,8 @@ class StudentsImportBody extends StatelessWidget {
             Navigator.pop(context);
 
             AppRouter.showStudentsForm(
-              context: context,
-              discipline: discipline,
+              context,
+              discipline,
               initialStudents: students,
             );
           },
