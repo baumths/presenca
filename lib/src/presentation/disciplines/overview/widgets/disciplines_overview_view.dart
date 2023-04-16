@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../application/discipline/overview/bloc.dart';
 import '../../../app/router.dart';
 import '../../../settings/settings.dart';
-import 'body/body.dart';
+import 'disciplines_overview_body.dart';
 
 class DisciplineOverviewView extends StatelessWidget {
   const DisciplineOverviewView({super.key});
@@ -12,13 +12,23 @@ class DisciplineOverviewView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Disciplinas'),
+      body: const CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            title: Text('Disciplinas'),
+            actions: [
+              // TODO: allow selecting a discipline by long pressing on it and
+              //       add action buttons here (e.g., edit, archive, etc.).
+            ],
+          ),
+          DisciplinesOverviewBody(),
+        ],
       ),
-      body: const DisciplinesOverviewBody(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
       floatingActionButton: const CreateDisciplineFab(),
       bottomNavigationBar: BottomAppBar(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
         child: Row(
           children: [
             IconButton(
