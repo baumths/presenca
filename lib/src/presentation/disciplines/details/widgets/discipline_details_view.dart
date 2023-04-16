@@ -77,10 +77,11 @@ class DisciplineDetailsBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.group_add_rounded),
+            icon: const Icon(Icons.format_list_bulleted_add),
             tooltip: 'Importar Alunos',
             onPressed: () async {
               await showModalBottomSheet<void>(
@@ -92,7 +93,6 @@ class DisciplineDetailsBottomBar extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(width: 8),
           IconButton(
             icon: const Icon(Icons.manage_accounts),
             tooltip: 'Editar Alunos',
@@ -103,12 +103,8 @@ class DisciplineDetailsBottomBar extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(width: 8),
           IconButton(
-            icon: const RotatedBox(
-              quarterTurns: -1,
-              child: Icon(Icons.login),
-            ),
+            icon: const Icon(Icons.publish_rounded),
             tooltip: 'Exportar Chamadas',
             onPressed: () async {
               await showModalBottomSheet<void>(
