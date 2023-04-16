@@ -83,7 +83,7 @@ class StudentsFormPage extends StatelessWidget {
 }
 
 class _Overlay extends StatelessWidget {
-  const _Overlay({super.key});
+  const _Overlay();
 
   @override
   Widget build(BuildContext context) {
