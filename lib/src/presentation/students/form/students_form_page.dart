@@ -74,7 +74,7 @@ class StudentsFormPage extends StatelessWidget {
         child: Stack(
           children: [
             StudentsFormView(title: discipline.name),
-            const _Overlay(),
+            const Positioned.fill(child: _Overlay()),
           ],
         ),
       ),
@@ -87,26 +87,21 @@ class _Overlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-
     return BlocBuilder<StudentsFormBloc, StudentsFormState>(
       buildWhen: (p, c) => p.isSaving != c.isSaving,
       builder: (BuildContext context, StudentsFormState state) {
         return IgnorePointer(
           ignoring: !state.isSaving,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            color: state.isSaving
-                ? Colors.black.withOpacity(0.5)
-                : Colors.transparent,
-            width: screenSize.width,
-            height: screenSize.height,
-            child: Visibility(
-              visible: state.isSaving,
+          child: Visibility(
+            visible: state.isSaving,
+            child: ColoredBox(
+              color: Colors.black.withOpacity(0.7),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const CircularProgressIndicator(),
+                  const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.white),
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     'Salvando Lista de Alunos...',

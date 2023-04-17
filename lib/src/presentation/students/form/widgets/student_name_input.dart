@@ -12,7 +12,7 @@ class StudentNameInput extends StatefulWidget {
 
 class _StudentNameInputState extends State<StudentNameInput> {
   late final TextEditingController _textController;
-  FocusNode? _focusNode;
+  late final FocusNode _focusNode;
 
   @override
   void initState() {
@@ -22,10 +22,21 @@ class _StudentNameInputState extends State<StudentNameInput> {
   }
 
   @override
+  void didUpdateWidget(covariant StudentNameInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    context.read<StudentsFormBloc>().state.selectedStudent.fold(
+      () {},
+      (selectedStudent) {
+        _textController.text = selectedStudent.name;
+        _focusNode.requestFocus();
+      },
+    );
+  }
+
+  @override
   void dispose() {
     _textController.dispose();
-    _focusNode?.dispose();
-    _focusNode = null;
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -46,7 +57,7 @@ class _StudentNameInputState extends State<StudentNameInput> {
           listenWhen: (p, c) => p.students.length < c.students.length,
           listener: (BuildContext context, StudentsFormState state) {
             _textController.clear();
-            _focusNode?.requestFocus();
+            _focusNode.requestFocus();
           },
         ),
         BlocListener<StudentsFormBloc, StudentsFormState>(
@@ -58,7 +69,7 @@ class _StudentNameInputState extends State<StudentNameInput> {
             );
 
             _textController.text = studentName;
-            _focusNode?.requestFocus();
+            _focusNode.requestFocus();
           },
         ),
       ],
