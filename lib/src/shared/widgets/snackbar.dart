@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
-import '../theme/padding.dart';
 
 abstract class SnackBarHelper {
   static void showSuccess(BuildContext context, String message) {
@@ -50,22 +49,15 @@ abstract class SnackBarHelper {
     required Color color,
   }) {
     return SnackBar(
-      padding: EdgeInsets.zero,
       behavior: SnackBarBehavior.floating,
       shape: kDefaultShapeBorder,
-      content: Padding(
-        padding: AppPadding.allSmall,
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 4.0, right: 8.0),
-              child: Icon(icon, color: color),
-            ),
-            Flexible(
-              child: Text(message),
-            ),
-          ],
-        ),
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 16),
+      content: Row(
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(width: 8),
+          Flexible(child: Text(message)),
+        ],
       ),
     );
   }
