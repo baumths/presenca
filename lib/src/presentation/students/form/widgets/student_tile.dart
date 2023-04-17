@@ -5,10 +5,7 @@ import '../../../../application/students/form/bloc.dart';
 import '../../../../domain/student.dart';
 
 class StudentTile extends StatelessWidget {
-  const StudentTile({
-    super.key,
-    required this.student,
-  });
+  const StudentTile({super.key, required this.student});
 
   final Student student;
 
@@ -52,10 +49,9 @@ class DefaultStudentTile extends StatelessWidget {
     return ListTile(
       title: Text(student.name),
       trailing: IconButton(
-        splashRadius: 24,
-        color: Colors.green,
-        tooltip: 'Marcar como Inativo',
-        icon: const Icon(Icons.toggle_on),
+        tooltip: 'Tornar Inativo',
+        color: Theme.of(context).colorScheme.secondary,
+        icon: const Icon(Icons.person_off),
         onPressed: () => context
             .read<StudentsFormBloc>()
             .add(StudentsFormEvent.activeToggled(student)),
@@ -68,10 +64,7 @@ class DefaultStudentTile extends StatelessWidget {
 }
 
 class EditingStudentTile extends StatelessWidget {
-  const EditingStudentTile({
-    super.key,
-    required this.title,
-  });
+  const EditingStudentTile({super.key, required this.title});
 
   final String title;
 
@@ -85,7 +78,7 @@ class EditingStudentTile extends StatelessWidget {
       ),
       subtitle: const Text('Editando'),
       trailing: const Padding(
-        padding: EdgeInsets.only(right: 8),
+        padding: EdgeInsets.only(right: 12),
         child: Icon(Icons.edit_rounded),
       ),
     );
@@ -93,10 +86,7 @@ class EditingStudentTile extends StatelessWidget {
 }
 
 class InactiveStudentTile extends StatelessWidget {
-  const InactiveStudentTile({
-    super.key,
-    required this.student,
-  });
+  const InactiveStudentTile({super.key, required this.student});
 
   final Student student;
 
@@ -105,32 +95,19 @@ class InactiveStudentTile extends StatelessWidget {
     return ListTile(
       title: Text(
         student.name,
-        style: const TextStyle(
-          decoration: TextDecoration.lineThrough,
-        ),
+        style: const TextStyle(decoration: TextDecoration.lineThrough),
       ),
-      subtitle: const Text('Inativo'),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            splashRadius: 24,
-            color: Theme.of(context).colorScheme.error,
-            tooltip: 'Remover',
-            icon: const Icon(Icons.delete),
-            onPressed: () => context
-                .read<StudentsFormBloc>()
-                .add(StudentsFormEvent.deletePressed(student)),
-          ),
-          IconButton(
-            splashRadius: 24,
-            tooltip: 'Marcar como Ativo',
-            icon: const Icon(Icons.toggle_off),
-            onPressed: () => context
-                .read<StudentsFormBloc>()
-                .add(StudentsFormEvent.activeToggled(student)),
-          ),
-        ],
+      subtitle: const Text('Inativo (pressione para ativar)'),
+      onLongPress: () => context
+          .read<StudentsFormBloc>()
+          .add(StudentsFormEvent.activeToggled(student)),
+      trailing: IconButton(
+        color: Theme.of(context).colorScheme.error,
+        tooltip: 'Remover',
+        icon: const Icon(Icons.delete),
+        onPressed: () => context
+            .read<StudentsFormBloc>()
+            .add(StudentsFormEvent.deletePressed(student)),
       ),
     );
   }
