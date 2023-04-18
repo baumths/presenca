@@ -22,6 +22,7 @@ class StudentTile extends StatelessWidget {
         side: BorderSide(color: colorScheme.outlineVariant),
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
+      trailing: const Icon(Icons.info_outlined),
       title: Text(
         student.name,
         style: TextStyle(
