@@ -44,7 +44,7 @@ class StudentsFormView extends StatelessWidget {
                 const SizedBox(width: 8),
               ],
               bottom: const PreferredSize(
-                preferredSize: Size(double.infinity, 48),
+                preferredSize: Size(double.infinity, 72),
                 child: StudentNameInput(),
               ),
             ),
@@ -76,26 +76,29 @@ class StudentsFormBody extends StatelessWidget {
         builder: (BuildContext context, StudentsFormState state) {
           final List<Student> students = state.students;
 
-          return SliverList(
-            delegate: SliverChildBuilderDelegate(
-              childCount: students.length,
-              (context, int index) {
-                final student = students[index];
+          return SliverPadding(
+            padding: const EdgeInsets.only(top: 8),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                childCount: students.length,
+                (context, int index) {
+                  final student = students[index];
 
-                final tile = StudentTile(
-                  key: Key(student.id),
-                  student: student,
-                );
+                  final tile = StudentTile(
+                    key: Key(student.id),
+                    student: student,
+                  );
 
-                if (index.isOdd) {
-                  return tile;
-                }
+                  if (index.isOdd) {
+                    return tile;
+                  }
 
-                return ColoredBox(
-                  color: theme.colorScheme.surfaceVariant.withOpacity(.3),
-                  child: tile,
-                );
-              },
+                  return ColoredBox(
+                    color: theme.colorScheme.surfaceVariant.withOpacity(.3),
+                    child: tile,
+                  );
+                },
+              ),
             ),
           );
         },
