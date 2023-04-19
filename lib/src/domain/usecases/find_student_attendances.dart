@@ -1,6 +1,6 @@
-import '../../domain/entities/attendee.dart';
-import '../../domain/entities/student.dart';
-import '../../domain/repositories/attendances_repository.dart';
+import '../entities/attendee.dart';
+import '../entities/student.dart';
+import '../repositories/attendances_repository.dart';
 
 abstract class FindStudentAttendancesUsecase {
   const FindStudentAttendancesUsecase();
