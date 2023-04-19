@@ -100,9 +100,8 @@ class _StudentNameInputState extends State<StudentNameInput> {
               (failure) => failure.whenOrNull(
                 emptyName: () => state.selectedStudent.fold(
                   () {},
-                  (student) {
-                    final String name = student.name;
-                    errorMessage = 'Por favor, informe um novo nome para $name';
+                  (_) {
+                    errorMessage = 'Informe um novo nome para o(a) aluno(a).';
                   },
                 ),
               ),
@@ -123,7 +122,6 @@ class _StudentNameInputState extends State<StudentNameInput> {
               contentPadding: const EdgeInsets.fromLTRB(16, 4, 0, 4),
               suffixIconConstraints: const BoxConstraints(minWidth: 56),
               errorText: errorMessage,
-              errorMaxLines: 3,
               suffixIcon: IconButton(
                 splashRadius: 24,
                 onPressed: onDone,
