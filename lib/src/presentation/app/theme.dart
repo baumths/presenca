@@ -29,7 +29,10 @@ ThemeData _createThemeDataFromColorScheme(ColorScheme colorScheme) {
     dividerTheme: const DividerThemeData(thickness: 1.0),
     bottomSheetTheme: const BottomSheetThemeData(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
       ),
     ),
   );
