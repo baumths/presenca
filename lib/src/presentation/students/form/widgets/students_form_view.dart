@@ -8,9 +8,7 @@ import 'student_name_input.dart';
 import 'student_tile.dart';
 
 class StudentsFormView extends StatelessWidget {
-  const StudentsFormView({super.key, required this.title});
-
-  final String title;
+  const StudentsFormView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +24,19 @@ class StudentsFormView extends StatelessWidget {
 
         return discardPressed ?? false;
       },
-      child: Scaffold(
-        body: CustomScrollView(
+      child: Material(
+        child: CustomScrollView(
           slivers: [
             SliverAppBar(
               pinned: true,
               titleSpacing: 0,
-              title: Text(title),
-              titleTextStyle: Theme.of(context).textTheme.titleMedium,
+              title: Text(
+                context.read<StudentsFormBloc>().discipline.name,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               actions: [
                 TextButton(
                   child: const Text('Salvar'),
@@ -67,42 +70,54 @@ class StudentsFormBody extends StatelessWidget {
       data: theme.listTileTheme.copyWith(
         dense: true,
         horizontalTitleGap: 0,
-        contentPadding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+        contentPadding: const EdgeInsets.fromLTRB(16, 8, 4, 8),
         selectedColor: theme.colorScheme.primary,
         selectedTileColor: theme.colorScheme.primaryContainer,
       ),
-      child: BlocBuilder<StudentsFormBloc, StudentsFormState>(
-        buildWhen: (p, c) => p.students != c.students,
-        builder: (BuildContext context, StudentsFormState state) {
-          final List<Student> students = state.students;
+      child: const StudentsFormStudentList(),
+    );
+  }
+}
 
-          return SliverPadding(
-            padding: const EdgeInsets.only(top: 8),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                childCount: students.length,
-                (context, int index) {
-                  final student = students[index];
+class StudentsFormStudentList extends StatelessWidget {
+  const StudentsFormStudentList({super.key});
 
-                  final tile = StudentTile(
-                    key: Key(student.id),
-                    student: student,
-                  );
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<StudentsFormBloc, StudentsFormState>(
+      buildWhen: (p, c) => p.students != c.students,
+      builder: (BuildContext context, StudentsFormState state) {
+        final List<Student> students = state.students;
 
-                  if (index.isOdd) {
-                    return tile;
-                  }
+        return SliverPadding(
+          padding: const EdgeInsets.only(top: 8),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: students.length,
+              (context, int index) {
+                final student = students[index];
 
-                  return ColoredBox(
-                    color: theme.colorScheme.surfaceVariant.withOpacity(.3),
-                    child: tile,
-                  );
-                },
-              ),
+                final tile = StudentTile(
+                  key: Key(student.id),
+                  student: student,
+                );
+
+                if (index.isOdd) {
+                  return tile;
+                }
+
+                return ColoredBox(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .surfaceVariant
+                      .withOpacity(.3),
+                  child: tile,
+                );
+              },
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
