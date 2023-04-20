@@ -55,8 +55,16 @@ class AttendanceCardContent extends StatelessWidget {
             context: context,
             useSafeArea: true,
             isScrollControlled: true,
-            builder: (_) => AttendanceDetailsPage(
-              bloc: context.read(),
+            builder: (_) => DraggableScrollableSheet(
+              expand: false,
+              minChildSize: .6,
+              initialChildSize: 1,
+              builder: (_, scrollController) {
+                return AttendanceDetailsPage(
+                  bloc: context.read(),
+                  scrollController: scrollController,
+                );
+              },
             ),
           );
         },

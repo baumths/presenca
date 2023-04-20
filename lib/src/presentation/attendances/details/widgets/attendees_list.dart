@@ -1,3 +1,5 @@
+import 'dart:math' as math show max;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,35 +14,47 @@ class AttendeesList extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BlocBuilder<AttendanceDetailsBloc, AttendanceDetailsState>(
-      builder: (context, state) {
-        final students = state.students;
+    return CheckboxTheme(
+      data: theme.checkboxTheme.copyWith(
+        checkColor: MaterialStatePropertyAll(theme.colorScheme.onSecondary),
+        fillColor: MaterialStateProperty.resolveWith(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.selected)) {
+              return theme.colorScheme.secondary;
+            }
+            return theme.colorScheme.outlineVariant;
+          },
+        ),
+      ),
+      child: BlocBuilder<AttendanceDetailsBloc, AttendanceDetailsState>(
+        builder: (context, state) {
+          if (state.students.isEmpty) {
+            return const EmptyAttendeesList();
+          }
 
-        if (students.isEmpty) {
-          return const EmptyAttendeesList();
-        }
+          // TODO: Use SliverList.separated once available on stable
+          return SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: math.max(0, state.students.length * 2 - 1),
+              (context, index) {
+                final int studentIndex = index ~/ 2;
 
-        return CheckboxTheme(
-          data: theme.checkboxTheme.copyWith(
-            fillColor: MaterialStatePropertyAll(theme.colorScheme.primary),
-            checkColor: MaterialStatePropertyAll(theme.colorScheme.onPrimary),
-          ),
-          child: ListView.separated(
-            itemCount: students.length,
-            padding: AppPadding.allSmall,
-            separatorBuilder: (_, __) => const SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              final student = students[index];
+                if (index.isEven) {
+                  final student = state.students[studentIndex];
 
-              return AttendeeTile(
-                key: Key(student.id),
-                student: student,
-                attended: state.didStudentAttend(student),
-              );
-            },
-          ),
-        );
-      },
+                  return AttendeeTile(
+                    key: Key(student.id),
+                    student: student,
+                    attended: state.didStudentAttend(student),
+                  );
+                }
+
+                return const SizedBox(height: 8);
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -50,7 +64,8 @@ class EmptyAttendeesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox.expand(
+    return const SliverFillRemaining(
+      hasScrollBody: false,
       child: Padding(
         padding: EdgeInsets.only(top: 16),
         child: Align(
@@ -59,7 +74,7 @@ class EmptyAttendeesList extends StatelessWidget {
             borderRadius: kDefaultBorderRadius,
             type: MaterialType.card,
             child: Padding(
-              padding: AppPadding.tile,
+              padding: EdgeInsets.all(16),
               child: Text(
                 'Essa chamada está vazia',
                 textAlign: TextAlign.center,
@@ -99,7 +114,9 @@ class AttendeeTile extends StatelessWidget {
       ),
       contentPadding: const EdgeInsetsDirectional.only(start: 16, end: 8),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: colorScheme.outlineVariant),
+        side: BorderSide(
+          color: attended ? colorScheme.secondary : colorScheme.outlineVariant,
+        ),
         borderRadius: kDefaultBorderRadius,
       ),
       selectedTileColor: colorScheme.surfaceVariant,

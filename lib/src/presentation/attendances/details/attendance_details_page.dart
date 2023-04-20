@@ -8,15 +8,19 @@ class AttendanceDetailsPage extends StatelessWidget {
   const AttendanceDetailsPage({
     super.key,
     required this.bloc,
+    this.scrollController,
   });
 
   final AttendanceDetailsBloc bloc;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: bloc,
-      child: const AttendanceDetailsView(),
+      child: AttendanceDetailsView(
+        scrollController: scrollController,
+      ),
     );
   }
 }
