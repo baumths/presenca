@@ -1,3 +1,5 @@
+import 'dart:math' as math show max;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:presenca/src/shared/constants.dart';
@@ -11,55 +13,11 @@ class DisciplinesOverviewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DisciplinesOverviewBloc, DisciplinesOverviewState>(
-      builder: (context, state) => state.map(
-        loadInProgress: (_) => const _LoadingDisciplines(),
-        loadSuccess: (state) {
-          if (state.disciplines.isEmpty) {
-            return const _EmptyDisciplines();
-          }
-
-          return _DisciplinesList(
-            disciplines: state.disciplines,
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _LoadingDisciplines extends StatelessWidget {
-  const _LoadingDisciplines();
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(16, 156, 16, 0),
-      sliver: SliverList(
-        delegate: SliverChildListDelegate(
-          addAutomaticKeepAlives: false,
-          const [
-            Text('Buscando...'),
-            SizedBox(height: 20),
-            LinearProgressIndicator(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _DisciplinesList extends StatelessWidget {
-  const _DisciplinesList({required this.disciplines});
-
-  final List<Discipline> disciplines;
-
-  @override
-  Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return ListTileTheme(
       data: theme.listTileTheme.copyWith(
+        minVerticalPadding: 8,
         tileColor: theme.colorScheme.surfaceVariant.withOpacity(.3),
         iconColor: theme.colorScheme.onSurfaceVariant,
         shape: RoundedRectangleBorder(
@@ -67,21 +25,50 @@ class _DisciplinesList extends StatelessWidget {
           side: BorderSide(color: theme.colorScheme.outlineVariant),
         ),
       ),
-      child: SliverPadding(
-        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-        sliver: SliverList(
-          delegate: SliverChildBuilderDelegate(
-            childCount: disciplines.length,
-            (BuildContext context, int index) {
-              final discipline = disciplines[index];
+      child: const _DisciplinesList(),
+    );
+  }
+}
 
-              return _DisciplineTile(
-                key: Key(discipline.id),
-                discipline: discipline,
-              );
-            },
-          ),
+class _DisciplinesList extends StatelessWidget {
+  const _DisciplinesList();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<DisciplinesOverviewBloc, DisciplinesOverviewState>(
+      builder: (context, state) => state.map(
+        loadInProgress: (_) => const SliverToBoxAdapter(
+          child: LinearProgressIndicator(),
         ),
+        loadSuccess: (state) {
+          if (state.disciplines.isEmpty) {
+            return const _EmptyDisciplines();
+          }
+
+          return SliverPadding(
+            padding: const EdgeInsets.all(8),
+            // TODO: replace by SliverList.separated once it reaches stable
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                childCount: math.max(0, state.disciplines.length * 2 - 1),
+                (BuildContext context, int index) {
+                  final disciplineIndex = index ~/ 2;
+
+                  if (index.isOdd) {
+                    return const SizedBox(height: 8);
+                  }
+
+                  final discipline = state.disciplines[disciplineIndex];
+
+                  return _DisciplineTile(
+                    key: Key(discipline.id),
+                    discipline: discipline,
+                  );
+                },
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -94,14 +81,11 @@ class _DisciplineTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: ListTile(
-        title: Text(discipline.name),
-        trailing: const Icon(Icons.arrow_forward_rounded),
-        onLongPress: () => AppRouter.showDisciplineForm(context, discipline),
-        onTap: () => AppRouter.showDisciplineDetails(context, discipline),
-      ),
+    return ListTile(
+      title: Text(discipline.name),
+      trailing: const Icon(Icons.arrow_forward_rounded),
+      onLongPress: () => AppRouter.showDisciplineForm(context, discipline),
+      onTap: () => AppRouter.showDisciplineDetails(context, discipline),
     );
   }
 }
@@ -114,11 +98,11 @@ class _EmptyDisciplines extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(16, 156, 16, 0),
+      padding: const EdgeInsets.all(16),
       sliver: SliverList(
         delegate: SliverChildListDelegate([
           const Text(
-            'A lista de disciplinas está vazia.',
+            'Você ainda não possui nenhuma disciplina.',
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
