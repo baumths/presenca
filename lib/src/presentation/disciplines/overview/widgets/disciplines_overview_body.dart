@@ -61,6 +61,7 @@ class _DisciplinesList extends StatelessWidget {
     return ListTileTheme(
       data: theme.listTileTheme.copyWith(
         tileColor: theme.colorScheme.surfaceVariant.withOpacity(.3),
+        iconColor: theme.colorScheme.onSurfaceVariant,
         shape: RoundedRectangleBorder(
           borderRadius: kDefaultBorderRadius,
           side: BorderSide(color: theme.colorScheme.outlineVariant),
