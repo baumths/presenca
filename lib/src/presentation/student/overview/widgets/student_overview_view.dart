@@ -71,7 +71,6 @@ class StudentOverview extends StatelessWidget {
   Widget build(BuildContext context) {
     final int total = attendees.length;
     final int count = attendees.where((entry) => entry.attended).length;
-    final int frequency = total == 0 ? 0 : (count / total * 100).round();
 
     final String locale = context.l10n.localeName;
     final DateFormat dateFormatter = DateFormat('MMMd', locale);
@@ -81,41 +80,87 @@ class StudentOverview extends StatelessWidget {
       slivers: [
         SliverList(
           delegate: SliverChildListDelegate([
-            ListTile(
-              title: Text(student.name),
-              subtitle: Text(
-                'Frequência $count/$total ($frequency%)',
-                style: const TextStyle(fontWeight: FontWeight.w500),
-              ),
+            _StudentSummary(
+              studentName: student.name,
+              attendeesCount: count,
+              totalAttendances: total,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             const _SectionHeader('Grade de Chamadas'),
           ]),
         ),
-        SliverPadding(
-          padding: const EdgeInsets.all(16),
-          sliver: SliverGrid(
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 136,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              childAspectRatio: 1.9,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              childCount: attendees.length,
-              (BuildContext context, int index) {
-                final Attendee attendee = attendees[index];
+        if (attendees.isNotEmpty)
+          SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 128,
+                mainAxisExtent: 64,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                childCount: attendees.length,
+                (BuildContext context, int index) {
+                  final Attendee attendee = attendees[index];
 
-                return AttendeeTile(
-                  date: dateFormatter.format(attendee.date),
-                  time: timeFormatter.format(attendee.date),
-                  attended: attendee.attended,
-                );
-              },
+                  return AttendeeTile(
+                    date: dateFormatter.format(attendee.date),
+                    time: timeFormatter.format(attendee.date),
+                    attended: attendee.attended,
+                  );
+                },
+              ),
             ),
           ),
-        ),
       ],
+    );
+  }
+}
+
+class _StudentSummary extends StatelessWidget {
+  const _StudentSummary({
+    required this.studentName,
+    required this.totalAttendances,
+    required this.attendeesCount,
+  });
+
+  final String studentName;
+  final int totalAttendances;
+  final int attendeesCount;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget? subtitle;
+
+    if (totalAttendances > 0) {
+      const numberTextStyle = TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 16,
+      );
+
+      subtitle = Text.rich(TextSpan(
+        children: [
+          const TextSpan(text: 'Presente em '),
+          TextSpan(
+            text: attendeesCount.toString(),
+            style: numberTextStyle,
+          ),
+          const TextSpan(text: ' de '),
+          TextSpan(
+            text: totalAttendances.toString(),
+            style: numberTextStyle,
+          ),
+          totalAttendances == 1
+              ? const TextSpan(text: ' chamada')
+              : const TextSpan(text: ' chamadas'),
+        ],
+      ));
+    }
+
+    return ListTile(
+      title: Text(studentName),
+      subtitle: subtitle,
     );
   }
 }
