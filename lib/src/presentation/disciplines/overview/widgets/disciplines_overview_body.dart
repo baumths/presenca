@@ -81,11 +81,28 @@ class _DisciplineTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    if (discipline.isArchived) {
+      return ListTile(
+        title: Text(discipline.name, style: const TextStyle(fontSize: 14)),
+        subtitle: const Text('Arquivada', style: TextStyle(fontSize: 12)),
+        trailing: const Icon(Icons.edit_outlined),
+        onTap: () => AppRouter.showDisciplineForm(context, discipline),
+      );
+    }
+
     return ListTile(
       title: Text(discipline.name),
       trailing: const Icon(Icons.arrow_forward_rounded),
       onLongPress: () => AppRouter.showDisciplineForm(context, discipline),
       onTap: () => AppRouter.showDisciplineDetails(context, discipline),
+      tileColor: colorScheme.surfaceVariant,
+      iconColor: colorScheme.onSurfaceVariant,
+      textColor: colorScheme.onSurfaceVariant,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
     );
   }
 }
