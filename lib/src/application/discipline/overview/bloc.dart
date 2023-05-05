@@ -40,9 +40,27 @@ class DisciplinesOverviewBloc
       },
       onData: (List<Discipline> disciplines) {
         return DisciplinesOverviewState.loadSuccess(
-          disciplines: disciplines,
+          disciplines: _sortDisciplines(disciplines),
         );
       },
     );
+  }
+
+  /// This sorts all disciplines by [Discipline.name] then moves all archived
+  /// disciplines to the end of the list.
+  List<Discipline> _sortDisciplines(List<Discipline> disciplines) {
+    disciplines.sort((a, b) => a.name.compareTo(b.name));
+
+    final unarchivedDisciplines = <Discipline>[];
+    final archivedDisciplines = <Discipline>[];
+
+    for (final discipline in disciplines) {
+      if (discipline.isArchived) {
+        archivedDisciplines.add(discipline);
+      } else {
+        unarchivedDisciplines.add(discipline);
+      }
+    }
+    return [...unarchivedDisciplines, ...archivedDisciplines];
   }
 }

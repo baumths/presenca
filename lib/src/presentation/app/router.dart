@@ -20,6 +20,7 @@ abstract class AppRouter {
   ) {
     showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       builder: (_) => DisciplineFormPage(
         editingDiscipline: editingDiscipline,
       ),
