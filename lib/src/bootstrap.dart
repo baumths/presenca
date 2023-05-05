@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'application/settings/theme/cubit.dart';
 import 'infrastructure/adapters.dart';
 import 'infrastructure/repositories.dart';
 import 'infrastructure/services.dart';
@@ -21,6 +22,12 @@ Future<Widget> createAndInitializeApp() async {
 
   final filePickerAdapter = FilePickerAdapterImpl();
 
+  final themeSettingsCubit = ThemeSettingsCubit(
+    settingsRepository: settingsRepository,
+  );
+
+  await themeSettingsCubit.init();
+
   return PresencaApp(
     attendancesRepository: attendancesRepository,
     disciplinesRepository: disciplinesRepository,
@@ -28,6 +35,7 @@ Future<Widget> createAndInitializeApp() async {
     studentsRepository: studentsRepository,
     saveFileService: saveFileService,
     filePickerAdapter: filePickerAdapter,
+    themeSettingsCubit: themeSettingsCubit,
   );
 }
 
