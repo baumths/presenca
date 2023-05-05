@@ -17,10 +17,6 @@ class DisciplineOverviewView extends StatelessWidget {
           SliverAppBar(
             pinned: true,
             title: Text('Disciplinas'),
-            actions: [
-              // TODO: allow selecting a discipline by long pressing on it and
-              //       add action buttons here (e.g., edit, archive, etc.).
-            ],
           ),
           DisciplinesOverviewBody(),
         ],
