@@ -18,6 +18,7 @@ class PresencaApp extends StatelessWidget {
     required this.studentsRepository,
     required this.saveFileService,
     required this.filePickerAdapter,
+    required this.themeSettingsCubit,
   });
 
   final AttendancesRepository attendancesRepository;
@@ -26,6 +27,7 @@ class PresencaApp extends StatelessWidget {
   final StudentsRepository studentsRepository;
   final SaveFileService saveFileService;
   final FilePickerAdapter filePickerAdapter;
+  final ThemeSettingsCubit themeSettingsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +40,8 @@ class PresencaApp extends StatelessWidget {
         RepositoryProvider.value(value: saveFileService),
         RepositoryProvider.value(value: filePickerAdapter),
       ],
-      child: BlocProvider<ThemeSettingsCubit>(
-        create: (context) {
-          final themeCubit = ThemeSettingsCubit(
-            settingsRepository: context.read(),
-          );
-          return themeCubit..init();
-        },
+      child: BlocProvider<ThemeSettingsCubit>.value(
+        value: themeSettingsCubit,
         child: const AppView(),
       ),
     );
