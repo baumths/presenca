@@ -26,6 +26,7 @@ class DisciplineFormBloc
     await event.map(
       started: (event) => _onStarted(event, emit),
       nameChanged: (event) => _onNameChanged(event, emit),
+      archivePressed: (event) => _onArchivePressed(event, emit),
       submitted: (event) => _onSubmitted(event, emit),
     );
   }
@@ -61,6 +62,17 @@ class DisciplineFormBloc
         saveFailureOrSuccessOption: const None(),
       ),
     );
+  }
+
+  Future<void> _onArchivePressed(
+    _ArchivePressed event,
+    Emitter<DisciplineFormState> emit,
+  ) async {
+    emit(state.copyWith(
+      discipline: state.discipline.copyWith(
+        isArchived: !state.discipline.isArchived,
+      ),
+    ));
   }
 
   Future<void> _onSubmitted(
