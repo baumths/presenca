@@ -10,10 +10,10 @@ class AttendanceFormBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return const Padding(
       padding: AppPadding.allSmall,
       child: Column(
-        children: const [
+        children: [
           ActionsBar(),
           SizedBox(height: 8),
           Expanded(
@@ -30,11 +30,11 @@ class ActionsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return const SizedBox(
       height: 40,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: const [
+        children: [
           Expanded(flex: 3, child: DateSelector()),
           SizedBox(width: 8),
           Expanded(flex: 2, child: TimeSelector()),

@@ -84,10 +84,10 @@ class AttendanceCardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         AttendanceCardTitle(),
         AttendanceCardNote(),
         Divider(height: 0),
@@ -175,12 +175,12 @@ class InfoRow extends StatelessWidget {
       data: theme.iconTheme.copyWith(
         color: theme.colorScheme.onSurfaceVariant,
       ),
-      child: SizedBox(
+      child: const SizedBox(
         height: 48,
         child: Padding(
           padding: AppPadding.horizontalMedium,
           child: Row(
-            children: const [
+            children: [
               Flexible(
                 child: StudentCounter(),
               ),
@@ -231,8 +231,8 @@ class StudentCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: const [
+    return const Row(
+      children: [
         Icon(Icons.people_alt),
         SizedBox(width: 16),
         Spacer(),

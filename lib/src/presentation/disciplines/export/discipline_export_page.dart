@@ -44,12 +44,12 @@ class DisciplineExportView extends StatelessWidget {
       style: theme.textTheme.bodyMedium!.copyWith(
         color: theme.colorScheme.onSurface,
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      child: const Padding(
+        padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [
+          children: [
             BottomSheetDragHandle(),
             Text(
               'Exportação CSV',
@@ -143,9 +143,9 @@ class _LoadingIndicator extends StatelessWidget {
     return Material(
       shape: kDefaultShapeBorder,
       color: theme.colorScheme.surfaceVariant.withOpacity(.3),
-      child: Row(
+      child: const Row(
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: SizedBox.square(
               dimension: 24,
@@ -155,7 +155,7 @@ class _LoadingIndicator extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
                 'Exportando Disciplina',
                 style: TextStyle(

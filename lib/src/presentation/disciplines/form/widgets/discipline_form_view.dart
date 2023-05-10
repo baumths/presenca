@@ -52,16 +52,16 @@ class DisciplineFormBody extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.fromLTRB(16, 0, 16, bottomPadding),
-      child: Column(
+      child: const Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const DisciplineNameInput(),
-          const SizedBox(height: 16),
+          DisciplineNameInput(),
+          SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: const [
+            children: [
               ArchiveButton(),
               DisciplineFormSaveButton(),
             ],
