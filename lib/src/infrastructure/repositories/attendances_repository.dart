@@ -7,20 +7,20 @@ class AttendancesRepositoryImpl implements AttendancesRepository {
   static const String kAttendancesBoxName = 'attendances';
 
   const AttendancesRepositoryImpl(
-    LazyBox<List> storage,
+    LazyBox<List<dynamic>> storage,
   ) : _storage = storage;
 
   static Future<AttendancesRepository> create() async {
-    final box = await Hive.openLazyBox<List>(kAttendancesBoxName);
+    final box = await Hive.openLazyBox<List<dynamic>>(kAttendancesBoxName);
     return AttendancesRepositoryImpl(box);
   }
 
-  final LazyBox<List> _storage;
+  final LazyBox<List<dynamic>> _storage;
 
   @override
   Future<List<Attendance>> find(String disciplineId) async {
     try {
-      final List? attendances = await _storage.get(disciplineId);
+      final List<dynamic>? attendances = await _storage.get(disciplineId);
 
       if (attendances == null) {
         return <Attendance>[];
@@ -58,7 +58,7 @@ class AttendancesRepositoryImpl implements AttendancesRepository {
     return attendances.map((a) => a.toJson()).toList();
   }
 
-  List<Attendance> attendancesFromHive(List hiveList) {
+  List<Attendance> attendancesFromHive(List<dynamic> hiveList) {
     return <Attendance>[
       for (final dynamic json in hiveList) Attendance.fromJson(json as String),
     ];
