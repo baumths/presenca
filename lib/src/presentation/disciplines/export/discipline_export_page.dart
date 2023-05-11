@@ -24,7 +24,12 @@ class DisciplineExportPage extends StatelessWidget {
       child: BlocListener<DisciplineExportCubit, DisciplineExportState>(
         listener: (context, state) {
           state.whenOrNull(
-            success: () => Navigator.pop(context),
+            success: (snackBarMessage) {
+              if (snackBarMessage != null) {
+                SnackBarHelper.showInfo(context, snackBarMessage);
+              }
+              Navigator.pop(context);
+            },
           );
         },
         child: const DisciplineExportView(),
