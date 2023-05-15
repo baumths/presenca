@@ -65,12 +65,12 @@ class StudentsImportBody extends StatelessWidget {
       style: theme.textTheme.bodyMedium!.copyWith(
         color: theme.colorScheme.onSurface,
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      child: const Padding(
+        padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [
+          children: [
             BottomSheetDragHandle(),
             Text(
               'Importar Lista de Alunos',
@@ -157,8 +157,8 @@ class _LoadingIndicator extends StatelessWidget {
     return Material(
       color: theme.colorScheme.surfaceVariant.withOpacity(.3),
       shape: kDefaultShapeBorder,
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: SizedBox.square(

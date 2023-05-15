@@ -7,20 +7,20 @@ class StudentsRepositoryImpl implements StudentsRepository {
   static const String kStudentsBoxName = 'students';
 
   const StudentsRepositoryImpl(
-    LazyBox<List> storage,
+    LazyBox<List<dynamic>> storage,
   ) : _storage = storage;
 
   static Future<StudentsRepository> create() async {
-    final box = await Hive.openLazyBox<List>(kStudentsBoxName);
+    final box = await Hive.openLazyBox<List<dynamic>>(kStudentsBoxName);
     return StudentsRepositoryImpl(box);
   }
 
-  final LazyBox<List> _storage;
+  final LazyBox<List<dynamic>> _storage;
 
   @override
   Future<List<Student>> find(String disciplineId) async {
     try {
-      final List? students = await _storage.get(disciplineId);
+      final List<dynamic>? students = await _storage.get(disciplineId);
 
       if (students == null) {
         return <Student>[];
@@ -58,7 +58,7 @@ class StudentsRepositoryImpl implements StudentsRepository {
     return students.map((s) => s.toJson()).toList();
   }
 
-  List<Student> studentsFromHive(List hiveList) {
+  List<Student> studentsFromHive(List<dynamic> hiveList) {
     return <Student>[
       for (final dynamic json in hiveList) Student.fromJson(json as String),
     ];

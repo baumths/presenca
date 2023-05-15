@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -37,7 +38,6 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
       attendances: await _attendancesRepository.find(discipline.id),
     );
 
-    // TODO: maybe move to another isolate (probably overkill)
     final String fileName = disciplineAggregate.fileName;
     final List<List<String>> fileContent = disciplineAggregate.toCsv();
 
@@ -46,12 +46,24 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
       fileContent,
     );
 
-    await Share.shareFiles(
-      [path],
-      mimeTypes: ['text/csv'],
-      text: fileName,
-    );
+    String? snackBarMessage;
 
-    emit(const DisciplineExportState.success());
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        // FIXME: `share_plus:7.0.0` does not support linux and windows
+        snackBarMessage = 'Arquivo salvo em "$path"';
+        break;
+      default:
+        await Share.shareXFiles(text: fileName, <XFile>[
+          XFile(
+            path,
+            name: fileName,
+            mimeType: 'text/csv',
+          ),
+        ]);
+    }
+
+    emit(DisciplineExportState.success(snackBarMessage: snackBarMessage));
   }
 }

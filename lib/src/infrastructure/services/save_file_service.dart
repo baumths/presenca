@@ -14,7 +14,7 @@ class SaveFileServiceImpl implements SaveFileService {
     late final String content = const ListToCsvConverter().convert(csv);
     fileName = fileName.endsWith('.csv') ? fileName : '$fileName.csv';
 
-    final dir = await getTemporaryDirectory();
+    final dir = await getApplicationDocumentsDirectory();
     File file = File(path.join(dir.path, fileName));
     file = await file.writeAsString(content, flush: true);
 

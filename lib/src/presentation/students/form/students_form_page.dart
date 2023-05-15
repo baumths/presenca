@@ -71,8 +71,8 @@ class StudentsFormPage extends StatelessWidget {
             ),
           );
         },
-        child: Stack(
-          children: const [
+        child: const Stack(
+          children: [
             StudentsFormView(),
             Positioned.fill(child: _Overlay()),
           ],

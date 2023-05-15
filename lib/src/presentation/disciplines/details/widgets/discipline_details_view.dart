@@ -57,6 +57,7 @@ class _DisciplineDetailsViewState extends State<DisciplineDetailsView>
       body: DisciplineDetailsBody(tabController: tabController),
       floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
       floatingActionButton: FloatingActionButton(
+        heroTag: '_', // Temporary fix for scaffold paint issue
         child: const Icon(Icons.add_task_rounded),
         onPressed: () {
           AppRouter.showAttendanceForm(context, widget.discipline);
