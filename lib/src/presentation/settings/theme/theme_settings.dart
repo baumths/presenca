@@ -81,17 +81,14 @@ class ThemeModeSelector extends StatelessWidget {
             ButtonSegment(
               value: ThemeMode.light,
               icon: Icon(Icons.light_mode_outlined),
-              label: Text('Claro'),
             ),
             ButtonSegment(
               value: ThemeMode.dark,
               icon: Icon(Icons.dark_mode_outlined),
-              label: Text('Escuro'),
             ),
             ButtonSegment(
               value: ThemeMode.system,
               icon: Icon(Icons.smartphone),
-              label: Text('Sistema'),
             ),
           ],
         );
