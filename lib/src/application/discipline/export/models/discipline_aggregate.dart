@@ -19,7 +19,7 @@ class DisciplineAggregate {
   final Discipline discipline;
 
   String get _sanitizedDisciplineName => discipline.name
-      .replaceAll(' ', '_')
+      .replaceAll(' ', '-')
       .replaceAll(fileNameRegEx, '')
       .toLowerCase();
 
