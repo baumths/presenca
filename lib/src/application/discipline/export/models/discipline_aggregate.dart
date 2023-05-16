@@ -6,7 +6,7 @@ import '../../../../domain/student.dart';
 
 class DisciplineAggregate {
   static final RegExp fileNameRegEx = RegExp(r'[^\w\p{L}]', unicode: true);
-  static final DateFormat dateFormat = DateFormat('dd/MM HH:mm');
+  static final DateFormat dateFormat = DateFormat('d-M-y_HH-mm');
 
   const DisciplineAggregate({
     required this.discipline,
@@ -18,10 +18,14 @@ class DisciplineAggregate {
   final List<Attendance> attendances;
   final Discipline discipline;
 
-  String get fileName => discipline.name
+  String get _sanitizedDisciplineName => discipline.name
       .replaceAll(' ', '_')
       .replaceAll(fileNameRegEx, '')
       .toLowerCase();
+
+  String get fileName {
+    return '${_sanitizedDisciplineName}_${dateFormat.format(DateTime.now())}';
+  }
 
   List<List<String>> toCsv() {
     return [
