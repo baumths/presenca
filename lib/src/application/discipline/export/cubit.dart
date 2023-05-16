@@ -46,13 +46,9 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
       fileContent,
     );
 
-    String? snackBarMessage;
-
     switch (defaultTargetPlatform) {
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        // FIXME: `share_plus:7.0.0` does not support linux and windows
-        snackBarMessage = 'Arquivo salvo em "$path"';
+      case TargetPlatform.linux || TargetPlatform.windows:
+        // FIXME: `share_plus:7.0.0` does not support linux nor windows
         break;
       default:
         await Share.shareXFiles(text: fileName, <XFile>[
@@ -64,6 +60,8 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
         ]);
     }
 
-    emit(DisciplineExportState.success(snackBarMessage: snackBarMessage));
+    emit(DisciplineExportState.success(
+      snackBarMessage: 'Arquivo salvo em "$path"',
+    ));
   }
 }
