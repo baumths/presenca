@@ -78,24 +78,10 @@ class DisciplineExportView extends StatelessWidget {
               '- A última linha é dedicada às anotações.',
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
-            SizedBox(height: 16),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'Atenção! ',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  TextSpan(
-                    text: 'Caso você já tenha exportado essa disciplina '
-                        'anteriormente, o arquivo antigo será ',
-                  ),
-                  TextSpan(
-                    text: 'sobrescrito.',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  )
-                ],
-              ),
+            SizedBox(height: 8),
+            Text(
+              'O nome do arquivo será formado pelo nome da disciplina, data e '
+              'horário de exportação.',
             ),
             SizedBox(height: 16),
             _ExportButton(),
