@@ -38,7 +38,7 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
       attendances: await _attendancesRepository.find(discipline.id),
     );
 
-    final String fileName = disciplineAggregate.fileName;
+    final String fileName = disciplineAggregate.timestampedFileName;
     final List<List<String>> fileContent = disciplineAggregate.toCsv();
 
     final String path = await _saveFileService.saveCsv(
@@ -51,7 +51,7 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
         // FIXME: `share_plus:7.0.0` does not support linux nor windows
         break;
       default:
-        await Share.shareXFiles(text: fileName, <XFile>[
+        await Share.shareXFiles(text: discipline.name, <XFile>[
           XFile(
             path,
             name: fileName,
