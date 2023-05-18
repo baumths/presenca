@@ -51,7 +51,7 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
         // FIXME: `share_plus:7.0.0` does not support linux nor windows
         break;
       default:
-        await Share.shareXFiles(text: fileName, <XFile>[
+        await Share.shareXFiles(text: discipline.name, <XFile>[
           XFile(
             path,
             name: fileName,
