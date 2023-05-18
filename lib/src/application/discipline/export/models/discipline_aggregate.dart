@@ -18,14 +18,14 @@ class DisciplineAggregate {
   final List<Attendance> attendances;
   final Discipline discipline;
 
-  String get _sanitizedDisciplineName => discipline.name
+  String get fileName => discipline.name
       .replaceAll(' ', '-')
       .replaceAll(fileNameRegEx, '')
       .toLowerCase();
 
-  String get fileName {
-    return '${_sanitizedDisciplineName}_${dateFormat.format(DateTime.now())}';
-  }
+  String get timestamp => dateFormat.format(DateTime.now());
+
+  String get timestampedFileName => '${fileName}_$timestamp';
 
   List<List<String>> toCsv() {
     return [

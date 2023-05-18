@@ -38,7 +38,7 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
       attendances: await _attendancesRepository.find(discipline.id),
     );
 
-    final String fileName = disciplineAggregate.fileName;
+    final String fileName = disciplineAggregate.timestampedFileName;
     final List<List<String>> fileContent = disciplineAggregate.toCsv();
 
     final String path = await _saveFileService.saveCsv(
