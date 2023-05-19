@@ -24,6 +24,11 @@ jobs:
           channel: "stable"
           cache: true
 
+      - name: create signing files
+        run: |
+          echo "${{ secrets.KEYSTORE_JKS }}" | base64 --decode > android/app/keystore.jks
+          echo "${{ secrets.KEY_PROPERTIES }}" | base64 --decode > android/key.properties
+
       - run: flutter pub get
       - run: dart run build_runner build --delete-conflicting-outputs
 
