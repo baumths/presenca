@@ -22,7 +22,7 @@ class AttendanceFormView extends StatelessWidget {
             tooltip: 'Salvar',
             onPressed: () => context
                 .read<AttendanceFormBloc>()
-                .add(const AttendanceFormEvent.submitted()),
+                .add(const AttendanceFormSubmitted()),
           ),
         ],
       ),

@@ -1,23 +1,35 @@
 part of 'bloc.dart';
 
-@freezed
-class AttendanceFormEvent with _$AttendanceFormEvent {
-  const factory AttendanceFormEvent.started({
-    required Discipline discipline,
-  }) = _Started;
+sealed class AttendanceFormEvent {
+  const AttendanceFormEvent();
+}
 
-  const factory AttendanceFormEvent.dateChanged(DateTime date) = _DateChanged;
+class AttendanceFormStarted extends AttendanceFormEvent {
+  const AttendanceFormStarted(this.discipline);
+  final Discipline discipline;
+}
 
-  const factory AttendanceFormEvent.timeChanged({
-    required int hour,
-    required int minute,
-  }) = _TimeChanged;
+class AttendanceFormDateChanged extends AttendanceFormEvent {
+  const AttendanceFormDateChanged(this.date);
+  final DateTime date;
+}
 
-  const factory AttendanceFormEvent.noteChanged(String note) = _NoteChanged;
+class AttendanceFormTimeChanged extends AttendanceFormEvent {
+  const AttendanceFormTimeChanged({required this.hour, required this.minute});
+  final int hour;
+  final int minute;
+}
 
-  const factory AttendanceFormEvent.attendeePressed(
-    Attendee attendee,
-  ) = _AttendeePressed;
+class AttendanceFormNoteChanged extends AttendanceFormEvent {
+  const AttendanceFormNoteChanged(this.note);
+  final String note;
+}
 
-  const factory AttendanceFormEvent.submitted() = _Submitted;
+class AttendanceFormAttendeePressed extends AttendanceFormEvent {
+  const AttendanceFormAttendeePressed(this.attendee);
+  final Attendee attendee;
+}
+
+class AttendanceFormSubmitted extends AttendanceFormEvent {
+  const AttendanceFormSubmitted();
 }

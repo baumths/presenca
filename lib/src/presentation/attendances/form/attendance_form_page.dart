@@ -30,9 +30,7 @@ class AttendanceFormPage extends StatelessWidget {
           studentsRepository: context.read<StudentsRepository>(),
         );
 
-        final event = AttendanceFormEvent.started(discipline: discipline);
-
-        return bloc..add(event);
+        return bloc..add(AttendanceFormStarted(discipline));
       },
       child: const AttendanceFormView(),
     );

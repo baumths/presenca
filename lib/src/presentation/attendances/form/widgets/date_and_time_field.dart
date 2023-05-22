@@ -33,11 +33,10 @@ class DateSelector extends StatelessWidget {
       ),
       onPressed: () async {
         final bloc = context.read<AttendanceFormBloc>();
-
         final date = await _pickDate(context, bloc.state.date);
 
         if (date != null) {
-          bloc.add(AttendanceFormEvent.dateChanged(date));
+          bloc.add(AttendanceFormDateChanged(date));
         }
       },
     );
@@ -72,12 +71,10 @@ class TimeSelector extends StatelessWidget {
         final time = await _pickTime(context, bloc.state.date);
 
         if (time != null) {
-          bloc.add(
-            AttendanceFormEvent.timeChanged(
-              hour: time.hour,
-              minute: time.minute,
-            ),
-          );
+          bloc.add(AttendanceFormTimeChanged(
+            hour: time.hour,
+            minute: time.minute,
+          ));
         }
       },
     );
