@@ -6,7 +6,8 @@ import '../../../../domain/student.dart';
 
 class DisciplineAggregate {
   static final RegExp fileNameRegEx = RegExp(r'[^\w\p{L}]', unicode: true);
-  static final DateFormat dateFormat = DateFormat('d-M-y_HH-mm');
+  static final DateFormat timestampDateFormat = DateFormat('dd-MM-yyyy_HH-mm');
+  static final DateFormat attendanceDateFormat = DateFormat('dd/MM/yyyy HH:mm');
 
   const DisciplineAggregate({
     required this.discipline,
@@ -23,7 +24,7 @@ class DisciplineAggregate {
       .replaceAll(fileNameRegEx, '')
       .toLowerCase();
 
-  String get timestamp => dateFormat.format(DateTime.now());
+  String get timestamp => timestampDateFormat.format(DateTime.now());
 
   String get timestampedFileName => '${fileName}_$timestamp';
 
@@ -39,7 +40,7 @@ class DisciplineAggregate {
     final header = <String>['Nome'];
 
     for (final attendance in attendances) {
-      header.add(dateFormat.format(attendance.date));
+      header.add(attendanceDateFormat.format(attendance.date));
     }
 
     return header;
