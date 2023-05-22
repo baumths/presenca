@@ -13,24 +13,23 @@ class DisciplineExportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<DisciplineExportCubit>(
-      create: (context) {
-        return DisciplineExportCubit(
-          discipline: discipline,
-          attendancesRepository: context.read(),
-          studentsRepository: context.read(),
-          saveFileService: context.read(),
-        );
-      },
+      create: (context) => DisciplineExportCubit(
+        discipline: discipline,
+        attendancesRepository: context.read(),
+        studentsRepository: context.read(),
+        saveFileService: context.read(),
+      ),
       child: BlocListener<DisciplineExportCubit, DisciplineExportState>(
+        listenWhen: (prev, curr) {
+          return prev != curr && curr is DisciplineExportLoadSuccess;
+        },
         listener: (context, state) {
-          state.whenOrNull(
-            success: (snackBarMessage) {
-              if (snackBarMessage != null) {
-                SnackBarHelper.showInfo(context, snackBarMessage);
-              }
-              Navigator.pop(context);
-            },
-          );
+          if (state case DisciplineExportLoadSuccess()) {
+            if (state.snackBarMessage case final message?) {
+              SnackBarHelper.showInfo(context, message);
+            }
+            Navigator.pop(context);
+          }
         },
         child: const DisciplineExportView(),
       ),
@@ -100,26 +99,24 @@ class _ExportButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     return BlocBuilder<DisciplineExportCubit, DisciplineExportState>(
-      builder: (context, state) {
-        return FadeUpwardsSwitcher(
-          child: SizedBox(
-            key: ValueKey(state.isLoading),
-            height: kDefaultButtonHeight,
-            width: double.infinity,
-            child: state.isLoading
-                ? const _LoadingIndicator()
-                : MaterialButton(
-                    color: theme.colorScheme.primary,
-                    textColor: theme.colorScheme.onPrimary,
-                    shape: kDefaultShapeBorder,
-                    child: const Text('Exportar Disciplina'),
-                    onPressed: () {
-                      context.read<DisciplineExportCubit>().exportDiscipline();
-                    },
-                  ),
-          ),
-        );
-      },
+      builder: (context, state) => FadeUpwardsSwitcher(
+        child: SizedBox(
+          key: ValueKey(state.isLoading),
+          height: kDefaultButtonHeight,
+          width: double.infinity,
+          child: state.isLoading
+              ? const _LoadingIndicator()
+              : MaterialButton(
+                  color: theme.colorScheme.primary,
+                  textColor: theme.colorScheme.onPrimary,
+                  shape: kDefaultShapeBorder,
+                  child: const Text('Exportar Disciplina'),
+                  onPressed: () {
+                    context.read<DisciplineExportCubit>().exportDiscipline();
+                  },
+                ),
+        ),
+      ),
     );
   }
 }
