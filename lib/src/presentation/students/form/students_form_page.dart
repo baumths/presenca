@@ -39,11 +39,7 @@ class StudentsFormPage extends StatelessWidget {
           studentsRepository: context.read<StudentsRepository>(),
         );
 
-        final formStarted = StudentsFormEvent.started(
-          initialStudents: initialStudents,
-        );
-
-        return bloc..add(formStarted);
+        return bloc..add(StudentsFormStarted(initialStudents));
       },
       child: BlocListener<StudentsFormBloc, StudentsFormState>(
         listenWhen: (p, c) {

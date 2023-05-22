@@ -43,14 +43,9 @@ class _StudentNameInputState extends State<StudentNameInput> {
 
   @override
   Widget build(BuildContext context) {
-    void onDone() {
-      final bloc = context.read<StudentsFormBloc>();
-      bloc.add(
-        StudentsFormEvent.editingComplete(
-          _textController.text,
-        ),
-      );
-    }
+    void onDone() => context
+        .read<StudentsFormBloc>()
+        .add(StudentsFormEditingComplete(_textController.text));
 
     return MultiBlocListener(
       listeners: [
@@ -98,14 +93,14 @@ class _StudentNameInputState extends State<StudentNameInput> {
           state.failureOrSuccessOption.fold(
             () {},
             (either) => either.fold(
-              (failure) => switch (failure) {
-                StudentFailure.emptyName => state.selectedStudent.fold(
-                    () {},
-                    (_) {
-                      errorMessage = 'Informe um novo nome para o(a) aluno(a).';
-                    },
-                  ),
-                _ => null,
+              (failure) {
+                errorMessage = switch (failure) {
+                  StudentFailure.emptyName => state.selectedStudent.fold(
+                      () => null,
+                      (_) => 'Informe um novo nome para o(a) aluno(a).',
+                    ),
+                  _ => null,
+                };
               },
               (_) {},
             ),

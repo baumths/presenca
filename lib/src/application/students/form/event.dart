@@ -1,26 +1,34 @@
 part of 'bloc.dart';
 
-@freezed
-class StudentsFormEvent with _$StudentsFormEvent {
-  const factory StudentsFormEvent.started({
-    required List<Student> initialStudents,
-  }) = _Started;
+sealed class StudentsFormEvent {
+  const StudentsFormEvent();
+}
 
-  const factory StudentsFormEvent.selected(
-    Student student,
-  ) = _Selected;
+class StudentsFormStarted extends StudentsFormEvent {
+  const StudentsFormStarted(this.initialStudents);
+  final List<Student> initialStudents;
+}
 
-  const factory StudentsFormEvent.editingComplete(
-    String name,
-  ) = _EditingComplete;
+class StudentsFormStudentSelected extends StudentsFormEvent {
+  const StudentsFormStudentSelected(this.student);
+  final Student student;
+}
 
-  const factory StudentsFormEvent.activeToggled(
-    Student student,
-  ) = _ActiveToggled;
+class StudentsFormEditingComplete extends StudentsFormEvent {
+  const StudentsFormEditingComplete(this.name);
+  final String name;
+}
 
-  const factory StudentsFormEvent.deletePressed(
-    Student student,
-  ) = _DeletePressed;
+class StudentsFormStudentActiveToggled extends StudentsFormEvent {
+  const StudentsFormStudentActiveToggled(this.student);
+  final Student student;
+}
 
-  const factory StudentsFormEvent.submitted() = _Submitted;
+class StudentsFormStudentDeleted extends StudentsFormEvent {
+  const StudentsFormStudentDeleted(this.student);
+  final Student student;
+}
+
+class StudentsFormSubmitted extends StudentsFormEvent {
+  const StudentsFormSubmitted();
 }

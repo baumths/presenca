@@ -54,11 +54,11 @@ class DefaultStudentTile extends StatelessWidget {
         icon: const Icon(Icons.person_off),
         onPressed: () => context
             .read<StudentsFormBloc>()
-            .add(StudentsFormEvent.activeToggled(student)),
+            .add(StudentsFormStudentActiveToggled(student)),
       ),
       onTap: () => context
           .read<StudentsFormBloc>()
-          .add(StudentsFormEvent.selected(student)),
+          .add(StudentsFormStudentSelected(student)),
     );
   }
 }
@@ -100,14 +100,14 @@ class InactiveStudentTile extends StatelessWidget {
       subtitle: const Text('Inativo (pressione para ativar)'),
       onLongPress: () => context
           .read<StudentsFormBloc>()
-          .add(StudentsFormEvent.activeToggled(student)),
+          .add(StudentsFormStudentActiveToggled(student)),
       trailing: IconButton(
         color: Theme.of(context).colorScheme.error,
         tooltip: 'Remover',
         icon: const Icon(Icons.delete),
         onPressed: () => context
             .read<StudentsFormBloc>()
-            .add(StudentsFormEvent.deletePressed(student)),
+            .add(StudentsFormStudentDeleted(student)),
       ),
     );
   }
