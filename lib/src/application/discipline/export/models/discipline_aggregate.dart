@@ -30,13 +30,13 @@ class DisciplineAggregate {
 
   List<List<String>> toCsv() {
     return [
-      _buildHeader(),
-      ..._generateBody(),
-      _buildNoteRow(),
+      _buildHeaders(),
+      ..._generateStudentRows(),
+      _buildNotesRow(),
     ];
   }
 
-  List<String> _buildHeader() {
+  List<String> _buildHeaders() {
     final header = <String>['Nome'];
 
     for (final attendance in attendances) {
@@ -46,7 +46,7 @@ class DisciplineAggregate {
     return header;
   }
 
-  List<String> _buildNoteRow() {
+  List<String> _buildNotesRow() {
     final notes = <String>['Anotações'];
 
     for (final attendance in attendances) {
@@ -56,7 +56,7 @@ class DisciplineAggregate {
     return notes;
   }
 
-  Iterable<List<String>> _generateBody() sync* {
+  Iterable<List<String>> _generateStudentRows() sync* {
     // TODO: cache attendance.attendedStudentIds removing already checked ids.
     for (final student in students) {
       final name = student.active ? student.name : '${student.name} (Inativo)';
