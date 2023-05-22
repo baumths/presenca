@@ -1,12 +1,19 @@
 part of 'bloc.dart';
 
-@freezed
-class StudentOverviewState with _$StudentOverviewState {
-  const factory StudentOverviewState.loadInProgress() =
-      StudentOverviewLoadInProgress;
+sealed class StudentOverviewState {
+  const StudentOverviewState();
+}
 
-  const factory StudentOverviewState.loadSuccess({
-    required Student student,
-    required List<Attendee> attendees,
-  }) = StudentOverviewLoadSuccess;
+class StudentOverviewLoadInProgress extends StudentOverviewState {
+  const StudentOverviewLoadInProgress();
+}
+
+class StudentOverviewLoadSuccess extends StudentOverviewState {
+  const StudentOverviewLoadSuccess({
+    required this.student,
+    required this.attendees,
+  });
+
+  final Student student;
+  final List<Attendee> attendees;
 }

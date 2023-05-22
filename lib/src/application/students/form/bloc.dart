@@ -24,19 +24,19 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
   Future<void> _onEvent(
     StudentsFormEvent event,
     Emitter<StudentsFormState> emit,
-  ) async {
-    await event.map(
-      started: (event) => _onStarted(event, emit),
-      selected: (event) => _onSelected(event, emit),
-      editingComplete: (event) => _onEditingComplete(event, emit),
-      activeToggled: (event) => _onActiveToggled(event, emit),
-      deletePressed: (event) => _onDeletePressed(event, emit),
-      submitted: (event) => _onSubmitted(event, emit),
-    );
+  ) {
+    return switch (event) {
+      StudentsFormStarted event => _onStarted(event, emit),
+      StudentsFormStudentSelected event => _onSelected(event, emit),
+      StudentsFormEditingComplete event => _onEditingComplete(event, emit),
+      StudentsFormStudentActiveToggled event => _onActiveToggled(event, emit),
+      StudentsFormStudentDeleted event => _onDeletePressed(event, emit),
+      StudentsFormSubmitted event => _onSubmitted(event, emit),
+    };
   }
 
   Future<void> _onStarted(
-    _Started event,
+    StudentsFormStarted event,
     Emitter<StudentsFormState> emit,
   ) async {
     late final List<Student> students;
@@ -59,7 +59,7 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
   }
 
   Future<void> _onSelected(
-    _Selected event,
+    StudentsFormStudentSelected event,
     Emitter<StudentsFormState> emit,
   ) async {
     emit(
@@ -71,7 +71,7 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
   }
 
   Future<void> _onEditingComplete(
-    _EditingComplete event,
+    StudentsFormEditingComplete event,
     Emitter<StudentsFormState> emit,
   ) async {
     final String studentName = event.name.trim();
@@ -102,13 +102,9 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
       (editingStudent) {
         // Editing student
         if (studentName.isEmpty) {
-          emit(
-            state.copyWith(
-              failureOrSuccessOption: const Some(
-                Left(StudentFailure.emptyName()),
-              ),
-            ),
-          );
+          emit(state.copyWith(
+            failureOrSuccessOption: const Some(Left(StudentFailure.emptyName)),
+          ));
           return;
         }
 
@@ -132,7 +128,7 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
   }
 
   Future<void> _onActiveToggled(
-    _ActiveToggled event,
+    StudentsFormStudentActiveToggled event,
     Emitter<StudentsFormState> emit,
   ) async {
     final newStudents = [
@@ -153,7 +149,7 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
   }
 
   Future<void> _onDeletePressed(
-    _DeletePressed event,
+    StudentsFormStudentDeleted event,
     Emitter<StudentsFormState> emit,
   ) async {
     final newStudents = state.students
@@ -168,7 +164,7 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
   }
 
   Future<void> _onSubmitted(
-    _Submitted event,
+    StudentsFormSubmitted event,
     Emitter<StudentsFormState> emit,
   ) async {
     emit(

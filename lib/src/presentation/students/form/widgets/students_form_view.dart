@@ -42,7 +42,7 @@ class StudentsFormView extends StatelessWidget {
                   child: const Text('Salvar'),
                   onPressed: () => context
                       .read<StudentsFormBloc>()
-                      .add(const StudentsFormEvent.submitted()),
+                      .add(const StudentsFormSubmitted()),
                 ),
                 const SizedBox(width: 8),
               ],

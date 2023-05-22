@@ -7,10 +7,7 @@ import '../../../domain/usecases/find_student_attendances.dart';
 import 'widgets/student_overview_view.dart';
 
 class StudentOverviewPage extends StatelessWidget {
-  const StudentOverviewPage({
-    super.key,
-    required this.student,
-  });
+  const StudentOverviewPage({super.key, required this.student});
 
   final Student student;
 
@@ -29,7 +26,7 @@ class StudentOverviewPage extends StatelessWidget {
             attendancesRepository: RepositoryProvider.of(context),
           ),
         );
-        return bloc..add(StudentOverviewEvent.started(student));
+        return bloc..add(StudentOverviewStarted(student));
       },
       child: const StudentOverviewView(),
     );

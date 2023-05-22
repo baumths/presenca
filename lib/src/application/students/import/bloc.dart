@@ -27,14 +27,14 @@ class StudentsImportBloc
   Future<void> _onEvent(
     StudentsImportEvent event,
     Emitter<StudentsImportState> emit,
-  ) async {
-    await event.map(
-      pickFilePressed: (event) => _onPickFilePressed(event, emit),
-    );
+  ) {
+    return switch (event) {
+      StudentsImportPickFilePressed event => _onPickFilePressed(event, emit),
+    };
   }
 
   Future<void> _onPickFilePressed(
-    _PickFilePressed event,
+    StudentsImportPickFilePressed event,
     Emitter<StudentsImportState> emit,
   ) async {
     emit(

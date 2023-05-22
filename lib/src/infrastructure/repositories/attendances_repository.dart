@@ -41,7 +41,7 @@ class AttendancesRepositoryImpl implements AttendancesRepository {
       await _storage.put(disciplineId, attendancesToHive(attendances));
       return const Right(unit);
     } on HiveError {
-      return const Left(AttendanceFailure.unableToUpdate());
+      return const Left(AttendanceFailure.unableToUpdate);
     }
   }
 

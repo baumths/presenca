@@ -23,7 +23,7 @@ class DisciplinesRepositoryImpl implements DisciplinesRepository {
       await _storage.put(discipline.id, discipline.toJson());
       return const Right(unit);
     } on HiveError {
-      return const Left(DisciplineFailure.unableToUpdate());
+      return const Left(DisciplineFailure.unableToUpdate);
     }
   }
 

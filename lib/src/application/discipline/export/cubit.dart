@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../domain/attendance.dart';
@@ -9,7 +8,6 @@ import '../../../domain/student.dart';
 import '../../../infrastructure/services.dart';
 import 'models/discipline_aggregate.dart';
 
-part 'cubit.freezed.dart';
 part 'state.dart';
 
 class DisciplineExportCubit extends Cubit<DisciplineExportState> {
@@ -21,7 +19,7 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
   })  : _attendancesRepository = attendancesRepository,
         _studentsRepository = studentsRepository,
         _saveFileService = saveFileService,
-        super(const DisciplineExportState.initial());
+        super(const DisciplineExportInitial());
 
   final Discipline discipline;
   final AttendancesRepository _attendancesRepository;
@@ -30,7 +28,7 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
   final SaveFileService _saveFileService;
 
   Future<void> exportDiscipline() async {
-    emit(const DisciplineExportState.loading());
+    emit(const DisciplineExportLoadInProgress());
 
     final disciplineAggregate = DisciplineAggregate(
       discipline: discipline,
@@ -60,7 +58,7 @@ class DisciplineExportCubit extends Cubit<DisciplineExportState> {
         ]);
     }
 
-    emit(DisciplineExportState.success(
+    emit(DisciplineExportLoadSuccess(
       snackBarMessage: 'Arquivo salvo em "$path"',
     ));
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/discipline/form/bloc.dart';
+import '../../../../domain/discipline.dart';
 import '../../../../shared/shared.dart';
 
 class DisciplineFormView extends StatelessWidget {
@@ -17,15 +18,14 @@ class DisciplineFormView extends StatelessWidget {
         state.saveFailureOrSuccessOption.fold(
           () {},
           (either) => either.fold(
-            (failure) => failure.when(
-              unableToUpdate: () {
-                final String message = state.isEditing
-                    ? 'Não foi possível atualizar a disciplina.'
-                    : 'Não foi possível criar a disciplina.';
-
-                SnackBarHelper.showError(context, message);
-              },
-            ),
+            (failure) => switch (failure) {
+              DisciplineFailure.unableToUpdate => SnackBarHelper.showError(
+                  context,
+                  state.isEditing
+                      ? 'Não foi possível atualizar a disciplina.'
+                      : 'Não foi possível criar a disciplina.',
+                ),
+            },
             (_) {
               final String message = state.isEditing
                   ? 'Disciplina alterada com sucesso.'
@@ -126,13 +126,13 @@ class _DisciplineNameInputState extends State<DisciplineNameInput> {
           onChanged: (String text) {
             context
                 .read<DisciplineFormBloc>()
-                .add(DisciplineFormEvent.nameChanged(text));
+                .add(DisciplineFormNameChanged(text));
           },
           onFieldSubmitted: (_) {
             if (state.canSubmit) {
               context
                   .read<DisciplineFormBloc>()
-                  .add(const DisciplineFormEvent.submitted());
+                  .add(const DisciplineFormSubmitted());
             } else {
               _focusNode?.requestFocus();
             }
@@ -169,7 +169,7 @@ class ArchiveButton extends StatelessWidget {
           ),
           onPressed: () => context
               .read<DisciplineFormBloc>()
-              .add(const DisciplineFormEvent.archivePressed()),
+              .add(const DisciplineFormArchivePressed()),
         );
       },
     );
@@ -188,7 +188,7 @@ class DisciplineFormSaveButton extends StatelessWidget {
           onPressed: state.canSubmit
               ? () => context
                   .read<DisciplineFormBloc>()
-                  .add(const DisciplineFormEvent.submitted())
+                  .add(const DisciplineFormSubmitted())
               : null,
           child: const Text('Salvar'),
         );

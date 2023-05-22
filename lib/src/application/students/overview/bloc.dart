@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/discipline.dart';
 import '../../../domain/student.dart';
 
-part 'bloc.freezed.dart';
 part 'event.dart';
 part 'state.dart';
 
@@ -14,7 +12,7 @@ class StudentsOverviewBloc
     required StudentsRepository studentsRepository,
     required this.discipline,
   })  : _studentsRepository = studentsRepository,
-        super(const StudentsOverviewState.initial()) {
+        super(const StudentsOverviewInitial()) {
     on<StudentsOverviewEvent>(_onEvent);
   }
 
@@ -24,19 +22,19 @@ class StudentsOverviewBloc
   Future<void> _onEvent(
     StudentsOverviewEvent event,
     Emitter<StudentsOverviewState> emit,
-  ) async {
-    await event.map(
-      started: (event) => _onStarted(event, emit),
-    );
+  ) {
+    return switch (event) {
+      StudentsOverviewStarted event => _onStarted(event, emit),
+    };
   }
 
   Future<void> _onStarted(
-    _Started event,
+    StudentsOverviewStarted event,
     Emitter<StudentsOverviewState> emit,
   ) async {
     await emit.forEach(
       _studentsRepository.watch(discipline.id),
-      onError: (_, __) => const StudentsOverviewState.initial(),
+      onError: (_, __) => const StudentsOverviewInitial(),
       onData: (List<Student> students) {
         final activeStudents = <Student>[
           for (final Student student in students)
@@ -44,14 +42,11 @@ class StudentsOverviewBloc
         ];
 
         if (activeStudents.isEmpty) {
-          return const StudentsOverviewState.initial();
+          return const StudentsOverviewInitial();
         }
 
         activeStudents.sort((a, b) => a.name.compareTo(b.name));
-
-        return StudentsOverviewState.loadSuccess(
-          students: activeStudents,
-        );
+        return StudentsOverviewLoadSuccess(activeStudents);
       },
     );
   }

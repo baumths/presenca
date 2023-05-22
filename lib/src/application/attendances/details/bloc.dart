@@ -25,14 +25,14 @@ class AttendanceDetailsBloc
   Future<void> _onEvent(
     AttendanceDetailsEvent event,
     Emitter<AttendanceDetailsState> emit,
-  ) async {
-    await event.map(
-      started: (event) => _onStarted(event, emit),
-    );
+  ) {
+    return switch (event) {
+      AttendanceDetailsStarted event => _onStarted(event, emit),
+    };
   }
 
   Future<void> _onStarted(
-    _Started event,
+    AttendanceDetailsStarted event,
     Emitter<AttendanceDetailsState> emit,
   ) async {
     final students = await _studentsRepository.find(attendance.disciplineId);

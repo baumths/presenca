@@ -4,10 +4,7 @@ import '../../../../domain/entities/student.dart';
 import '../../../app/router.dart';
 
 class StudentTile extends StatelessWidget {
-  const StudentTile({
-    super.key,
-    required this.student,
-  });
+  const StudentTile({super.key, required this.student});
 
   final Student student;
 

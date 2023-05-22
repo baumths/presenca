@@ -1,6 +1,9 @@
 part of 'bloc.dart';
 
-@freezed
-class DisciplinesOverviewEvent with _$DisciplinesOverviewEvent {
-  const factory DisciplinesOverviewEvent.started() = _Started;
+sealed class DisciplinesOverviewEvent {
+  const DisciplinesOverviewEvent();
+}
+
+class DisciplinesOverviewStarted extends DisciplinesOverviewEvent {
+  const DisciplinesOverviewStarted();
 }

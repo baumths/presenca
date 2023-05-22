@@ -61,4 +61,12 @@ abstract class AppRouter {
   static void showStudentOverview(BuildContext context, Student student) {
     Navigator.of(context).push(StudentOverviewPage.route(student));
   }
+
+  static void showThemeSettings(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: ThemeSettingsView.bottomSheetBuilder,
+    );
+  }
 }

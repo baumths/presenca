@@ -7,10 +7,7 @@ import '../../../../shared/shared.dart';
 import '../../details/attendance_details_page.dart';
 
 class AttendanceCard extends StatelessWidget {
-  const AttendanceCard({
-    super.key,
-    required this.attendance,
-  });
+  const AttendanceCard({super.key, required this.attendance});
 
   final Attendance attendance;
 
@@ -25,9 +22,7 @@ class AttendanceCard extends StatelessWidget {
           studentsRepository: context.read(),
         );
 
-        final event = AttendanceDetailsEvent.started(localeName: localeName);
-
-        return bloc..add(event);
+        return bloc..add(AttendanceDetailsStarted(localeName));
       },
       child: const AttendanceCardContent(),
     );
@@ -172,22 +167,16 @@ class InfoRow extends StatelessWidget {
     final theme = Theme.of(context);
 
     return IconTheme(
-      data: theme.iconTheme.copyWith(
-        color: theme.colorScheme.onSurfaceVariant,
-      ),
+      data: theme.iconTheme.copyWith(color: theme.colorScheme.onSurfaceVariant),
       child: const SizedBox(
         height: 48,
         child: Padding(
           padding: AppPadding.horizontalMedium,
           child: Row(
             children: [
-              Flexible(
-                child: StudentCounter(),
-              ),
+              Flexible(child: StudentCounter()),
               VerticalDivider(width: 32),
-              Flexible(
-                child: TimeTile(),
-              ),
+              Flexible(child: TimeTile()),
             ],
           ),
         ),
@@ -254,23 +243,21 @@ class StudentsCounterText extends StatelessWidget {
         final count = state.attendees.length.toString();
         final total = state.students.length.toString();
 
-        return RichText(
-          text: TextSpan(
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-            children: [
-              TextSpan(
-                text: count,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              TextSpan(
-                text: '/$total',
-                style: const TextStyle(fontSize: 12),
-              ),
-            ],
+        return Text.rich(TextSpan(
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
           ),
-        );
+          children: [
+            TextSpan(
+              text: count,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(
+              text: '/$total',
+              style: const TextStyle(fontSize: 12),
+            ),
+          ],
+        ));
       },
     );
   }

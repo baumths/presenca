@@ -81,7 +81,7 @@ class AttendeeCheckboxTile extends StatelessWidget {
       selected: attendee.attended,
       onChanged: (_) => context
           .read<AttendanceFormBloc>()
-          .add(AttendanceFormEvent.attendeePressed(attendee)),
+          .add(AttendanceFormAttendeePressed(attendee)),
     );
   }
 }

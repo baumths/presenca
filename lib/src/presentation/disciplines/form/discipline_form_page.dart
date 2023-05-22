@@ -21,9 +21,7 @@ class DisciplineFormPage extends StatelessWidget {
           disciplinesRepository: context.read(),
         );
 
-        final event = DisciplineFormEvent.started(editingDiscipline);
-
-        return bloc..add(event);
+        return bloc..add(DisciplineFormStarted(editingDiscipline));
       },
       child: const DisciplineFormView(),
     );

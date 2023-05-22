@@ -1,9 +1,15 @@
 part of 'bloc.dart';
 
-@freezed
-class DisciplinesOverviewState with _$DisciplinesOverviewState {
-  const factory DisciplinesOverviewState.loadInProgress() = _LoadInProgress;
-  const factory DisciplinesOverviewState.loadSuccess({
-    required List<Discipline> disciplines,
-  }) = _LoadSuccess;
+sealed class DisciplinesOverviewState {
+  const DisciplinesOverviewState();
+}
+
+class DisciplinesOverviewLoadInProgress extends DisciplinesOverviewState {
+  const DisciplinesOverviewLoadInProgress();
+}
+
+class DisciplinesOverviewLoadSuccess extends DisciplinesOverviewState {
+  const DisciplinesOverviewLoadSuccess(this.disciplines);
+
+  final List<Discipline> disciplines;
 }

@@ -138,7 +138,7 @@ class _PickFileButton extends StatelessWidget {
                     child: const Text('Selecionar Arquivo'),
                     onPressed: () => context
                         .read<StudentsImportBloc>()
-                        .add(const StudentsImportEvent.pickFilePressed()),
+                        .add(const StudentsImportPickFilePressed()),
                   ),
           ),
         );

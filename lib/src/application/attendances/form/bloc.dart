@@ -29,19 +29,19 @@ class AttendanceFormBloc
   Future<void> _onEvent(
     AttendanceFormEvent event,
     Emitter<AttendanceFormState> emit,
-  ) async {
-    await event.map(
-      started: (event) => _onStarted(event, emit),
-      dateChanged: (event) => _onDateChanged(event, emit),
-      timeChanged: (event) => _onTimeChanged(event, emit),
-      noteChanged: (event) => _onNoteChanged(event, emit),
-      attendeePressed: (event) => _onAttendeePressed(event, emit),
-      submitted: (event) => _onSubmitted(event, emit),
-    );
+  ) {
+    return switch (event) {
+      AttendanceFormStarted event => _onStarted(event, emit),
+      AttendanceFormDateChanged event => _onDateChanged(event, emit),
+      AttendanceFormTimeChanged event => _onTimeChanged(event, emit),
+      AttendanceFormNoteChanged event => _onNoteChanged(event, emit),
+      AttendanceFormAttendeePressed event => _onAttendeePressed(event, emit),
+      AttendanceFormSubmitted event => _onSubmitted(event, emit),
+    };
   }
 
   Future<void> _onStarted(
-    _Started event,
+    AttendanceFormStarted event,
     Emitter<AttendanceFormState> emit,
   ) async {
     final students = await _studentsRepository.find(event.discipline.id);
@@ -64,9 +64,9 @@ class AttendanceFormBloc
   }
 
   Future<void> _onDateChanged(
-    _DateChanged event,
+    AttendanceFormDateChanged event,
     Emitter<AttendanceFormState> emit,
-  ) async {
+  ) {
     // Only replace the date, not the time.
     final newDate = DateTime(
       event.date.year,
@@ -76,20 +76,20 @@ class AttendanceFormBloc
       state.attendance.date.minute,
     );
 
-    emit(
-      state.copyWith(
-        saveFailureOrSuccessOption: const None(),
-        attendance: state.attendance.copyWith(
-          date: newDate,
-        ),
+    emit(state.copyWith(
+      saveFailureOrSuccessOption: const None(),
+      attendance: state.attendance.copyWith(
+        date: newDate,
       ),
-    );
+    ));
+
+    return Future.value();
   }
 
   Future<void> _onTimeChanged(
-    _TimeChanged event,
+    AttendanceFormTimeChanged event,
     Emitter<AttendanceFormState> emit,
-  ) async {
+  ) {
     // Only replace the time, not the date.
     final newDate = DateTime(
       state.date.year,
@@ -99,33 +99,33 @@ class AttendanceFormBloc
       event.minute,
     );
 
-    emit(
-      state.copyWith(
-        saveFailureOrSuccessOption: const None(),
-        attendance: state.attendance.copyWith(
-          date: newDate,
-        ),
+    emit(state.copyWith(
+      saveFailureOrSuccessOption: const None(),
+      attendance: state.attendance.copyWith(
+        date: newDate,
       ),
-    );
+    ));
+
+    return Future.value();
   }
 
   Future<void> _onNoteChanged(
-    _NoteChanged event,
+    AttendanceFormNoteChanged event,
     Emitter<AttendanceFormState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        attendance: state.attendance.copyWith(
-          note: event.note,
-        ),
+  ) {
+    emit(state.copyWith(
+      attendance: state.attendance.copyWith(
+        note: event.note,
       ),
-    );
+    ));
+
+    return Future.value();
   }
 
   Future<void> _onAttendeePressed(
-    _AttendeePressed event,
+    AttendanceFormAttendeePressed event,
     Emitter<AttendanceFormState> emit,
-  ) async {
+  ) {
     final newAttendees = <Attendee>[
       for (final Attendee attendee in state.attendees)
         if (attendee.studentId == event.attendee.studentId)
@@ -134,16 +134,16 @@ class AttendanceFormBloc
           attendee,
     ];
 
-    emit(
-      state.copyWith(
-        saveFailureOrSuccessOption: const None(),
-        attendees: newAttendees,
-      ),
-    );
+    emit(state.copyWith(
+      saveFailureOrSuccessOption: const None(),
+      attendees: newAttendees,
+    ));
+
+    return Future.value();
   }
 
   Future<void> _onSubmitted(
-    _Submitted event,
+    AttendanceFormSubmitted event,
     Emitter<AttendanceFormState> emit,
   ) async {
     final attendedStudentIds = <String>[
@@ -164,11 +164,9 @@ class AttendanceFormBloc
       [...attendances, attendance],
     );
 
-    emit(
-      state.copyWith(
-        attendance: attendance,
-        saveFailureOrSuccessOption: Some(saveFailureOrSuccess),
-      ),
-    );
+    emit(state.copyWith(
+      attendance: attendance,
+      saveFailureOrSuccessOption: Some(saveFailureOrSuccess),
+    ));
   }
 }

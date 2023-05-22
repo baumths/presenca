@@ -39,11 +39,7 @@ class StudentsFormPage extends StatelessWidget {
           studentsRepository: context.read<StudentsRepository>(),
         );
 
-        final formStarted = StudentsFormEvent.started(
-          initialStudents: initialStudents,
-        );
-
-        return bloc..add(formStarted);
+        return bloc..add(StudentsFormStarted(initialStudents));
       },
       child: BlocListener<StudentsFormBloc, StudentsFormState>(
         listenWhen: (p, c) {
@@ -53,14 +49,13 @@ class StudentsFormPage extends StatelessWidget {
           state.failureOrSuccessOption.fold(
             () {},
             (either) => either.fold(
-              (failure) => failure.whenOrNull(
-                unableToUpdate: () {
-                  SnackBarHelper.showError(
+              (failure) => switch (failure) {
+                StudentFailure.unableToUpdate => SnackBarHelper.showError(
                     context,
                     'Não foi possível salvar lista de alunos.',
-                  );
-                },
-              ),
+                  ),
+                _ => null,
+              },
               (_) {
                 Navigator.pop(context);
                 SnackBarHelper.showSuccess(

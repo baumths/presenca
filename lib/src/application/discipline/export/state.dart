@@ -1,14 +1,20 @@
 part of 'cubit.dart';
 
-@freezed
-class DisciplineExportState with _$DisciplineExportState {
-  const DisciplineExportState._();
+sealed class DisciplineExportState {
+  const DisciplineExportState();
 
-  const factory DisciplineExportState.initial() = _Initial;
-  const factory DisciplineExportState.loading() = _Loading;
-  const factory DisciplineExportState.success({
-    String? snackBarMessage,
-  }) = _Success;
+  bool get isLoading => this is DisciplineExportLoadInProgress;
+}
 
-  bool get isLoading => maybeWhen(loading: () => true, orElse: () => false);
+class DisciplineExportInitial extends DisciplineExportState {
+  const DisciplineExportInitial();
+}
+
+class DisciplineExportLoadInProgress extends DisciplineExportState {
+  const DisciplineExportLoadInProgress();
+}
+
+class DisciplineExportLoadSuccess extends DisciplineExportState {
+  const DisciplineExportLoadSuccess({required this.snackBarMessage});
+  final String? snackBarMessage;
 }

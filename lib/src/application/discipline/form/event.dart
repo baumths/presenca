@@ -1,11 +1,25 @@
 part of 'bloc.dart';
 
-@freezed
-class DisciplineFormEvent with _$DisciplineFormEvent {
-  const factory DisciplineFormEvent.started(
-    Discipline? editingDiscipline,
-  ) = _Started;
-  const factory DisciplineFormEvent.nameChanged(String name) = _NameChanged;
-  const factory DisciplineFormEvent.archivePressed() = _ArchivePressed;
-  const factory DisciplineFormEvent.submitted() = _Submitted;
+sealed class DisciplineFormEvent {
+  const DisciplineFormEvent();
+}
+
+class DisciplineFormStarted extends DisciplineFormEvent {
+  const DisciplineFormStarted(this.editingDiscipline);
+
+  final Discipline? editingDiscipline;
+}
+
+class DisciplineFormNameChanged extends DisciplineFormEvent {
+  const DisciplineFormNameChanged(this.name);
+
+  final String name;
+}
+
+class DisciplineFormArchivePressed extends DisciplineFormEvent {
+  const DisciplineFormArchivePressed();
+}
+
+class DisciplineFormSubmitted extends DisciplineFormEvent {
+  const DisciplineFormSubmitted();
 }

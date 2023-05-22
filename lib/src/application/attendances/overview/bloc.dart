@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/attendance.dart';
 import '../../../domain/discipline.dart';
 
-part 'bloc.freezed.dart';
 part 'event.dart';
 part 'state.dart';
 
@@ -14,7 +12,7 @@ class AttendancesOverviewBloc
     required this.discipline,
     required AttendancesRepository attendancesRepository,
   })  : _attendancesRepository = attendancesRepository,
-        super(const AttendancesOverviewState.loading()) {
+        super(const AttendancesOverviewLoadInProgress()) {
     on<AttendancesOverviewEvent>(_onEvent);
   }
 
@@ -24,14 +22,14 @@ class AttendancesOverviewBloc
   Future<void> _onEvent(
     AttendancesOverviewEvent event,
     Emitter<AttendancesOverviewState> emit,
-  ) async {
-    await event.map(
-      started: (event) => _onStarted(event, emit),
-    );
+  ) {
+    return switch (event) {
+      AttendancesOverviewStarted event => _onStarted(event, emit),
+    };
   }
 
   Future<void> _onStarted(
-    _Started event,
+    AttendancesOverviewStarted event,
     Emitter<AttendancesOverviewState> emit,
   ) async {
     await emit.forEach<List<Attendance>>(
@@ -40,15 +38,9 @@ class AttendancesOverviewBloc
         attendances = List<Attendance>.of(attendances)
           ..sort((a, b) => b.date.compareTo(a.date));
 
-        return AttendancesOverviewState.success(
-          attendances: attendances,
-        );
+        return AttendancesOverviewLoadSuccess(attendances);
       },
-      onError: (_, __) {
-        return const AttendancesOverviewState.success(
-          attendances: [],
-        );
-      },
+      onError: (_, __) => const AttendancesOverviewLoadSuccess([]),
     );
   }
 }

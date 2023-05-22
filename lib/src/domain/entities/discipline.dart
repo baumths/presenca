@@ -4,6 +4,10 @@ import 'package:uuid/uuid.dart';
 
 const Uuid _uuid = Uuid();
 
+enum DisciplineFailure {
+  unableToUpdate,
+}
+
 class Discipline {
   final String id;
   final String name;

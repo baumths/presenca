@@ -68,14 +68,12 @@ class AttendanceFormNote extends StatelessWidget {
 
           final note = await showDialog<String>(
             context: context,
-            builder: (_) {
-              return NotesDialog(
-                initialNote: bloc.state.attendance.note,
-              );
-            },
+            builder: (_) => NotesDialog(
+              initialNote: bloc.state.attendance.note,
+            ),
           );
           if (note != null) {
-            bloc.add(AttendanceFormEvent.noteChanged(note));
+            bloc.add(AttendanceFormNoteChanged(note));
           }
         },
       ),

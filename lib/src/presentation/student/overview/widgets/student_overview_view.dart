@@ -22,13 +22,13 @@ class StudentOverviewView extends StatelessWidget {
       ),
       body: BlocBuilder<StudentOverviewBloc, StudentOverviewState>(
         builder: (BuildContext context, StudentOverviewState state) {
-          return state.map(
-            loadInProgress: (_) => const _LoadingStudent(),
-            loadSuccess: (StudentOverviewLoadSuccess state) => StudentOverview(
-              student: state.student,
-              attendees: state.attendees,
-            ),
-          );
+          return switch (state) {
+            StudentOverviewLoadInProgress() => const _LoadingStudent(),
+            StudentOverviewLoadSuccess state => StudentOverview(
+                student: state.student,
+                attendees: state.attendees,
+              ),
+          };
         },
       ),
     );
