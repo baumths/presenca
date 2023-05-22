@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/discipline.dart';
 
-part 'bloc.freezed.dart';
 part 'event.dart';
 part 'state.dart';
 
@@ -12,7 +10,7 @@ class DisciplinesOverviewBloc
   DisciplinesOverviewBloc({
     required DisciplinesRepository disciplinesRepository,
   })  : _disciplinesRepository = disciplinesRepository,
-        super(const DisciplinesOverviewState.loadInProgress()) {
+        super(const DisciplinesOverviewLoadInProgress()) {
     on<DisciplinesOverviewEvent>(_onEvent);
   }
 
@@ -21,26 +19,22 @@ class DisciplinesOverviewBloc
   Future<void> _onEvent(
     DisciplinesOverviewEvent event,
     Emitter<DisciplinesOverviewState> emit,
-  ) async {
-    await event.map(
-      started: (event) => _onStarted(event, emit),
-    );
+  ) {
+    return switch (event) {
+      DisciplinesOverviewStarted event => _onStarted(event, emit),
+    };
   }
 
   Future<void> _onStarted(
-    _Started event,
+    DisciplinesOverviewStarted event,
     Emitter<DisciplinesOverviewState> emit,
   ) async {
     await emit.forEach(
       _disciplinesRepository.watch(),
-      onError: (_, __) {
-        return const DisciplinesOverviewState.loadSuccess(
-          disciplines: [],
-        );
-      },
+      onError: (_, __) => const DisciplinesOverviewLoadSuccess([]),
       onData: (List<Discipline> disciplines) {
-        return DisciplinesOverviewState.loadSuccess(
-          disciplines: _sortDisciplines(disciplines),
+        return DisciplinesOverviewLoadSuccess(
+          _sortDisciplines(disciplines),
         );
       },
     );
