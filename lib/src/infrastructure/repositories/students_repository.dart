@@ -41,7 +41,7 @@ class StudentsRepositoryImpl implements StudentsRepository {
       await _storage.put(disciplineId, studentsToHive(students));
       return const Right(unit);
     } on HiveError {
-      return const Left(StudentFailure.unableToUpdate());
+      return const Left(StudentFailure.unableToUpdate);
     }
   }
 

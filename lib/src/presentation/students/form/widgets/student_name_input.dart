@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/students/form/bloc.dart';
+import '../../../../domain/student.dart';
 
 class StudentNameInput extends StatefulWidget {
   const StudentNameInput({super.key});
@@ -97,14 +98,15 @@ class _StudentNameInputState extends State<StudentNameInput> {
           state.failureOrSuccessOption.fold(
             () {},
             (either) => either.fold(
-              (failure) => failure.whenOrNull(
-                emptyName: () => state.selectedStudent.fold(
-                  () {},
-                  (_) {
-                    errorMessage = 'Informe um novo nome para o(a) aluno(a).';
-                  },
-                ),
-              ),
+              (failure) => switch (failure) {
+                StudentFailure.emptyName => state.selectedStudent.fold(
+                    () {},
+                    (_) {
+                      errorMessage = 'Informe um novo nome para o(a) aluno(a).';
+                    },
+                  ),
+                _ => null,
+              },
               (_) {},
             ),
           );

@@ -6,6 +6,10 @@ import '../../shared/utils.dart' show listEquals;
 
 const Uuid _uuid = Uuid();
 
+enum AttendanceFailure {
+  unableToUpdate,
+}
+
 class Attendance {
   final String id;
   final String disciplineId;

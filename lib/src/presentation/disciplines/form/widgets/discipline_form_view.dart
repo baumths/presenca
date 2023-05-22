@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/discipline/form/bloc.dart';
+import '../../../../domain/discipline.dart';
 import '../../../../shared/shared.dart';
 
 class DisciplineFormView extends StatelessWidget {
@@ -17,15 +18,14 @@ class DisciplineFormView extends StatelessWidget {
         state.saveFailureOrSuccessOption.fold(
           () {},
           (either) => either.fold(
-            (failure) => failure.when(
-              unableToUpdate: () {
-                final String message = state.isEditing
-                    ? 'Não foi possível atualizar a disciplina.'
-                    : 'Não foi possível criar a disciplina.';
-
-                SnackBarHelper.showError(context, message);
-              },
-            ),
+            (failure) => switch (failure) {
+              DisciplineFailure.unableToUpdate => SnackBarHelper.showError(
+                  context,
+                  state.isEditing
+                      ? 'Não foi possível atualizar a disciplina.'
+                      : 'Não foi possível criar a disciplina.',
+                ),
+            },
             (_) {
               final String message = state.isEditing
                   ? 'Disciplina alterada com sucesso.'

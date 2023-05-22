@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 
 import '../entities/attendance.dart';
-import '../failures/attendance_failure.dart';
 
 abstract class AttendancesRepository {
   Future<List<Attendance>> find(String disciplineId);

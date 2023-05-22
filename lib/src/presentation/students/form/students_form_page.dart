@@ -53,14 +53,13 @@ class StudentsFormPage extends StatelessWidget {
           state.failureOrSuccessOption.fold(
             () {},
             (either) => either.fold(
-              (failure) => failure.whenOrNull(
-                unableToUpdate: () {
-                  SnackBarHelper.showError(
+              (failure) => switch (failure) {
+                StudentFailure.unableToUpdate => SnackBarHelper.showError(
                     context,
                     'Não foi possível salvar lista de alunos.',
-                  );
-                },
-              ),
+                  ),
+                _ => null,
+              },
               (_) {
                 Navigator.pop(context);
                 SnackBarHelper.showSuccess(

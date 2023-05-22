@@ -102,13 +102,9 @@ class StudentsFormBloc extends Bloc<StudentsFormEvent, StudentsFormState> {
       (editingStudent) {
         // Editing student
         if (studentName.isEmpty) {
-          emit(
-            state.copyWith(
-              failureOrSuccessOption: const Some(
-                Left(StudentFailure.emptyName()),
-              ),
-            ),
-          );
+          emit(state.copyWith(
+            failureOrSuccessOption: const Some(Left(StudentFailure.emptyName)),
+          ));
           return;
         }
 
