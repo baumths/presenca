@@ -6,7 +6,8 @@ import '../../../../domain/student.dart';
 
 class DisciplineAggregate {
   static final RegExp fileNameRegEx = RegExp(r'[^\w\p{L}]', unicode: true);
-  static final DateFormat dateFormat = DateFormat('d-M-y_HH-mm');
+  static final DateFormat timestampDateFormat = DateFormat('dd-MM-yyyy_HH-mm');
+  static final DateFormat attendanceDateFormat = DateFormat('dd/MM/yyyy HH:mm');
 
   const DisciplineAggregate({
     required this.discipline,
@@ -23,29 +24,29 @@ class DisciplineAggregate {
       .replaceAll(fileNameRegEx, '')
       .toLowerCase();
 
-  String get timestamp => dateFormat.format(DateTime.now());
+  String get timestamp => timestampDateFormat.format(DateTime.now());
 
   String get timestampedFileName => '${fileName}_$timestamp';
 
   List<List<String>> toCsv() {
     return [
-      _buildHeader(),
-      ..._generateBody(),
-      _buildNoteRow(),
+      _buildHeaders(),
+      ..._generateStudentRows(),
+      _buildNotesRow(),
     ];
   }
 
-  List<String> _buildHeader() {
+  List<String> _buildHeaders() {
     final header = <String>['Nome'];
 
     for (final attendance in attendances) {
-      header.add(dateFormat.format(attendance.date));
+      header.add(attendanceDateFormat.format(attendance.date));
     }
 
     return header;
   }
 
-  List<String> _buildNoteRow() {
+  List<String> _buildNotesRow() {
     final notes = <String>['Anotações'];
 
     for (final attendance in attendances) {
@@ -55,7 +56,7 @@ class DisciplineAggregate {
     return notes;
   }
 
-  Iterable<List<String>> _generateBody() sync* {
+  Iterable<List<String>> _generateStudentRows() sync* {
     // TODO: cache attendance.attendedStudentIds removing already checked ids.
     for (final student in students) {
       final name = student.active ? student.name : '${student.name} (Inativo)';
