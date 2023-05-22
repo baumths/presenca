@@ -22,17 +22,17 @@ class DisciplineFormBloc
   Future<void> _onEvent(
     DisciplineFormEvent event,
     Emitter<DisciplineFormState> emit,
-  ) async {
-    await event.map(
-      started: (event) => _onStarted(event, emit),
-      nameChanged: (event) => _onNameChanged(event, emit),
-      archivePressed: (event) => _onArchivePressed(event, emit),
-      submitted: (event) => _onSubmitted(event, emit),
-    );
+  ) {
+    return switch (event) {
+      DisciplineFormStarted event => _onStarted(event, emit),
+      DisciplineFormNameChanged event => _onNameChanged(event, emit),
+      DisciplineFormArchivePressed event => _onArchivePressed(event, emit),
+      DisciplineFormSubmitted event => _onSubmitted(event, emit),
+    };
   }
 
   Future<void> _onStarted(
-    _Started event,
+    DisciplineFormStarted event,
     Emitter<DisciplineFormState> emit,
   ) async {
     final Discipline? editingDiscipline = event.editingDiscipline;
@@ -51,7 +51,7 @@ class DisciplineFormBloc
   }
 
   Future<void> _onNameChanged(
-    _NameChanged event,
+    DisciplineFormNameChanged event,
     Emitter<DisciplineFormState> emit,
   ) async {
     final String name = event.name.trim();
@@ -65,7 +65,7 @@ class DisciplineFormBloc
   }
 
   Future<void> _onArchivePressed(
-    _ArchivePressed event,
+    DisciplineFormArchivePressed event,
     Emitter<DisciplineFormState> emit,
   ) async {
     emit(state.copyWith(
@@ -76,7 +76,7 @@ class DisciplineFormBloc
   }
 
   Future<void> _onSubmitted(
-    _Submitted event,
+    DisciplineFormSubmitted event,
     Emitter<DisciplineFormState> emit,
   ) async {
     Either<DisciplineFailure, Unit>? failureOrSuccess;

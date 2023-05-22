@@ -126,13 +126,13 @@ class _DisciplineNameInputState extends State<DisciplineNameInput> {
           onChanged: (String text) {
             context
                 .read<DisciplineFormBloc>()
-                .add(DisciplineFormEvent.nameChanged(text));
+                .add(DisciplineFormNameChanged(text));
           },
           onFieldSubmitted: (_) {
             if (state.canSubmit) {
               context
                   .read<DisciplineFormBloc>()
-                  .add(const DisciplineFormEvent.submitted());
+                  .add(const DisciplineFormSubmitted());
             } else {
               _focusNode?.requestFocus();
             }
@@ -169,7 +169,7 @@ class ArchiveButton extends StatelessWidget {
           ),
           onPressed: () => context
               .read<DisciplineFormBloc>()
-              .add(const DisciplineFormEvent.archivePressed()),
+              .add(const DisciplineFormArchivePressed()),
         );
       },
     );
@@ -188,7 +188,7 @@ class DisciplineFormSaveButton extends StatelessWidget {
           onPressed: state.canSubmit
               ? () => context
                   .read<DisciplineFormBloc>()
-                  .add(const DisciplineFormEvent.submitted())
+                  .add(const DisciplineFormSubmitted())
               : null,
           child: const Text('Salvar'),
         );
