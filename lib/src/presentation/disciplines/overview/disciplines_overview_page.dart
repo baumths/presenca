@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../application/discipline/overview/bloc.dart';
 import '../../../domain/discipline.dart';
 import '../../app/router.dart';
-import '../../settings/settings.dart';
 
 class DisciplinesOverviewPage extends StatelessWidget {
   const DisciplinesOverviewPage({super.key});
@@ -48,13 +47,7 @@ class DisciplineOverviewView extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.palette_outlined),
               tooltip: 'Tema',
-              onPressed: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: ThemeSettingsView.bottomSheetBuilder,
-                );
-              },
+              onPressed: () => AppRouter.showThemeSettings(context),
             ),
           ],
         ),
