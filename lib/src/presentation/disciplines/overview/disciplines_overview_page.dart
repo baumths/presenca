@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 import '../../../application/discipline/overview/bloc.dart';
 import '../../../domain/discipline.dart';
@@ -125,11 +125,14 @@ class _AboutButtonState extends State<AboutButton> {
                         child: Icon(Icons.task_alt, size: 40),
                       ),
                       onTap: () async {
-                        const url = 'https://github.com/baumths/presenca';
-                        final uri = Uri.parse(url);
+                        final uri = Uri(
+                          scheme: 'https',
+                          host: 'github.com',
+                          path: '/baumths/presenca',
+                        );
 
-                        if (await canLaunchUrl(uri)) {
-                          launchUrl(uri);
+                        if (await url_launcher.canLaunchUrl(uri)) {
+                          url_launcher.launchUrl(uri);
                         }
                       },
                     ),
