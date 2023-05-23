@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../application/discipline/overview/bloc.dart';
 import '../../../domain/discipline.dart';
+import '../../../shared/shared.dart';
 import '../../app/router.dart';
 
 class DisciplinesOverviewPage extends StatelessWidget {
@@ -34,6 +37,7 @@ class DisciplineOverviewView extends StatelessWidget {
           SliverAppBar(
             pinned: true,
             title: Text('Disciplinas'),
+            actions: [AboutButton()],
           ),
           DisciplinesOverviewBody(),
         ],
@@ -70,6 +74,69 @@ class CreateDisciplineFab extends StatelessWidget {
           ),
         _ => const SizedBox(),
       },
+    );
+  }
+}
+
+class AboutButton extends StatefulWidget {
+  const AboutButton({super.key});
+
+  @override
+  State<AboutButton> createState() => _AboutButtonState();
+}
+
+class _AboutButtonState extends State<AboutButton> {
+  PackageInfo? _packageInfo;
+
+  void updatePackageInfo(PackageInfo? packageInfo) {
+    _packageInfo = packageInfo;
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    PackageInfo.fromPlatform().then(updatePackageInfo, onError: (_) {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeUpwardsSwitcher(
+      child: _packageInfo == null
+          ? const SizedBox.shrink()
+          : IconButton(
+              tooltip: 'Sobre o Presença',
+              icon: const Icon(Icons.question_mark, size: 16),
+              onPressed: () => showAboutDialog(
+                context: context,
+                applicationVersion: _packageInfo!.version,
+                applicationIcon: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Material(
+                    shape: const CircleBorder(),
+                    color: Colors.teal,
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      child: const SizedBox.square(
+                        dimension: 48,
+                        child: Icon(Icons.task_alt, size: 40),
+                      ),
+                      onTap: () async {
+                        const url = 'https://github.com/baumths/presenca';
+                        final uri = Uri.parse(url);
+
+                        if (await canLaunchUrl(uri)) {
+                          launchUrl(uri);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
     );
   }
 }
