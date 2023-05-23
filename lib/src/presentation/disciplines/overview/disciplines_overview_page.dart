@@ -103,9 +103,8 @@ class _DisciplinesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DisciplinesOverviewBloc, DisciplinesOverviewState>(
       builder: (context, state) => switch (state) {
-        DisciplinesOverviewLoadInProgress() => const SliverToBoxAdapter(
-            child: LinearProgressIndicator(),
-          ),
+        DisciplinesOverviewLoadInProgress() =>
+          const SliverToBoxAdapter(child: LinearProgressIndicator()),
         DisciplinesOverviewLoadSuccess state when state.disciplines.isEmpty =>
           const _EmptyDisciplines(),
         DisciplinesOverviewLoadSuccess state => SliverPadding(
@@ -166,8 +165,6 @@ class _EmptyDisciplines extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return SliverPadding(
       padding: const EdgeInsets.all(16),
       sliver: SliverList.list(children: [
@@ -176,11 +173,7 @@ class _EmptyDisciplines extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
-        TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: colorScheme.secondaryContainer,
-            textStyle: TextStyle(color: colorScheme.onSecondaryContainer),
-          ),
+        FilledButton.tonal(
           child: const Text('Criar Disciplina'),
           onPressed: () => AppRouter.showDisciplineForm(context, null),
         ),

@@ -60,8 +60,6 @@ class _EmptyStudents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(
@@ -72,16 +70,12 @@ class _EmptyStudents extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
-          TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: colorScheme.secondaryContainer,
-              textStyle: TextStyle(color: colorScheme.onSecondaryContainer),
-            ),
+          FilledButton.tonal(
+            child: const Text('Cadastrar Alunos'),
             onPressed: () {
               final bloc = context.read<StudentsOverviewBloc>();
               AppRouter.showStudentsForm(context, bloc.discipline);
             },
-            child: const Text('Cadastrar Alunos'),
           ),
           const Spacer(flex: 2),
         ],
