@@ -71,7 +71,6 @@ class StudentsImportBody extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            BottomSheetDragHandle(),
             Text(
               'Importar Lista de Alunos',
               style: TextStyle(fontSize: 22),

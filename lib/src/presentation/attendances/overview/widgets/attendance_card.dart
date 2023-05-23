@@ -49,6 +49,7 @@ class AttendanceCardContent extends StatelessWidget {
           showModalBottomSheet<void>(
             context: context,
             useSafeArea: true,
+            showDragHandle: false,
             isScrollControlled: true,
             builder: (_) => DraggableScrollableSheet(
               expand: false,

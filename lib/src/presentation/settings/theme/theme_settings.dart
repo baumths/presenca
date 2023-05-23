@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/settings/theme/cubit.dart';
-import '../../../shared/shared.dart' show BottomSheetDragHandle;
 
 class ThemeSettingsView extends StatelessWidget {
   const ThemeSettingsView({super.key, this.scrollController});
@@ -25,23 +24,17 @@ class ThemeSettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      /// Top padding added by [BottomSheetDragHandle].
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: CustomScrollView(
         shrinkWrap: true,
         controller: scrollController,
         slivers: [
-          SliverList(
-            delegate: SliverChildListDelegate(
-              const [
-                BottomSheetDragHandle(),
-                Header(),
-                SizedBox(height: 16),
-                ThemeModeSelector(),
-                SizedBox(height: 16),
-              ],
-            ),
-          ),
+          SliverList.list(children: const [
+            Header(),
+            SizedBox(height: 16),
+            ThemeModeSelector(),
+            SizedBox(height: 16),
+          ]),
           const SliverColorSelector(colors: Colors.primaries),
         ],
       ),
