@@ -78,39 +78,35 @@ class StudentOverview extends StatelessWidget {
 
     return CustomScrollView(
       slivers: [
-        SliverList(
-          delegate: SliverChildListDelegate([
-            _StudentSummary(
-              studentName: student.name,
-              attendeesCount: count,
-              totalAttendances: total,
-            ),
-            const SizedBox(height: 24),
-            const _SectionHeader('Grade de Chamadas'),
-          ]),
-        ),
+        SliverList.list(children: [
+          _StudentSummary(
+            studentName: student.name,
+            attendeesCount: count,
+            totalAttendances: total,
+          ),
+          const SizedBox(height: 24),
+          const _SectionHeader('Grade de Chamadas'),
+        ]),
         if (attendees.isNotEmpty)
           SliverPadding(
             padding: const EdgeInsets.all(16),
-            sliver: SliverGrid(
+            sliver: SliverGrid.builder(
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 128,
                 mainAxisExtent: 64,
                 mainAxisSpacing: 8,
                 crossAxisSpacing: 8,
               ),
-              delegate: SliverChildBuilderDelegate(
-                childCount: attendees.length,
-                (BuildContext context, int index) {
-                  final Attendee attendee = attendees[index];
+              itemCount: attendees.length,
+              itemBuilder: (BuildContext context, int index) {
+                final Attendee attendee = attendees[index];
 
-                  return AttendeeTile(
-                    date: dateFormatter.format(attendee.date),
-                    time: timeFormatter.format(attendee.date),
-                    attended: attendee.attended,
-                  );
-                },
-              ),
+                return AttendeeTile(
+                  date: dateFormatter.format(attendee.date),
+                  time: timeFormatter.format(attendee.date),
+                  attended: attendee.attended,
+                );
+              },
             ),
           ),
       ],

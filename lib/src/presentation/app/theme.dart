@@ -28,6 +28,7 @@ ThemeData _createThemeDataFromColorScheme(ColorScheme colorScheme) {
     dialogTheme: const DialogTheme(shape: kDefaultShapeBorder),
     dividerTheme: const DividerThemeData(thickness: 1.0),
     bottomSheetTheme: const BottomSheetThemeData(
+      showDragHandle: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12),

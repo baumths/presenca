@@ -96,6 +96,7 @@ class DisciplineDetailsBottomBar extends StatelessWidget {
               await showModalBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
+                showDragHandle: true,
                 builder: (_) => DisciplineExportPage(discipline: discipline),
               );
             },

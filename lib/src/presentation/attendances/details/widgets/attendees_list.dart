@@ -1,5 +1,3 @@
-import 'dart:math' as math show max;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,26 +30,18 @@ class AttendeesList extends StatelessWidget {
             return const EmptyAttendeesList();
           }
 
-          // TODO: Use SliverList.separated once available on stable
-          return SliverList(
-            delegate: SliverChildBuilderDelegate(
-              childCount: math.max(0, state.students.length * 2 - 1),
-              (context, index) {
-                final int studentIndex = index ~/ 2;
+          return SliverList.separated(
+            itemCount: state.students.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 8),
+            itemBuilder: (_, int index) {
+              final student = state.students[index];
 
-                if (index.isEven) {
-                  final student = state.students[studentIndex];
-
-                  return AttendeeTile(
-                    key: Key(student.id),
-                    student: student,
-                    attended: state.didStudentAttend(student),
-                  );
-                }
-
-                return const SizedBox(height: 8);
-              },
-            ),
+              return AttendeeTile(
+                key: Key(student.id),
+                student: student,
+                attended: state.didStudentAttend(student),
+              );
+            },
           );
         },
       ),

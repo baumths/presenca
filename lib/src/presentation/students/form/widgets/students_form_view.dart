@@ -91,30 +91,28 @@ class StudentsFormStudentList extends StatelessWidget {
 
         return SliverPadding(
           padding: const EdgeInsets.only(top: 8),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              childCount: students.length,
-              (context, int index) {
-                final student = students[index];
+          sliver: SliverList.builder(
+            itemCount: students.length,
+            itemBuilder: (context, int index) {
+              final student = students[index];
 
-                final tile = StudentTile(
-                  key: Key(student.id),
-                  student: student,
-                );
+              final tile = StudentTile(
+                key: Key(student.id),
+                student: student,
+              );
 
-                if (index.isOdd) {
-                  return tile;
-                }
+              if (index.isOdd) {
+                return tile;
+              }
 
-                return ColoredBox(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .surfaceVariant
-                      .withOpacity(.3),
-                  child: tile,
-                );
-              },
-            ),
+              return ColoredBox(
+                color: Theme.of(context)
+                    .colorScheme
+                    .surfaceVariant
+                    .withOpacity(.3),
+                child: tile,
+              );
+            },
           ),
         );
       },

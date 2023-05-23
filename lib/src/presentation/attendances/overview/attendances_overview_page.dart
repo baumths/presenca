@@ -86,8 +86,6 @@ class EmptyAttendances extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(
@@ -98,18 +96,14 @@ class EmptyAttendances extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
-          TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: colorScheme.secondaryContainer,
-              textStyle: TextStyle(color: colorScheme.onSecondaryContainer),
-            ),
+          FilledButton.tonal(
+            child: const Text('Iniciar Chamada'),
             onPressed: () {
               AppRouter.showAttendanceForm(
                 context,
                 context.read<AttendancesOverviewBloc>().discipline,
               );
             },
-            child: const Text('Iniciar Chamada'),
           ),
           const Spacer(flex: 2),
         ],
