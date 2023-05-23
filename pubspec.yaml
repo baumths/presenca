@@ -2,7 +2,7 @@ name: presenca
 description: Your disciplines attendance helper.
 
 publish_to: 'none'
-version: 1.1.2
+version: 1.2.0
 
 environment:
   sdk: ^3.0.1
