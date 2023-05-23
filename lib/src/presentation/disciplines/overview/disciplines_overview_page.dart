@@ -170,23 +170,21 @@ class _EmptyDisciplines extends StatelessWidget {
 
     return SliverPadding(
       padding: const EdgeInsets.all(16),
-      sliver: SliverList(
-        delegate: SliverChildListDelegate([
-          const Text(
-            'Você ainda não possui nenhuma disciplina.',
-            textAlign: TextAlign.center,
+      sliver: SliverList.list(children: [
+        const Text(
+          'Você ainda não possui nenhuma disciplina.',
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 24),
+        TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: colorScheme.secondaryContainer,
+            textStyle: TextStyle(color: colorScheme.onSecondaryContainer),
           ),
-          const SizedBox(height: 24),
-          TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: colorScheme.secondaryContainer,
-              textStyle: TextStyle(color: colorScheme.onSecondaryContainer),
-            ),
-            child: const Text('Criar Disciplina'),
-            onPressed: () => AppRouter.showDisciplineForm(context, null),
-          ),
-        ]),
-      ),
+          child: const Text('Criar Disciplina'),
+          onPressed: () => AppRouter.showDisciplineForm(context, null),
+        ),
+      ]),
     );
   }
 }
