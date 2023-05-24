@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart' as url_launcher;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../application/discipline/overview/bloc.dart';
 import '../../../domain/discipline.dart';
@@ -131,8 +131,11 @@ class _AboutButtonState extends State<AboutButton> {
                           path: '/baumths/presenca',
                         );
 
-                        if (await url_launcher.canLaunchUrl(uri)) {
-                          url_launcher.launchUrl(uri);
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
                         }
                       },
                     ),
