@@ -6,9 +6,15 @@ import '../../../../domain/student.dart';
 
 class DisciplineAggregate {
   static final RegExp fileNameRegEx = RegExp(r'[^\w\p{L}]', unicode: true);
+
   static final DateFormat timestampDateFormat = DateFormat('dd-MM-yyyy_HH-mm');
   static final DateFormat attendanceDateFormat = DateFormat('dd/MM/yyyy HH:mm');
 
+  // Tags used when creating/parsing the aggragated CSV table.
+  static const String nameTag = 'Nome';
+  static const String notesTag = 'Anotações';
+  static const String attendedTag = 'Presente';
+  static const String inactiveTag = '(Inativo)';
   const DisciplineAggregate({
     required this.discipline,
     required this.students,
@@ -37,7 +43,7 @@ class DisciplineAggregate {
   }
 
   List<String> _buildHeaders() {
-    final header = <String>['Nome'];
+    final header = <String>[nameTag];
 
     for (final attendance in attendances) {
       header.add(attendanceDateFormat.format(attendance.date));
@@ -47,7 +53,7 @@ class DisciplineAggregate {
   }
 
   List<String> _buildNotesRow() {
-    final notes = <String>['Anotações'];
+    final notes = <String>[notesTag];
 
     for (final attendance in attendances) {
       notes.add(attendance.note);
@@ -59,12 +65,13 @@ class DisciplineAggregate {
   Iterable<List<String>> _generateStudentRows() sync* {
     // TODO: cache attendance.attendedStudentIds removing already checked ids.
     for (final student in students) {
-      final name = student.active ? student.name : '${student.name} (Inativo)';
-      final studentRow = [name];
+      final studentRow = [
+        student.active ? student.name : '${student.name} $inactiveTag',
+      ];
 
       for (final attendance in attendances) {
         if (attendance.attendedStudentIds.contains(student.id)) {
-          studentRow.add('Presente');
+          studentRow.add(attendedTag);
         } else {
           studentRow.add('');
         }
