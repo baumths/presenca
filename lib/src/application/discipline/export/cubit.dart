@@ -6,7 +6,7 @@ import '../../../domain/attendance.dart';
 import '../../../domain/discipline.dart';
 import '../../../domain/student.dart';
 import '../../../infrastructure/services.dart';
-import 'models/discipline_aggregate.dart';
+import '../common/discipline_aggregate.dart';
 
 part 'state.dart';
 

@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart';
 
-import '../../../../domain/attendance.dart';
-import '../../../../domain/discipline.dart';
-import '../../../../domain/student.dart';
+import '../../../domain/attendance.dart';
+import '../../../domain/discipline.dart';
+import '../../../domain/student.dart';
 
 class DisciplineAggregate {
   static final RegExp fileNameRegEx = RegExp(r'[^\w\p{L}]', unicode: true);
