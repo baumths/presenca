@@ -185,7 +185,7 @@ class SampleImportTable extends StatelessWidget {
         ),
         columns: const [
           DataColumn(label: Text('Nome')),
-          DataColumn(label: Text('dd/mm/aaaa hh:mm')),
+          DataColumn(label: Text('DD/MM/AAAA HH:MM')),
           DataColumn(label: Text('01/01/2000 00:00')),
         ],
         rows: const [

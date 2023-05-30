@@ -118,7 +118,7 @@ class DisciplineFormBloc
             'Falha ao interpretar data e hora de chamada. '
                 'Linha 1, Coluna ${failure.column + 1}:\n'
                 'Formato recebido: "${failure.actual}"\n'
-                'Formato esperado: "dd/mm/aaaa hh:mm"',
+                'Formato esperado: "DD/MM/AAAA HH:MM"',
         };
 
         emit(state.copyWith(
