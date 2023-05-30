@@ -140,23 +140,28 @@ class DisciplineImportFailedDialog extends StatelessWidget {
       iconColor: colorScheme.error,
       iconPadding: const EdgeInsetsDirectional.fromSTEB(24, 24, 24, 12),
       contentPadding: const EdgeInsets.only(bottom: 24),
-      content: Column(children: [
-        const Divider(height: 24),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Text(
-            failure.message,
-            style: TextStyle(
-              fontSize: 12,
-              color: colorScheme.onSurfaceVariant,
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Divider(height: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Text(
+              failure.message,
+              style: TextStyle(
+                fontSize: 12,
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
-        ),
-        const Divider(height: 24),
-        const Text('Tabela de Exemplo', style: TextStyle(fontSize: 16)),
-        const SizedBox(height: 12),
-        const SampleImportTable(),
-      ]),
+          const Divider(height: 24),
+          const Center(
+            child: Text('Tabela de Exemplo', style: TextStyle(fontSize: 16)),
+          ),
+          const SizedBox(height: 12),
+          const SampleImportTable(),
+        ],
+      ),
     );
   }
 }
