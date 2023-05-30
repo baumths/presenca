@@ -12,7 +12,7 @@ class FilePickerAdapterImpl extends FilePickerAdapter {
   Future<List<List<String>>> pickCsv() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['csv'],
+      allowedExtensions: ['text/csv', 'csv'],
       withReadStream: true,
     );
 
