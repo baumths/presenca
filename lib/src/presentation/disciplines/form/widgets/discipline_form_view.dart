@@ -5,6 +5,8 @@ import '../../../../application/discipline/form/bloc.dart';
 import '../../../../domain/discipline.dart';
 import '../../../../shared/shared.dart';
 
+import 'discipline_import.dart';
+
 class DisciplineFormView extends StatelessWidget {
   const DisciplineFormView({super.key});
 
@@ -58,14 +60,35 @@ class DisciplineFormBody extends StatelessWidget {
         children: [
           DisciplineNameInput(),
           SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              ArchiveButton(),
-              DisciplineFormSaveButton(),
-            ],
+          ActionsBar(),
+        ],
+      ),
+    );
+  }
+}
+
+class ActionsBar extends StatelessWidget {
+  const ActionsBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const IconButtonTheme(
+      data: IconButtonThemeData(
+        style: ButtonStyle(
+          shape: MaterialStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
           ),
+        ),
+      ),
+      child: Row(
+        children: [
+          ArchiveButton(),
+          SizedBox(width: 8),
+          ImportButton(),
+          Spacer(),
+          DisciplineFormSaveButton(),
         ],
       ),
     );
@@ -152,21 +175,12 @@ class ArchiveButton extends StatelessWidget {
       buildWhen: (p, c) => p.discipline.isArchived != c.discipline.isArchived,
       builder: (context, state) {
         final isArchived = state.discipline.isArchived;
-        final theme = Theme.of(context);
 
-        return IconButton(
+        return IconButton.filledTonal(
           tooltip: 'Toque para ${isArchived ? 'desarquivar' : 'arquivar'}',
           isSelected: isArchived,
           selectedIcon: const Icon(Icons.unarchive),
           icon: const Icon(Icons.archive_outlined),
-          color: theme.colorScheme.secondary,
-          padding: const EdgeInsets.all(12),
-          style: IconButton.styleFrom(
-            backgroundColor: theme.colorScheme.secondaryContainer,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            ),
-          ),
           onPressed: () => context
               .read<DisciplineFormBloc>()
               .add(const DisciplineFormArchivePressed()),
