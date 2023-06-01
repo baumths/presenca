@@ -115,10 +115,10 @@ class DisciplineFormBloc
         final message = switch (failure) {
           InvalidTableFormat() => 'Formato de tabela inválido.',
           InvalidAttendanceDateFormat failure =>
-            'Falha ao interpretar data e hora de chamada. '
-                'Linha 1, Coluna ${failure.column + 1}:\n'
-                'Formato recebido: "${failure.actual}"\n'
-                'Formato esperado: "DD/MM/AAAA HH:MM"',
+            'Falha ao interpretar data e hora de chamada na '
+                'linha 1, coluna ${failure.column + 1}:\n'
+                'Esperado: "dd/mm/aaaa hh:mm"\n'
+                'Encontrado: "${failure.actual}"',
         };
 
         emit(state.copyWith(
