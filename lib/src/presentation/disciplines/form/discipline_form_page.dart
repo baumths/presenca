@@ -6,10 +6,7 @@ import '../../../domain/discipline.dart';
 import 'widgets/discipline_form_view.dart';
 
 class DisciplineFormPage extends StatelessWidget {
-  const DisciplineFormPage({
-    super.key,
-    this.editingDiscipline,
-  });
+  const DisciplineFormPage({super.key, this.editingDiscipline});
 
   final Discipline? editingDiscipline;
 
@@ -19,6 +16,9 @@ class DisciplineFormPage extends StatelessWidget {
       create: (_) {
         final bloc = DisciplineFormBloc(
           disciplinesRepository: context.read(),
+          attendancesRepository: context.read(),
+          studentsRepository: context.read(),
+          filePicker: context.read(),
         );
 
         return bloc..add(DisciplineFormStarted(editingDiscipline));

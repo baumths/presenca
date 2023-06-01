@@ -1,4 +1,4 @@
-import 'dart:convert' show utf8;
+import 'dart:io' show File;
 
 import 'package:csv/csv.dart' show CsvToListConverter;
 import 'package:file_picker/file_picker.dart';
@@ -7,38 +7,27 @@ abstract class FilePickerAdapter {
   Future<List<List<String>>> pickCsv();
 }
 
+const _csvToListConverter = CsvToListConverter(
+  shouldParseNumbers: false,
+);
+
 class FilePickerAdapterImpl extends FilePickerAdapter {
   @override
   Future<List<List<String>>> pickCsv() async {
     final result = await FilePicker.platform.pickFiles(
-      withReadStream: true,
-      // Not working
-      // type: FileType.custom,
-      // allowedExtensions: ['csv'],
+      type: FileType.custom,
+      allowedExtensions: ['text/csv', 'csv'],
     );
 
-    if (result == null) {
+    if (result == null || result.files.isEmpty) {
       return const [];
     }
 
-    final PlatformFile file = result.files.single;
-
-    if (file.extension != 'csv') {
-      // TODO(future): return a [Failure] to inform user
+    try {
+      final content = await File(result.files.single.path!).readAsString();
+      return _csvToListConverter.convert<String>(content);
+    } on Exception {
       return const [];
     }
-    final Stream<List<int>>? dataStream = file.readStream;
-
-    if (dataStream == null) {
-      return const [];
-    }
-
-    final List<List<String>> csv = await dataStream
-        .transform(utf8.decoder)
-        .transform(const CsvToListConverter())
-        .map((row) => row.map((dynamic obj) => '$obj').toList())
-        .toList();
-
-    return csv;
   }
 }

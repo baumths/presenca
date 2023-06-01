@@ -20,6 +20,14 @@ class DisciplineFormArchivePressed extends DisciplineFormEvent {
   const DisciplineFormArchivePressed();
 }
 
+class DisciplineFormImportPressed extends DisciplineFormEvent {
+  const DisciplineFormImportPressed();
+}
+
+class DisciplineFormImportReset extends DisciplineFormEvent {
+  const DisciplineFormImportReset();
+}
+
 class DisciplineFormSubmitted extends DisciplineFormEvent {
   const DisciplineFormSubmitted();
 }
