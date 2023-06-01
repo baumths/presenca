@@ -135,7 +135,7 @@ class DisciplineImportFailedDialog extends StatelessWidget {
     return AlertDialog(
       scrollable: true,
       title: const Text('Falha na Importação'),
-      titlePadding: EdgeInsets.zero,
+      titlePadding: const EdgeInsets.symmetric(horizontal: 24),
       icon: const Icon(Icons.warning_rounded, size: 40),
       iconColor: colorScheme.error,
       iconPadding: const EdgeInsetsDirectional.fromSTEB(24, 24, 24, 12),
@@ -143,9 +143,8 @@ class DisciplineImportFailedDialog extends StatelessWidget {
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Divider(height: 24),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.all(24),
             child: Text(
               failure.message,
               style: TextStyle(
@@ -154,9 +153,9 @@ class DisciplineImportFailedDialog extends StatelessWidget {
               ),
             ),
           ),
-          const Divider(height: 24),
-          const Center(
-            child: Text('Tabela de Exemplo', style: TextStyle(fontSize: 16)),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: Text('Formato Esperado', style: TextStyle(fontSize: 16)),
           ),
           const SizedBox(height: 12),
           const SampleImportTable(),
@@ -171,8 +170,9 @@ class SampleImportTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final tableBorderSide = BorderSide(
-      color: Theme.of(context).colorScheme.outlineVariant,
+      color: theme.colorScheme.outlineVariant,
     );
 
     return SingleChildScrollView(
@@ -188,9 +188,11 @@ class SampleImportTable extends StatelessWidget {
           horizontalInside: tableBorderSide,
           verticalInside: tableBorderSide,
         ),
+        dataTextStyle: theme.textTheme.bodySmall,
+        headingTextStyle: theme.textTheme.titleSmall?.copyWith(fontSize: 12),
         columns: const [
           DataColumn(label: Text('Nome')),
-          DataColumn(label: Text('DD/MM/AAAA HH:MM')),
+          DataColumn(label: Text('dd/mm/aaaa hh:mm')),
           DataColumn(label: Text('01/01/2000 00:00')),
         ],
         rows: const [
